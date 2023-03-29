@@ -38,31 +38,48 @@ const formatLocation = (location) => {
 // This function takes an event object as an argument and returns a formatted string for use in a newsletter
 const formatEvent = (event) => {
   // Trim the event title and get the start and end times for the event
-  const title = event.title.trim()
-  const start = getStartTime(event)
-  const end_date = getEndTime(event)
+  const title = event.title.trim();
+  const start = getStartTime(event);
+  const end_date = getEndTime(event);
 
-  const template_title = '<p style="margin: 0px"><span style="font-family:sans-serif;font-size:2em"><b>%EVENTDATETIME% | %EVENTTITLE%</b></span></p>'
-  const event_date_weekday = start.toLocaleDateString("en-US", { weekday: "long" })
-  const event_date_monthday = start.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit" })
-  const formatted_title = template_title.replace('%EVENTDATETIME%', event_date_weekday + " " + event_date_monthday).replace('%EVENTTITLE%', event.title.trim())
+  // Define the event title template and format it with the event date and title
+  const template_title =
+    '<p style="margin: 0px"><span style="font-family:sans-serif;font-size:2em"><b>%EVENTDATETIME% | %EVENTTITLE%</b></span></p>';
+  const event_date_weekday = start.toLocaleDateString("en-US", { weekday: "long" });
+  const event_date_monthday = start.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit" });
+  const formatted_title = template_title
+    .replace("%EVENTDATETIME%", event_date_weekday + " " + event_date_monthday)
+    .replace("%EVENTTITLE%", event.title.trim());
 
-  const template_time_and_link = '<p style="margin: 0px"><span style="font-family:monospace;font-size:1.25em"><em>%EVENTDURATION% | <a href="%EVENTURL%">RSVP HERE</a></em></span></p>'
-  const startTime = start.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
-  const endTime = end_date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
-  const eventURL = encodeURI(event.browser_url)
-  const formatted_date_and_link = template_time_and_link.replace('%EVENTDURATION%', startTime + " - " + endTime).replace('%EVENTURL%', eventURL)
+  // Define the event time and link template and format it with the event duration and URL
+  const template_time_and_link =
+    '<p style="margin: 0px"><span style="font-family:monospace;font-size:1.25em"><em>%EVENTDURATION% | <a href="%EVENTURL%">RSVP HERE</a></em></span></p>';
+  const startTime = start.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+  const endTime = end_date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+  const eventURL = encodeURI(event.browser_url);
+  const formatted_date_and_link = template_time_and_link
+    .replace("%EVENTDURATION%", startTime + " - " + endTime)
+    .replace("%EVENTURL%", eventURL);
 
-  const template_description = '<p style="margin: 0px"><span style="font-family:sans-serif">%EVENTDESCRIPTION%</span></p>'
-  const formatted_description = template_description.replace('%EVENTDESCRIPTION%', formattedDescription(event.description))
+  // Define the event description template and format it with the event description
+  const template_description =
+    '<p style="margin: 0px"><span style="font-family:sans-serif">%EVENTDESCRIPTION%</span></p>';
+  const formatted_description = template_description.replace(
+    "%EVENTDESCRIPTION%",
+    formattedDescription(event.description)
+  );
 
-  let formatted_body = '<div>' + formatted_title + formatted_date_and_link + formatted_description + '<br></div>'
+  // Combine the formatted title, date, link, and description
+  let formatted_body = "<div>" + formatted_title + formatted_date_and_link + formatted_description + "<br></div>";
 
   // Set custom link colors by replacing anchor tags with a style attribute containing a custom color value
-  formatted_body = formatted_body.replace(new RegExp('<a ', 'g'), '<a style="color: #' + scriptProperties.getProperty("LINK_COLOR") + '" ') 
+  formatted_body = formatted_body.replace(
+    new RegExp("<a ", "g"),
+    '<a style="color: #' + scriptProperties.getProperty("LINK_COLOR") + '" '
+  );
 
-  return formatted_body // Return the final formatted string for the event
-}
+  return formatted_body; // Return the final formatted string for the event
+};
 
 // This function compiles an HTML message of upcoming events and returns it as a string
 const compileHTMLMessage = () => {
