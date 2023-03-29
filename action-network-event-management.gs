@@ -1,10 +1,11 @@
+// This function tags an Action Network event with the Google ID for its corresponding Google Calendar event
 const tagANEvent = async (action_network_id, google_id) => {
-	Logger.log("Tagging Action Network event " + action_network_id + "with Google Calendar event ID " + google_id)
+	Logger.log("Tagging Action Network event " + action_network_id + " with Google Calendar event ID " + google_id)
 
-	// creates payload for PUT request to Action Network, adding google_id as an identifier on the event 
+	// Create a payload for the PUT request to Action Network, adding the Google ID as an identifier on the event
 	const payload = JSON.stringify({ "identifiers": [ "google_id:" + google_id ] })
 
-	// sets options and sends request to Action Network, logs response
+	// Set the options for the request and send it to Action Network, logging the response
 	const options = {
 		method: "put",
 		payload: payload,
