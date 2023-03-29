@@ -5,7 +5,7 @@ Automation for Action Network
 This Google Apps Script code simplifies some more labor-intensive Action Network tasks:
 - **syncANtoGCal()** Retrieving a list of recently-edited Action Network events and syncing them to Google Calendar.
 - **emailFormattedEventList()** Retriving a list of upcoming Action Network events and compiling them into an HTML-formatted Action Network email draft.
-- **draftANMessage()** Retriving a list of upcoming Action Network events and compiling them into an HTML-formatted email to be sent to a single address.
+- **draftANEventMessage()** Retriving a list of upcoming Action Network events and compiling them into an HTML-formatted email to be sent to a single address.
 
 ## Script Properties
 To use these features, you must configure [Script Properties](https://developers.google.com/apps-script/reference/properties) in your Google Apps script.
@@ -24,4 +24,4 @@ To use these features, you must configure [Script Properties](https://developers
 
 ## Triggering
 - Our script is set to call syncANtoGCal() every 10 minutes.
-- Our script is set to call draftANMessage() every Tuesday morning.
+- Our script is set to call draftANEventMessage() every Tuesday morning.
