@@ -9,10 +9,12 @@ const recently_modified = 7;
 
 // This function syncs events modified in the last week from Action Network to Google Calendar
 const syncANtoGCal = () => {
+
 	let events = getRecentlyModifiedEventIDs(recently_modified); // Get an array of event IDs for events modified in the last week
 	Logger.log("Found " + events.length + " events modified in the last " + recently_modified + " days.");
 
 	for (let i = 0; i < events.length; i++) {
+
 		const event = getAllANEventData(events[i].href); // Get all event data for the current event ID
 
 		const action_network_id = getEventIDFromAN(event, "action_network" + ":[^,]*"); // Get the Action Network ID for the event
@@ -36,5 +38,7 @@ const syncANtoGCal = () => {
 			}
 
 		}
+
 	}
+
 }
