@@ -1,17 +1,17 @@
 // Creates a new Action Network Email Message with the provided HTML-formatted text as the body.
 // Values for Subject, Sender, Reply-To, Origin System, and Wrapper are obtained via defined Script Properties.
 const draftANMessage = (doc) => {
-  // creates payload for POST request to Action Network
-  const payload = JSON.stringify({
-    "subject": scriptProperties.getProperty("AN_EMAIL_SUBJECT"),
-    "body": doc,
-    "from": scriptProperties.getProperty("AN_EMAIL_SENDER"),
-    "origin_system": scriptProperties.getProperty("AN_ORIGIN_SYSTEM"),
-    "reply_to": scriptProperties.getProperty("AN_EMAIL_REPLY_TO"),
-    "_links": {
-      "osdi:wrapper": { "href": scriptProperties.getProperty("AN_EMAIL_WRAPPER") }
-      }
-    })
+	// creates payload for POST request to Action Network
+	const payload = JSON.stringify({
+		"subject": scriptProperties.getProperty("AN_EMAIL_SUBJECT"),
+		"body": doc,
+		"from": scriptProperties.getProperty("AN_EMAIL_SENDER"),
+		"origin_system": scriptProperties.getProperty("AN_ORIGIN_SYSTEM"),
+		"reply_to": scriptProperties.getProperty("AN_EMAIL_REPLY_TO"),
+		"_links": {
+		"osdi:wrapper": { "href": scriptProperties.getProperty("AN_EMAIL_WRAPPER") }
+		}
+	})
 
   // sets options and sends request to Action Network, logs with action_network identifiter after completion.
   const options = {
