@@ -44,38 +44,35 @@ const formatEvent = (event) => {
 
   // Define the event title template and format it with the event date and title
   const template_title =
-    '<p style="margin: 0px"><span style="font-family:sans-serif;font-size:2em"><b>%EVENTDATETIME% | %EVENTTITLE%</b></span></p>';
-  const event_date_weekday = start.toLocaleDateString("en-US", { weekday: "long" });
-  const event_date_monthday = start.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit" });
-  const formatted_title = template_title
-    .replace("%EVENTDATETIME%", event_date_weekday + " " + event_date_monthday)
-    .replace("%EVENTTITLE%", event.title.trim());
+    '<h2 style="font-size:1.8em;margin-bottom:-.9rem">%EVENTTITLE%</h2>';
+  const formatted_title = template_title.replace("%EVENTTITLE%", event.title.trim());
 
   // Define the event time and link template and format it with the event duration and URL
   const template_time_and_link =
-    '<p style="margin: 0px"><span style="font-family:monospace;font-size:1.25em"><em>%EVENTDURATION% | <a href="%EVENTURL%">RSVP HERE</a></em></span></p>';
+    '<h3 style="font-style:italic;margin-bottom:-.5rem">%EVENTDATE% | %EVENTDURATION% | <a style="color:#ec1f27;text-decoration:none" href="%EVENTURL%">RSVP HERE</a></h3>';
+  const event_date_weekday = start.toLocaleDateString("en-US", { weekday: "long" });
+  const event_date_monthday = start.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit" });
   const startTime = start.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
   const endTime = end_date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
   const eventURL = encodeURI(event.browser_url);
   const formatted_date_and_link = template_time_and_link
+    .replace("%EVENTDATE%", event_date_weekday + " " + event_date_monthday)
     .replace("%EVENTDURATION%", startTime + " - " + endTime)
     .replace("%EVENTURL%", eventURL);
 
-  // Define the event description template and format it with the event description
-  const template_description =
-    '<p style="margin: 0px"><span style="font-family:sans-serif">%EVENTDESCRIPTION%</span></p>';
-  const formatted_description = template_description.replace(
-    "%EVENTDESCRIPTION%",
-    formattedDescription(event.description)
-  );
-
   // Combine the formatted title, date, link, and description
-  let formatted_body = "<div>" + formatted_title + formatted_date_and_link + formatted_description + "<br></div>";
+  let formatted_body = "<div>" + formatted_title + formatted_date_and_link + event.description + "</div>";
 
   // Set custom link colors by replacing anchor tags with a style attribute containing a custom color value
   formatted_body = formatted_body.replace(
     new RegExp("<a ", "g"),
     '<a style="color: #' + scriptProperties.getProperty("LINK_COLOR") + '" '
+  );
+
+  // Set line spacing for unformatted paragraphs
+  formatted_body = formatted_body.replace(
+    new RegExp("<p>", "g"),
+    '<p style="margin-bottom:-.5rem">'
   );
 
   return formatted_body; // Return the final formatted string for the event
