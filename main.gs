@@ -1,11 +1,15 @@
+// Get the u properties object for use throughout the script
+const userProperties = PropertiesService.getUserProperties()
 // Get the script properties object for use throughout the script
-const scriptProperties = PropertiesService.getScriptProperties();
+const scriptProperties = PropertiesService.getScriptProperties()
 // Set standard API parameters for use in requests to the Action Network API
-const standard_api_params = { headers: { "OSDI-API-Token": scriptProperties.getProperty("AN_API_KEY") }, contentType: "application/hal+json" };
+const standard_api_params = { headers: { "OSDI-API-Token": scriptProperties.getProperty("AN_API_KEY") }, contentType: "application/hal+json" }
 // Set a default event length of 90 minutes in case no length is specified
-const default_length_mins = 90;
+const default_length_mins = 90
 // Set the number of days to consider events as recently modified
-const recently_modified = 7;
+const recently_modified = 7
+// Set the number of days to consider events as upcoming
+const days_upcoming = 10
 
 // This function syncs events modified in the last week from Action Network to Google Calendar
 const syncANtoGCal = () => {
