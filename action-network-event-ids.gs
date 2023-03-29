@@ -1,5 +1,4 @@
-// Returns event IDs from Action Network
-// If provided with filter, appends to api url
+// This function returns event IDs from Action Network. If a filter is provided, it appends it to the API URL.
 const getANEventIDs = (filter) => {
 	let url = scriptProperties.getProperty("AN_API_URL") + "events/"
 	if (filter != null) { url += filter }
@@ -8,13 +7,14 @@ const getANEventIDs = (filter) => {
 	return JSON.parse(content)["_links"]["osdi:events"]
 }
 
-// If provided with filter, appends to api url
+// This function sorts event IDs by date, based on the start time of the event.
+// It is used by the getSortedANEventIDs function to sort the event IDs by the soonest event first.
 const sortByDate = (a,b) => {
 	return getStartTime(getAllANEventData(a.href)) - getStartTime(getAllANEventData(b.href))
 }
 
-// Returns upcoming event IDs from Action Network sorted by soonest event first
-// If provided with filter, appends to api url
+// This function returns upcoming event IDs from Action Network, sorted by the soonest event first.
+// If a filter is provided, it appends it to the API URL.
 const getSortedANEventIDs = () => {
 	const eventsByCreation = getANEventIDs("?filter=start_date gt '" + Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd") + "'")
 
@@ -22,7 +22,8 @@ const getSortedANEventIDs = () => {
 	return eventsByCreation.sort(sortByDate)
 }
 
-// Returns event IDs from Action Network for events modified since a number of days ago.
+// This function returns event IDs from Action Network for events modified since a certain number of days ago.
+// It calculates the date to filter events by based on the current date and the number of days ago.
 const getRecentlyModifiedEventIDs = (daysago) => {
 	const MILLIS_PER_DAY = 1000 * 60 * 60 * 24
 	const now = new Date()
