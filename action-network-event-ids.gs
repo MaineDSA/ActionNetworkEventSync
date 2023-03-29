@@ -15,10 +15,17 @@ const sortByDate = (a,b) => {
 
 // This function returns upcoming event IDs from Action Network, sorted by the soonest event first.
 // If a filter is provided, it appends it to the API URL.
-const getSortedANEventIDs = () => {
-	const eventsByCreation = getANEventIDs("?filter=start_date gt '" + Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd") + "'")
+const getSortedUpcomingANEventIDs = (extrafilter) => {
+  const currentDate = new Date()
+  const formattedFilterDate = Utilities.formatDate(currentDate, "UTC", "yyyy-MM-dd")
+  let filter = "?filter=start_date gt '" + formattedFilterDate
+  if (extrafilter != null) { filter += "'" + extrafilter }
+    filter += "'"
+	Logger.log("Finding upcoming events via filter query " + filter + ".")
 
+	const eventsByCreation = getANEventIDs(filter)
 	Logger.log("Sorting " + eventsByCreation.length + " Events By Soonest")
+
 	return eventsByCreation.sort(sortByDate)
 }
 
