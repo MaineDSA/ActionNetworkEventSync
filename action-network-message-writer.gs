@@ -1,8 +1,10 @@
-const draftANMessage = () => {
-  // creates payload for POST request to Action Network, creating new email draft with upcoming events as the body 
+// Creates a new Action Network Email Message with the provided HTML-formatted text as the body.
+// Values for Subject, Sender, Reply-To, Origin System, and Wrapper are obtained via defined Script Properties.
+const draftANMessage = (doc) => {
+  // creates payload for POST request to Action Network
   const payload = JSON.stringify({
     "subject": scriptProperties.getProperty("AN_EMAIL_SUBJECT"),
-    "body": compileHTMLMessage(),
+    "body": doc,
     "from": scriptProperties.getProperty("AN_EMAIL_SENDER"),
     "origin_system": scriptProperties.getProperty("AN_ORIGIN_SYSTEM"),
     "reply_to": scriptProperties.getProperty("AN_EMAIL_REPLY_TO"),
@@ -11,7 +13,7 @@ const draftANMessage = () => {
       }
     })
 
-  // sets options and sends request to Action Network, logs response
+  // sets options and sends request to Action Network, logs with action_network identifiter after completion.
   const options = {
     method: "post",
     payload: payload,
@@ -24,4 +26,8 @@ const draftANMessage = () => {
   const response = UrlFetchApp.fetch(scriptProperties.getProperty("AN_API_URL") + "messages/", options)
   const action_network_id = getEventIDFromAN(JSON.parse(response), "action_network" + ":[^,]*")
   Logger.log("Created Action Network Message " + action_network_id + ".")
+}
+
+const draftANEventMessage= () => {
+  draftANMessage(compileHTMLMessage())
 }
