@@ -1,7 +1,7 @@
 //set offsets for timezone during daylight savings time and standard time. Reference 24timezones.com.
 const dstOffset = (datevar) => {
-	var dstoffset = 'GMT-04:00' // YOUR OFFSET DURING DST
-	var standardoffset = 'GMT-05:00' // YOUR STANDARD OFFSET
+	var dstoffset = scriptProperties.getProperty("TIME_DST") // YOUR OFFSET DURING DST
+	var standardoffset = scriptProperties.getProperty("TIME_STANDARD") // YOUR STANDARD OFFSET
 	Date.prototype.stdTimezoneOffset = function() {
 		var jan = new Date(this.getFullYear(), 0, 1)
 		var jul = new Date(this.getFullYear(), 6, 1)
