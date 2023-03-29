@@ -1,4 +1,4 @@
-// Get start and end times via API. Time zone based on event location.
+// This function gets the start time of an event, based on the event's location time zone.
 const getStartTime = (event) => {
 	const start_date = new Date(event.start_date)
 	const start_date_utc = start_date.toUTCString()
@@ -7,7 +7,7 @@ const getStartTime = (event) => {
 	return output_date
 }
 
-// Get start and end times via API. Time zone based on event location.
+// This function gets the end time of an event, based on the event's location time zone.
 const getEndTime = (event) => {
 	const start_date = getStartTime(event)
 
@@ -21,7 +21,7 @@ const getEndTime = (event) => {
 	return output_date
 }
 
-// Returns requested event ID if found in AN event data
+// This function returns the requested event ID if it is found in the Action Network event data.
 const getEventIDFromAN = (contentJSON, search_id) => {
 	const identifiers = contentJSON.identifiers
 	const regex_id = new RegExp(search_id).exec(identifiers)
@@ -31,8 +31,8 @@ const getEventIDFromAN = (contentJSON, search_id) => {
 	return regex_id[0].substring(search_id.indexOf('[')).trim()
 }
 
-// Returns data about event ID from Action Network
-// If provided with filter_date ("UTC", "yyyy-MM-dd"), returns only events modified since that date
+// This function returns all event data for an event ID from Action Network.
+// If provided with a filter_date ("UTC", "yyyy-MM-dd"), it returns only events modified since that date.
 const getAllANEventData = (event_url) => {
 	const content = UrlFetchApp.fetch(event_url, standard_api_params)
 	return JSON.parse(content)
