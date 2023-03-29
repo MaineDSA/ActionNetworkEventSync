@@ -1,11 +1,13 @@
 # ActionNetworkScript
 Automation for Action Network
 
+## Features
 This Google Apps Script code simplifies some more labor-intensive Action Network tasks:
 - **syncANtoGCal()** Retrieving a list of recently-edited Action Network events and syncing them to Google Calendar.
 - **emailFormattedEventList()** Retriving a list of upcoming Action Network events and compiling them into an HTML-formatted Action Network email draft.
 - **draftANMessage()** Retriving a list of upcoming Action Network events and compiling them into an HTML-formatted email to be sent to a single address.
 
+## Script Properties
 To use these features, you must configure [Script Properties](https://developers.google.com/apps-script/reference/properties) in your Google Apps script.
 - AN_API_KEY: Your Action Network API Key.
 - AN_API_URL: Your Action Network API URL (https://actionnetwork.org/api/v2/).
@@ -19,3 +21,7 @@ To use these features, you must configure [Script Properties](https://developers
 - LINK_COLOR: Preferred color for HTML links in HTML-formatted email bodies as a hex code. We use ec1f27.
 - TIME_DST: The time zone you use during Daylight Savings Time. We use GMT-04:00.
 - TIME_STANDARD: The time zone you use outside of Daylight Savings Time. We use GMT-05:00
+
+## Triggering
+- Our script is set to call syncANtoGCal() every 10 minutes.
+- Our script is set to call draftANMessage() every Tuesday morning.
