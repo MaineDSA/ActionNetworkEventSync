@@ -27,4 +27,5 @@ const dstOffset = (datevar) => {
     // Return the standard offset if it is not being observed.
     return standardoffset
   }
+
 }
