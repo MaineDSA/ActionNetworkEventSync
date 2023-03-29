@@ -1,4 +1,5 @@
-//set offsets for timezone during daylight savings time and standard time. Reference 24timezones.com.
+// Set offsets for timezone during daylight savings time and standard time. Reference 24timezones.com.
+// This function was preserved from another Google Apps AN script that we used to use. That script was created by Joel Studebaker.
 const dstOffset = (datevar) => {
 	var dstoffset = scriptProperties.getProperty("TIME_DST") // YOUR OFFSET DURING DST
 	var standardoffset = scriptProperties.getProperty("TIME_STANDARD") // YOUR STANDARD OFFSET
