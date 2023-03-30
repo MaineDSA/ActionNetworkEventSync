@@ -89,7 +89,7 @@ const compileHTMLMessage = () => {
 
   Logger.log("Found and sorted " + events.length + " upcoming events.")
 
-  let doc = '<!DOCTYPE html>' // Initialize an empty string for the final compiled HTML message
+  let doc = '<!DOCTYPE html><br /><hr class="rounded"><h1><center>Upcoming Events</center></h1>' // Initialize an empty string for the final compiled HTML message
   for (let i = 0; i < events.length; i++) {
     const event = getAllANEventData(events[i].href) // Get all event data for the current event ID
     const eventBody = formatEvent(event) // Format the current event as a string for use in the newsletter
