@@ -9,7 +9,9 @@ const draftANMessage = (doc) => {
     "origin_system": scriptProperties.getProperty("AN_ORIGIN_SYSTEM"),
     "reply_to": scriptProperties.getProperty("AN_EMAIL_REPLY_TO"),
     "_links": {
-      "osdi:wrapper": { "href": scriptProperties.getProperty("AN_EMAIL_WRAPPER") }
+      "osdi:wrapper": {
+        "href": scriptProperties.getProperty("AN_API_URL") + "wrappers/" + scriptProperties.getProperty("AN_EMAIL_WRAPPER")
+        }
     }
   })
 
