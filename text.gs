@@ -85,7 +85,7 @@ const compileHTMLMessage = () => {
   const filterDate = new Date()
   filterDate.setDate(filterDate.getDate() + days_upcoming)
   const formattedFilterDate = Utilities.formatDate(filterDate, "UTC", "yyyy-MM-dd")
-  const events = getSortedUpcomingANEventIDs(" and start_date lt '" + formattedFilterDate) // Get an array of sorted event IDs
+  const events = getSortedUpcomingANEventIDs([ " and start_date lt '" + formattedFilterDate ]) // Get an array of sorted event IDs
 
   Logger.log("Found and sorted " + events.length + " upcoming events.")
 
