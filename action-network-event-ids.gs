@@ -21,7 +21,7 @@ const getSortedUpcomingANEventIDs = (extrafilters) => {
   let filter = "?filter=start_date gt '" + formattedFilterDate + "'"
   if (extrafilters != null) {
     for (let i = 0; i < extrafilters.length; i++) {
-      if (extrafilters[i] != null) { filter += extrafilters[i] + "'" }
+      if (extrafilters[i] != null) { filter += extrafilters[i] }
     }
   }
 	Logger.log("Finding upcoming events via filter query " + filter + ".")
