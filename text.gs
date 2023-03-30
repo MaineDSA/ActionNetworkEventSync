@@ -78,14 +78,20 @@ const formatEvent = (event) => {
   return formatted_body; // Return the final formatted string for the event
 };
 
+const getUpcomingEventDateFilter = () => {
+  const futureDate = new Date()
+  futureDate.setDate(futureDate.getDate() + days_upcoming)
+  const formattedFutureDate = Utilities.formatDate(futureDate, "UTC", "yyyy-MM-dd")
+  const queryFutureDate = " and start_date lt '" + formattedFutureDate + "'"
+
+  return [ queryFutureDate ]
+}
+
 // This function compiles an HTML message of upcoming events and returns it as a string
 const compileHTMLMessage = () => {
   Logger.log("Compiling HTML message of upcoming events.")
 
-  const filterDate = new Date()
-  filterDate.setDate(filterDate.getDate() + days_upcoming)
-  const formattedFilterDate = Utilities.formatDate(filterDate, "UTC", "yyyy-MM-dd")
-  const events = getSortedUpcomingANEventIDs([ " and start_date lt '" + formattedFilterDate ]) // Get an array of sorted event IDs
+  const events = getSortedUpcomingANEventIDs(getUpcomingEventDateFilter()) // Get an array of sorted event IDs
 
   Logger.log("Found and sorted " + events.length + " upcoming events.")
 
