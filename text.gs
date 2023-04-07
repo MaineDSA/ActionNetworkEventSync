@@ -61,7 +61,7 @@ const formatEvent = (event) => {
     .replace("%EVENTURL%", eventURL);
 
   // Combine the formatted title, date, link, and description
-  let formatted_body = '<article>' + formatted_title + formatted_date_and_link + event.description + "</article>";
+  let formatted_body = '<article style="flex-basis:calc(100% - 4rem)">' + formatted_title + formatted_date_and_link + event.description + "</article>";
 
   // Set custom link colors by replacing anchor tags with a style attribute containing a custom color value
   formatted_body = formatted_body.replace(
@@ -112,9 +112,9 @@ const compileHTMLMessage = () => {
 
   // Additional Announcement(s)
   doc += '<br /><hr class="rounded"><h1><center>Even More</center></h1>'
-  doc += '<section style="display:flex;flex-direction:row">'
-  doc += '<article style="padding:0 .8em"><h2>First title</h2><p>Description of first announcement.</p></article>' // add first announcement
-  doc += '<article style="padding:0 .8em"><h2>Second title</h2><p>Description of second announcement.</p></article>' // add second announcement
+  doc += '<section style="display:flex;flex-direction:row;flex-wrap:wrap">'
+  doc += '<article style="flex-basis:calc((100% - 4rem)/2)"><h2>First title</h2><p>Description of first announcement.</p></article>' // add first announcement
+  doc += '<article style="flex-basis:calc((100% - 4rem)/2)"><h2>Second title</h2><p>Description of second announcement.</p></article>' // add second announcement
   doc += '</section>'
 
   return doc // Return the final compiled HTML message
