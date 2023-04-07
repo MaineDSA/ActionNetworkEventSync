@@ -1,7 +1,10 @@
 // This function returns event IDs from Action Network. If a filter is provided, it appends it to the API URL.
 const getANEventIDs = (filter) => {
 	let url = scriptProperties.getProperty("AN_API_URL") + "events/"
-	if (filter != null) { url += filter }
+	if (filter != null) {
+		Logger.log("Finding upcoming events via filter query " + filter + ".")
+		url += filter
+	}
 
 	const content = UrlFetchApp.fetch(url, standard_api_params)
 	return JSON.parse(content)["_links"]["osdi:events"]
@@ -16,15 +19,12 @@ const sortByDate = (a,b) => {
 // This function returns upcoming event IDs from Action Network, sorted by the soonest event first.
 // If a filter is provided, it appends it to the API URL.
 const getSortedUpcomingANEventIDs = (extrafilters) => {
-  const currentDate = new Date()
-  const formattedFilterDate = Utilities.formatDate(currentDate, "UTC", "yyyy-MM-dd")
-  let filter = "?filter=start_date gt '" + formattedFilterDate + "'"
+  let filter = "?filter=start_date gt '" + Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd") + "'"
   if (extrafilters != null) {
     for (let i = 0; i < extrafilters.length; i++) {
       if (extrafilters[i] != null) { filter += extrafilters[i] }
     }
   }
-	Logger.log("Finding upcoming events via filter query " + filter + ".")
 
 	const eventsByCreation = getANEventIDs(filter)
 	Logger.log("Sorting " + eventsByCreation.length + " Events By Soonest")
