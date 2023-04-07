@@ -11,7 +11,10 @@ const draftANMessage = (doc) => {
     "_links": {
       "osdi:wrapper": {
         "href": scriptProperties.getProperty("AN_API_URL") + "wrappers/" + scriptProperties.getProperty("AN_EMAIL_WRAPPER")
-        }
+        },
+      "osdi:creator": {
+        "href": scriptProperties.getProperty("AN_API_URL") + "people/" + scriptProperties.getProperty("AN_EMAIL_CREATOR")
+        },
     }
   })
 
