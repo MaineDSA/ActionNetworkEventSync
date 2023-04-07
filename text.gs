@@ -61,7 +61,7 @@ const formatEvent = (event) => {
     .replace("%EVENTURL%", eventURL);
 
   // Combine the formatted title, date, link, and description
-  let formatted_body = "<div>" + formatted_title + formatted_date_and_link + event.description + "</div>";
+  let formatted_body = '<article>' + formatted_title + formatted_date_and_link + event.description + "</article>";
 
   // Set custom link colors by replacing anchor tags with a style attribute containing a custom color value
   formatted_body = formatted_body.replace(
@@ -81,8 +81,7 @@ const formatEvent = (event) => {
 const getUpcomingEventDateFilter = () => {
   const futureDate = new Date()
   futureDate.setDate(futureDate.getDate() + days_upcoming)
-  const formattedFutureDate = Utilities.formatDate(futureDate, "UTC", "yyyy-MM-dd")
-  const queryFutureDate = " and start_date lt '" + formattedFutureDate + "'"
+  const queryFutureDate = " and start_date lt '" + Utilities.formatDate(futureDate, "UTC", "yyyy-MM-dd") + "'"
 
   return [ queryFutureDate ]
 }
@@ -95,13 +94,28 @@ const compileHTMLMessage = () => {
 
   Logger.log("Found and sorted " + events.length + " upcoming events.")
 
-  let doc = '<!DOCTYPE html><br /><hr class="rounded"><h1><center>Upcoming Events</center></h1>' // Initialize an empty string for the final compiled HTML message
+  let doc = '' // Initialize blank string for the final compiled HTML message
+
+  // Priority Announcement
+  doc += '<br /><hr class="rounded"><h1><center>Priority Announcement</center></h1><p>Description of priority announcement.</p>'
+
+  // Upcoming Events
+  doc += '<br /><hr class="rounded"><h1><center>Upcoming Events</center></h1>'
+  doc += '<section style="display:flex;flex-direction:column">'
   for (let i = 0; i < events.length; i++) {
     const event = getAllANEventData(events[i].href) // Get all event data for the current event ID
     const eventBody = formatEvent(event) // Format the current event as a string for use in the newsletter
     Logger.log("EVENT: " + eventBody)
     doc += eventBody // Add the formatted event string to the final HTML message
   }
+  doc += '</section>'
+
+  // Additional Announcement(s)
+  doc += '<br /><hr class="rounded"><h1><center>Even More</center></h1>'
+  doc += '<section style="display:flex;flex-direction:row">'
+  doc += '<article style="padding:0 .8em"><h2>First title</h2><p>Description of first announcement.</p></article>' // add first announcement
+  doc += '<article style="padding:0 .8em"><h2>Second title</h2><p>Description of second announcement.</p></article>' // add second announcement
+  doc += '</section>'
 
   return doc // Return the final compiled HTML message
 }
