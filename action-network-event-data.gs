@@ -26,7 +26,10 @@ const getEventIDFromAN = (contentJSON, search_id) => {
 	const identifiers = contentJSON.identifiers
 	const regex_id = new RegExp(search_id).exec(identifiers)
 
-	if (regex_id === null) { return null }
+	if (regex_id === null) {
+		Logger.log(search_id + ' not found in Action Network event identifiers.')
+		return null
+	}
 
 	return regex_id[0].substring(search_id.indexOf('[')).trim()
 }
