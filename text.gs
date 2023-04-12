@@ -101,7 +101,7 @@ const compileHTMLMessage = () => {
 
   // Upcoming Events
   doc += '<br /><hr class="rounded"><h1><center>Upcoming Events</center></h1>'
-  doc += '<section style="display:flex;flex-direction:column">'
+  doc += '<section">'
   for (let i = 0; i < events.length; i++) {
     const event = getAllANEventData(events[i].href) // Get all event data for the current event ID
     const eventBody = formatEvent(event) // Format the current event as a string for use in the newsletter
