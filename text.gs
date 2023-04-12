@@ -113,8 +113,8 @@ const compileHTMLMessage = () => {
   // Additional Announcement(s)
   doc += '<br /><hr class="rounded"><h1><center>Even More</center></h1>'
   doc += '<section style="display:flex;flex-direction:row;flex-wrap:wrap">'
-  doc += '<article style="flex-basis:calc((100% - 4rem)/2)"><h2>First title</h2><p>Description of first announcement.</p></article>' // add first announcement
-  doc += '<article style="flex-basis:calc((100% - 4rem)/2)"><h2>Second title</h2><p>Description of second announcement.</p></article>' // add second announcement
+  doc += '<article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>First title</h2><p>Description of first announcement.</p></article>' // add first announcement
+  doc += '<article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>Second title</h2><p>Description of second announcement.</p></article>' // add second announcement
   doc += '</section>'
 
   return doc // Return the final compiled HTML message
