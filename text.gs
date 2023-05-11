@@ -101,6 +101,7 @@ const compileHTMLMessage = () => {
 
   // Upcoming Events
   doc += '<br /><hr class="rounded"><h1><center>Upcoming Events</center></h1>'
+  doc += '<br /><p><center><a href="' + scriptProperties.getProperty("GCAL_LINK") + '">Google Calendar Link</a></center></p>'
   doc += '<section">'
   for (let i = 0; i < events.length; i++) {
     const event = getAllANEventData(events[i].href) // Get all event data for the current event ID
