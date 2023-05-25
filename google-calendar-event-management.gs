@@ -25,7 +25,7 @@ const createGoogleEvent = async (event, action_network_id) => {
 // This function updates a Google Calendar event with data from an updated Action Network event
 const updateGoogleEvent = async (event, action_network_id, google_id) => {
   const eventName = event.title.trim(); // Get the event name and trim any leading or trailing whitespace
-  Logger.log("Updating Google Calendar event " + eventName + " from Action Network at " + action_network_id + ".");
+  Logger.log("Updating event " + eventName + " from Action Network at " + action_network_id + ".");
 
   // Get the Google Calendar by ID from the script properties
   const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"));
