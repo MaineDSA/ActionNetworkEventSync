@@ -131,8 +131,9 @@ const compileHTMLMessage = () => {
 
     const event = getAllANEventData(events[i].href) // Get all event data for the current event ID
     const eventBody = formatEvent(event) // Format the current event as a string for use in the newsletter
-    Logger.log("EVENT: " + eventBody)
-    doc += eventBody // Add the formatted event string to the final HTML message
+    Logger.log("EVENT: " + eventBody + '; STATUS: ' + event.status)
+
+    if (event.status != 'cancelled') { doc += eventBody } // Add the formatted event string to the final HTML message if not cancelled
 
   }
   doc += '</section>'
