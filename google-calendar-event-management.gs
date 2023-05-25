@@ -58,7 +58,6 @@ const updateGoogleEvent = async (event, action_network_id, google_id) => {
 const cancelGoogleEvent = async (event, action_network_id, google_id) => {
 
   const eventName = event.title.trim(); // Get the event name and trim any leading or trailing whitespace
-  Logger.log(eventName + " is listed as cancelled in Action Network at " + action_network_id + ".");
 
   // Get the Google Calendar event by ID
   const eventGoogle = CalendarApp.getEventById(google_id);
