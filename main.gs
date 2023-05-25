@@ -23,10 +23,11 @@ const syncANtoGCal = () => {
 
 		const action_network_id = getEventIDFromAN(event, "action_network"); // Get the Action Network ID for the event
 
-		// If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
-		const google_id = getEventIDFromAN(event, "google_id");
+    Logger.log(event.title.trim() + " is listed as " + event.status + " in Action Network at " + action_network_id + ".");
 
-		if (google_id == null) { // If the event is not in Google Calendar
+    // If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
+		const google_id = getEventIDFromAN(event, "google_id");
+    if (google_id === null) { // If the event is not in Google Calendar
 
 			if (event.status != 'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
       
