@@ -1,3 +1,8 @@
+const formattedDescriptionFooter = (description) => {
+  let mask = ''
+  return mask
+}
+
 // This function takes a string argument 'description' and formats it by replacing various HTML tags and whitespace characters
 const formattedDescription = (description) => {
   // Remove double line breaks (<br><br>) and replace them with single line breaks (<br>)
@@ -17,11 +22,13 @@ const formattedDescription = (description) => {
 // This function takes an event object as an argument and generates a formatted description string for the event
 const calDescription = (event) => {
   // Create a string that provides a hyperlink to the event's browser URL and label it as "More Info and RSVP"
-  const moreInfo = "<p><b>More Info and RSVP:</b></p>" + '<p><a href="' + event.browser_url + '">' + event.browser_url + "</a>" + "</p>"
+  const moreInfo = "<h5><strong>More Info and RSVP:</strong></h5>" + '<p><a href="' + event.browser_url + '">' + event.browser_url + "</a>" + "</p>"
   // Generate a string that describes the event with a "Description" label and a formatted description using the 'formattedDescription' function defined above
-  const calDesc = "<p><b>Description:</b><br></p>" + formattedDescription(event.description)
+  const calDesc = "<h5><strong>Description:</strong></h5>" + formattedDescription(event.description)
+  // Create a string that provides a hyperlink to the chapter's COVID policy URL and label it as "Mask Policy"
+  const calDescFooter = formattedDescriptionFooter(event.description)
 
-  return moreInfo + calDesc // Return the concatenated string
+  return moreInfo + calDesc + calDescFooter // Return the concatenated string
 }
 
 // This function takes a location object as an argument and generates a string with the venue, address, locality, region, and postal code
@@ -97,7 +104,9 @@ const compileHTMLMessage = () => {
   let doc = '' // Initialize blank string for the final compiled HTML message
 
   // Priority Announcement
-  doc += '<br /><hr class="rounded"><h1><center>Priority Announcement</center></h1><p>Description of priority announcement.</p>'
+  doc += '<br /><hr class="rounded">'
+  doc += '<h1><center>Priority Announcement</center></h1>'
+  doc += '<br /><p>Description of priority announcement.</p>'
 
   // Upcoming Events
   doc += '<br /><hr class="rounded"><h1><center>Upcoming Events</center></h1>'
