@@ -21,10 +21,10 @@ const syncANtoGCal = () => {
 
 		const event = getAllANEventData(events[i].href); // Get all event data for the current event ID
 
-		const action_network_id = getEventIDFromAN(event, "action_network" + ":[^,]*"); // Get the Action Network ID for the event
+		const action_network_id = getEventIDFromAN(event, "action_network"); // Get the Action Network ID for the event
 
 		// If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
-		const google_id = getEventIDFromAN(event, "google_id" + ":[^,]*");
+		const google_id = getEventIDFromAN(event, "google_id");
 
 		if (google_id == null) { // If the event is not in Google Calendar
 

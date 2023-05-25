@@ -31,7 +31,7 @@ const draftANMessage = (doc) => {
   }
 
   const response = UrlFetchApp.fetch(scriptProperties.getProperty("AN_API_URL") + "messages/", options)
-  const action_network_id = getEventIDFromAN(JSON.parse(response), "action_network" + ":[^,]*")
+  const action_network_id = getEventIDFromAN(JSON.parse(response), "action_network")
   Logger.log("Created Action Network Message " + action_network_id + " with subject " + subject + '.')
 }
 
