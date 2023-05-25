@@ -18,8 +18,10 @@ const dstOffset = (datevar) => {
 
   // Check if DST is currently being observed for the given date.
   if (datevar.isDstObserved()) {
+    
     // Return the DST offset if it is being observed.
     return scriptProperties.getProperty("TIME_DST")
+    
   }
 
   // Return the standard offset if it is not being observed.

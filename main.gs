@@ -29,16 +29,22 @@ const syncANtoGCal = () => {
 		if (google_id == null) { // If the event is not in Google Calendar
 
 			if (event.status != 'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
+      
 				createGoogleEvent(event, action_network_id);
+        
 			}
 
 		} else { // If the event is in Google Calendar
 
 			// If the event was cancelled in Action Network, cancel it in Google Calendar
 			if (event.status != 'cancelled') {
+
 				updateGoogleEvent(event, action_network_id, google_id);
+
 			} else {
+
 				cancelGoogleEvent(event, action_network_id, google_id);
+
 			}
 
 		}
