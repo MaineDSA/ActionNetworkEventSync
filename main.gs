@@ -32,7 +32,8 @@ const syncANtoGCal = () => {
 			if (event.status != 'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
       
 				createGoogleEvent(event, action_network_id);
-        
+        sendSlackMessage(event, 'New Event Added to the Calendar:')
+
 			}
 
 		} else { // If the event is in Google Calendar
@@ -45,6 +46,7 @@ const syncANtoGCal = () => {
 			} else {
 
 				cancelGoogleEvent(event, action_network_id, google_id);
+        sendSlackMessage(event, 'Calendar Event Canceled:')
 
 			}
 
