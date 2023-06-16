@@ -2,7 +2,7 @@
 // Values for Subject, Sender, Reply-To, Origin System, and Wrapper are obtained via defined Script Properties.
 const draftANMessage = (doc) => {
 
-  const subject = scriptProperties.getProperty("AN_EMAIL_SUBJECT") + ' for ' + Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd")
+  const subject = '🌹 ' + scriptProperties.getProperty("AN_EMAIL_SUBJECT") + ' for ' + Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd") + ' 🌹'
 
   // Creates payload for POST request to Action Network
   const payload = JSON.stringify({
@@ -39,7 +39,7 @@ const draftANMessage = (doc) => {
 
 // Calls the draftANMessage function with the output of the compileHTMLMessage() function as an argument.
 const draftANEventMessage= () => {
-  
+
   draftANMessage(compileHTMLMessage())
-  
+
 }
