@@ -2,7 +2,7 @@ const formattedDescriptionFooter = (description) => {
 
   let mask = ''
 
-  if (description.toLocaleLowerCase().includes('no mask policy') === null) {
+  if (description.toLocaleLowerCase().includes('no mask policy') === false) {
     mask += '<h5><strong>Mask Policy:</strong></h5>'
     mask += '<p>If this event is in-person and you would like this to be a masked event, please contact the event organizer at least 3 days ahead of time.</p>'
     mask += '<p>Contact information for the event organizer should be listed at the RSVP link found above.</p>'
