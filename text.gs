@@ -1,8 +1,16 @@
 const formattedDescriptionFooter = (description) => {
-  
+
   let mask = ''
+
+  if (description.toLocaleLowerCase().includes('no mask policy') === null) {
+    mask += '<h5><strong>Mask Policy:</strong></h5>'
+    mask += '<p>If this event is in-person and you would like this to be a masked event, please contact the event organizer at least 3 days ahead of time.</p>'
+    mask += '<p>Contact information for the event organizer should be listed at the RSVP link found above.</p>'
+    mask += '<p>For complete details about this policy, <a style="color:#'+ scriptProperties.getProperty("LINK_COLOR") +';text-decoration:none" href="https://mainedsa.org/covid">click here</a>.</p>'
+  }
+
   return mask
-  
+
 }
 
 // This function takes a string argument 'description' and formats it by replacing various HTML tags and whitespace characters
@@ -27,7 +35,7 @@ const formattedDescription = (description) => {
 const calDescription = (event) => {
   
   // Create a string that provides a hyperlink to the event's browser URL and label it as "More Info and RSVP"
-  const moreInfo = "<h5><strong>More Info and RSVP:</strong></h5>" + '<p><a href="' + event.browser_url + '">' + event.browser_url + "</a>" + "</p>"
+  const moreInfo = "<h5><strong>More Info and RSVP:</strong></h5>" + '<p><a style="color:#'+ scriptProperties.getProperty("LINK_COLOR") +';text-decoration:none" href="' + event.browser_url + '">' + event.browser_url + "</a>" + "</p>"
   // Generate a string that describes the event with a "Description" label and a formatted description using the 'formattedDescription' function defined above
   const calDesc = "<h5><strong>Description:</strong></h5>" + formattedDescription(event.description)
   // Create a string that provides a hyperlink to the chapter's COVID policy URL and label it as "Mask Policy"
@@ -56,7 +64,6 @@ const formatLocation = (location) => {
 const formatEvent = (event) => {
   
   // Trim the event title and get the start and end times for the event
-  const title = event.title.trim();
   const start = getStartTime(event);
   const end_date = getEndTime(event);
 
@@ -67,7 +74,7 @@ const formatEvent = (event) => {
 
   // Define the event time and link template and format it with the event duration and URL
   const template_time_and_link =
-    '<h3 style="font-style:italic;margin-bottom:-.5rem">%EVENTDATE% | %EVENTDURATION% | <a style="color:#ec1f27;text-decoration:none" href="%EVENTURL%">RSVP HERE</a></h3>';
+    '<h3 style="font-style:italic;margin-bottom:-.5rem">%EVENTDATE% | %EVENTDURATION% | <a style="color:#'+ scriptProperties.getProperty("LINK_COLOR") +';text-decoration:none" href="%EVENTURL%">RSVP HERE</a></h3>';
   const event_date_weekday = start.toLocaleDateString("en-US", { weekday: "long" });
   const event_date_monthday = start.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit" });
   const startTime = start.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
@@ -125,7 +132,8 @@ const compileHTMLMessage = () => {
 
   // Upcoming Events
   doc += '<br /><hr class="rounded"><h1><center>Upcoming Events</center></h1>'
-  doc += '<p><center><a href="' + scriptProperties.getProperty("GCAL_LINK") + '">Google Calendar Link</a></center></p>'
+  doc += '<p><center><a style="color:#'+ scriptProperties.getProperty("LINK_COLOR") +';text-decoration:none" href="' + scriptProperties.getProperty("GCAL_LINK") + '">Google Calendar Link</a></center></p>'
+  doc += '<p><center><a style="color:#'+ scriptProperties.getProperty("LINK_COLOR") +';text-decoration:none" href="' + 'https://mainedsa.org/covid' + '">Mask Policy Link</a></center></p>'
   doc += '<section">'
   for (let i = 0; i < events.length; i++) {
 
