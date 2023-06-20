@@ -26,6 +26,8 @@ const createGoogleEvent = async (event, action_network_id) => {
 }
 
 // This function updates a Google Calendar event with data from an updated Action Network event
+// Known limitation: there seems to be no API for updating the location of an existing event
+// If Action Network events have their locations changed, they need to be updated manually in Google.
 const updateGoogleEvent = async (event, action_network_id, google_id) => {
 
   const eventName = event.title.trim(); // Get the event name and trim any leading or trailing whitespace
