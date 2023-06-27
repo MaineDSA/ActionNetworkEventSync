@@ -38,7 +38,7 @@ const getSortedUpcomingANEventIDs = (extrafilters) => {
 
 }
 
-// This function returns event IDs from Action Network for events modified since a certain number of days ago.
+// This function returns event IDs from Action Network for events modified since a certain number of days ago that have not started yet.
 // It calculates the date to filter events by based on the current date and the number of days ago.
 const getRecentlyModifiedEventIDs = (daysago) => {
 
@@ -47,6 +47,6 @@ const getRecentlyModifiedEventIDs = (daysago) => {
 	const lastWeek = new Date(now.getTime() - (MILLIS_PER_DAY * daysago))
 	const filter_date = Utilities.formatDate(lastWeek, "UTC", "yyyy-MM-dd")
 
-	return getANEventIDs("?filter=modified_date gt '" + filter_date + "'")
+	return getANEventIDs("?filter=modified_date gt '" + filter_date + "' and start_date gt '" + Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd") + "'")
 
 }
