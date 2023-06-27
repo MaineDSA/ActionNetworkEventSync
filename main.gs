@@ -15,7 +15,7 @@ const days_upcoming = 28
 const syncANtoGCal = () => {
 
 	let events = getRecentlyModifiedEventIDs(recently_modified); // Get an array of event IDs for events modified in the last week
-	Logger.log("Found " + events.length + " events modified in the last " + recently_modified + " days.");
+	Logger.log("Found " + events.length + " events modified in the last " + recently_modified + " days that have not started yet.");
 
 	for (let i = 0; i < events.length; i++) {
 
@@ -32,21 +32,21 @@ const syncANtoGCal = () => {
 			if (event.status != 'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
       
 				createGoogleEvent(event, action_network_id);
-        sendSlackMessage(event, 'New Event Added to the Calendar:')
+        if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") != null) { sendSlackMessage(event, 'New Event Added to the Calendar:') }
 
 			}
 
 		} else { // If the event is in Google Calendar
 
 			// If the event was cancelled in Action Network, cancel it in Google Calendar
-			if (event.status != 'cancelled') {
+			if (event.status === 'cancelled') {
 
-				updateGoogleEvent(event, action_network_id, google_id);
+				cancelGoogleEvent(event, action_network_id, google_id);
+        if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") != null) { sendSlackMessage(event, 'Calendar Event Canceled:') }
 
 			} else {
 
-				cancelGoogleEvent(event, action_network_id, google_id);
-        sendSlackMessage(event, 'Calendar Event Canceled:')
+				updateGoogleEvent(event, action_network_id, google_id);
 
 			}
 
