@@ -22,6 +22,7 @@ To use these features, you must configure [Script Properties](https://developers
 - LINK_COLOR: Preferred color for HTML links in HTML-formatted email bodies as a hex code. We use ec1f27.
 - TIME_DST: The time zone you use during Daylight Savings Time. We use GMT-04:00.
 - TIME_STANDARD: The time zone you use outside of Daylight Savings Time. We use GMT-05:00
+- SLACK_WEBHOOK_URL: A Slack webhook URL to notify when creating or canceling upcoming Google Calendar events.
 
 ## Triggering
 - Our script is set to call syncANtoGCal() every 10 minutes.
