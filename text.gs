@@ -115,21 +115,22 @@ const getUpcomingEventDateFilter = () => {
 
 }
 
-// This function compiles an HTML message of upcoming events and returns it as a string
-const compileHTMLMessage = () => {
+const getHTMLTopAnnouncement = () => {
 
-  Logger.log("Compiling HTML message of upcoming events.")
-
-  const events = getSortedUpcomingANEventIDs(getUpcomingEventDateFilter()) // Get an array of sorted event IDs
-
-  Logger.log("Found and sorted " + events.length + " upcoming events.")
-
-  let doc = '' // Initialize blank string for the final compiled HTML message
+  doc = ''
 
   // Priority Announcement
   doc += '<br /><hr class="rounded">'
   doc += '<h1><center>Priority Announcement</center></h1>'
   doc += '<br /><p>Description of priority announcement.</p>'
+
+  return doc
+
+}
+
+const getHTMLEvents = (events) => {
+
+  doc = ''
 
   // Upcoming Events
   doc += '<br /><hr class="rounded"><h1><center>Upcoming Events</center></h1>'
@@ -147,12 +148,44 @@ const compileHTMLMessage = () => {
   }
   doc += '</section>'
 
+  return doc
+
+}
+
+const getHTMLAnnouncements = () => {
+
+  doc = ''
+
   // Additional Announcement(s)
   doc += '<br /><hr class="rounded"><h1><center>Even More</center></h1>'
   doc += '<section style="display:flex;flex-direction:row;flex-wrap:wrap">'
   doc += '<article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>First title</h2><p>Description of first announcement.</p></article>' // add first announcement
   doc += '<article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>Second title</h2><p>Description of second announcement.</p></article>' // add second announcement
   doc += '</section>'
+
+  return doc
+
+}
+
+// This function compiles an HTML message of upcoming events and returns it as a string
+const compileHTMLEmail = (nextdays) => {
+
+  Logger.log("Compiling HTML email of upcoming events.")
+
+  const events = getSortedUpcomingANEventIDs(nextdays) // Get an array of sorted event IDs
+
+  Logger.log("Found and sorted " + events.length + " upcoming events.")
+
+  let doc = '' // Initialize blank string for the final compiled HTML message
+
+  // Priority Announcement
+  doc += getHTMLTopAnnouncement()
+
+  // Upcoming Events
+  doc += getHTMLEvents(events)
+
+  // Additional Announcement(s)
+  doc += getHTMLAnnouncements()
 
   return doc // Return the final compiled HTML message
 
