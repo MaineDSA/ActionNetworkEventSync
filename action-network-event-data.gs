@@ -47,7 +47,6 @@ const getEventIDFromAN = (contentJSON, search_id) => {
 }
 
 // This function returns all event data for an event ID from Action Network.
-// If provided with a filter_date ("UTC", "yyyy-MM-dd"), it returns only events modified since that date.
 const getAllANEventData = (event_url) => {
 
 	const content = UrlFetchApp.fetch(event_url, standard_api_params)
