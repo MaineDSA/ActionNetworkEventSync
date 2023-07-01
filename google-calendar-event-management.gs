@@ -46,10 +46,27 @@ const updateGoogleEvent = async (event, action_network_id, google_id) => {
 
   }
 
+  const event_description = calDescription(event)
+
+  const start_time = getStartTime(event)
+  const end_time = getEndTime(event)
+
   // Update the Google Calendar event with the new event details
-  eventGoogle.setTitle(eventName);
-  eventGoogle.setDescription(calDescription(event));
-  eventGoogle.setTime(getStartTime(event), getEndTime(event));
+  const title_old = eventGoogle.getTitle()
+  if (title_old !== eventName) {
+    Logger.log("Updating title of event " + eventGoogle.getTitle() + " to " + eventName + ".")
+    eventGoogle.setTitle(eventName)
+  }
+
+  const desc_old = eventGoogle.getDescription()
+  if (desc_old !== event_description) {
+  Logger.log("Updating description of event " + eventName + ".")
+    eventGoogle.setDescription(eventName)
+  }
+
+  Logger.log("Updating start time of event " + eventName + " from " + eventGoogle.getStartTime() + " to " + end_time + ".")
+  Logger.log("Updating end time of event " + eventName + " from " + eventGoogle.getEndTime() + " to " + end_time + ".")
+  eventGoogle.setTime(start_time, end_time)
 
   Logger.log("Updated event " + eventName + " in Google Calendar at " + eventGoogle.getId() + ".")
 
