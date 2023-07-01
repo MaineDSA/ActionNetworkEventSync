@@ -4,8 +4,9 @@ Automation for Action Network
 ## Features
 This Google Apps Script code simplifies some more labor-intensive Action Network tasks:
 - **syncANtoGCal()** Retrieving a list of recently-edited Action Network events and syncing them to Google Calendar.
-- **emailFormattedEventList()** Retriving a list of upcoming Action Network events and compiling them into an HTML-formatted Action Network email draft.
 - **draftANEventMessage()** Retriving a list of upcoming Action Network events and compiling them into an HTML-formatted email to be sent to a single address.
+- **emailFormattedEventList()** Retriving a list of upcoming Action Network events and compiling them into an HTML-formatted Gmail email.
+- **postTodaysEvents()** Retriving a list of upcoming Action Network events and compiling them into a regular Slack post.
 
 ## Script Properties
 To use these features, you must configure [Script Properties](https://developers.google.com/apps-script/reference/properties) in your Google Apps script.
@@ -22,8 +23,9 @@ To use these features, you must configure [Script Properties](https://developers
 - LINK_COLOR: Preferred color for HTML links in HTML-formatted email bodies as a hex code. We use ec1f27.
 - TIME_DST: The time zone you use during Daylight Savings Time. We use GMT-04:00.
 - TIME_STANDARD: The time zone you use outside of Daylight Savings Time. We use GMT-05:00
-- SLACK_WEBHOOK_URL: A Slack webhook URL to notify when creating or canceling upcoming Google Calendar events.
+- SLACK_WEBHOOK_URL (optional): A Slack webhook URL to notify when creating or canceling upcoming Google Calendar events.
 
 ## Triggering
 - Our script is set to call syncANtoGCal() every 10 minutes.
 - Our script is set to call draftANEventMessage() every Tuesday morning.
+- Our script is set to call postTodaysEvents() every morning.

@@ -10,6 +10,8 @@ const default_length_mins = 90
 const recently_modified = 14
 // Set the number of days to consider events as upcoming
 const days_upcoming_email = 28
+// Daily message to include this many days
+const days_upcoming_slack = 1
 
 // This function syncs events modified in the last week from Action Network to Google Calendar
 const syncANtoGCal = () => {
@@ -25,9 +27,9 @@ const syncANtoGCal = () => {
 
     	Logger.log(event.title.trim() + " is listed as " + event.status + " in Action Network at " + action_network_id + ".")
 
-    // If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
+    	// If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
 		const google_id = getEventIDFromAN(event, "google_id")
-    if (google_id === null) { // If the event is not in Google Calendar
+		if (google_id === null) { // If the event is not in Google Calendar
 
 			if (event.status != 'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
       
@@ -52,10 +54,31 @@ const syncANtoGCal = () => {
 
 		}
 
-			}
+	}
 
-		}
+}
+
+const postTodaysEvents = () => {
+	if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") === null) { 
+		Logger.log('SLACK WEBHOOK NOT CONFIGURED')
+		return
+	}
+
+	const events = getSortedUpcomingANEventIDs(getUpcomingEventDateFilter(days_upcoming_slack)); // Get an array of event IDs for events modified in the last week
+	Logger.log("Found " + events.length + " events coming up in the next " + days_upcoming_slack + " day(s).")
+
+	if (events.length <= 0) { return } // stop if there are no events today
+
+	let doc = "Today's Events:"
+	for (let i = 0; i < events.length; i++) {
+
+		const event = getAllANEventData(events[i].href); // Get all event data for the current event ID
+		Logger.log(event.title.trim() + " is listed as " + event.status + " in Action Network.")
+
+		if (event.status != 'cancelled') { doc += formatSlackEventAnnouncement(event) }
 
 	}
+
+	sendSlackMessage(doc)
 
 }
