@@ -7,7 +7,7 @@ const standard_api_params = { headers: { "OSDI-API-Token": scriptProperties.getP
 // Set a default event length of 90 minutes in case no length is specified
 const default_length_mins = 90
 // Set the number of days to consider events as recently modified
-const recently_modified = 7
+const recently_modified = 14
 // Set the number of days to consider events as upcoming
 const days_upcoming = 28
 
