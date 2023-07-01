@@ -2,7 +2,7 @@
 const createGoogleEvent = async (event, action_network_id) => {
 
   const eventName = event.title.trim(); // Get the event name and trim any leading or trailing whitespace
-  Logger.log("Creating event " + eventName + " from Action Network at " + action_network_id + ".");
+  Logger.log("Creating event " + eventName + " from Action Network at " + action_network_id + ".")
 
   // Set the event details object with the event description and location
   const eventDetails = {
@@ -11,15 +11,15 @@ const createGoogleEvent = async (event, action_network_id) => {
   }
 
   // Get the Google Calendar by ID from the script properties
-  const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"));
+  const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"))
   // Create the event in Google Calendar and get the Google ID for the new event
-  const eventGoogle = calendarGoogle.createEvent(eventName, getStartTime(event), getEndTime(event), eventDetails);
-  const google_id = eventGoogle.getId();
+  const eventGoogle = calendarGoogle.createEvent(eventName, getStartTime(event), getEndTime(event), eventDetails)
+  const google_id = eventGoogle.getId()
 
   // Tag the Action Network event with the Google ID for future reference
-  tagANEvent(action_network_id, google_id);
+  tagANEvent(action_network_id, google_id)
 
-  Logger.log("Created event " + eventName + " in Google Calendar at " + google_id + ".");
+  Logger.log("Created event " + eventName + " in Google Calendar at " + google_id + ".")
 
   return eventGoogle.getId(); // Return the Google ID for the new event
 
@@ -31,18 +31,18 @@ const createGoogleEvent = async (event, action_network_id) => {
 const updateGoogleEvent = async (event, action_network_id, google_id) => {
 
   const eventName = event.title.trim(); // Get the event name and trim any leading or trailing whitespace
-  Logger.log("Updating event " + eventName + " from Action Network at " + action_network_id + ".");
+  Logger.log("Updating event " + eventName + " from Action Network at " + action_network_id + ".")
 
   // Get the Google Calendar by ID from the script properties
-  const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"));
+  const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"))
   // Get the existing Google Calendar event by ID
-  let eventGoogle = calendarGoogle.getEventById(google_id);
+  let eventGoogle = calendarGoogle.getEventById(google_id)
 
   // If the Google Calendar event does not exist, log an error and return
   if (eventGoogle == null) {
 
-    Logger.log("Google Calendar event " + google_id + " not found.");
-    return;
+    Logger.log("Google Calendar event " + google_id + " not found.")
+    return
 
   }
 
@@ -51,7 +51,7 @@ const updateGoogleEvent = async (event, action_network_id, google_id) => {
   eventGoogle.setDescription(calDescription(event));
   eventGoogle.setTime(getStartTime(event), getEndTime(event));
 
-  Logger.log("Updated event " + eventName + " in Google Calendar at " + eventGoogle.getId() + ".");
+  Logger.log("Updated event " + eventName + " in Google Calendar at " + eventGoogle.getId() + ".")
 
   return eventGoogle.getId(); // Return the Google ID for the updated event
 
@@ -61,7 +61,7 @@ const updateGoogleEvent = async (event, action_network_id, google_id) => {
 const cancelGoogleEvent = async (event, action_network_id, google_id) => {
 
   // Get the Google Calendar event by ID
-  const eventGoogle = CalendarApp.getEventById(google_id);
+  const eventGoogle = CalendarApp.getEventById(google_id)
 
   // If the Google Calendar event doesn't exist, abort
   if (eventGoogle === null) { return }
@@ -74,12 +74,12 @@ const cancelGoogleEvent = async (event, action_network_id, google_id) => {
 
   } catch(e) {
 
-    Logger.log(eventName + " was already deleted from Google Calendar at " + google_id + ".");
+    Logger.log(eventName + " was already deleted from Google Calendar at " + google_id + ".")
     return false; // Return false to indicate that the event was not deleted (since it was already deleted)
 
   }
 
-  Logger.log(eventName + " has now been deleted from Google Calendar at " + google_id + ".");
+  Logger.log(eventName + " has now been deleted from Google Calendar at " + google_id + ".")
   return true; // Return true to indicate that the event was successfully deleted
 
 }
