@@ -11,7 +11,7 @@ const sendEmail = (doc) => {
 // Defines a function named emailFormattedEventList with no parameters
 const emailFormattedEventList = () => {
 
-  // Calls the sendEmail function with the output of the compileHTMLMessage() function as the message body.
-  sendEmail(compileHTMLMessage())
+  // Calls the sendEmail function with the output of the compileHTMLEmail() function as the message body.
+  sendEmail(compileHTMLEmail(getUpcomingEventDateFilter(days_upcoming_email)))
 
 }

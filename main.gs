@@ -9,7 +9,7 @@ const default_length_mins = 90
 // Set the number of days to consider events as recently modified
 const recently_modified = 14
 // Set the number of days to consider events as upcoming
-const days_upcoming = 28
+const days_upcoming_email = 28
 
 // This function syncs events modified in the last week from Action Network to Google Calendar
 const syncANtoGCal = () => {

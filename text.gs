@@ -105,10 +105,10 @@ const formatEvent = (event) => {
   
 }
 
-const getUpcomingEventDateFilter = () => {
+const getUpcomingEventDateFilter = (nextdays) => {
 
   const futureDate = new Date()
-  futureDate.setDate(futureDate.getDate() + days_upcoming)
+  futureDate.setDate(futureDate.getDate() + nextdays)
   const queryFutureDate = " and start_date lt '" + Utilities.formatDate(futureDate, "UTC", "yyyy-MM-dd") + "'"
 
   return [ queryFutureDate ]

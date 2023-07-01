@@ -37,9 +37,9 @@ const draftANMessage = (doc) => {
 
 }
 
-// Calls the draftANMessage function with the output of the compileHTMLMessage() function as an argument.
+// Calls the draftANMessage function with the output of the compileHTMLEmail() function as an argument.
 const draftANEventMessage= () => {
 
-  draftANMessage(compileHTMLMessage())
+  draftANMessage(compileHTMLEmail(getUpcomingEventDateFilter(days_upcoming_email)))
 
 }
