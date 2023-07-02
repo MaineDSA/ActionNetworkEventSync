@@ -19,10 +19,14 @@ const dstOffset = (datevar) => {
   // Check if DST is currently being observed for the given date.
   if (datevar.isDstObserved()) {
     
+    if (scriptProperties.getProperty("TIME_DST") === null) { Logger.log('No DST Time Zone "TIME_DST" provided, cannot continue.'); return }
+
     // Return the DST offset if it is being observed.
     return scriptProperties.getProperty("TIME_DST")
     
   }
+
+  if (scriptProperties.getProperty("TIME_STANDARD") === null) { Logger.log('No Standard Time Zone "TIME_STANDARD" provided, cannot continue.'); return }
 
   // Return the standard offset if it is not being observed.
   return scriptProperties.getProperty("TIME_STANDARD")
