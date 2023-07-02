@@ -1,0 +1,13 @@
+{
+  "name": "Google Apps Script Development",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "labnol.google-apps-script"
+      ]
+    }
+  },
+}
