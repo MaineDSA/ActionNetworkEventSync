@@ -13,7 +13,7 @@ To use these features, you must configure [Script Properties](https://developers
 - AN_API_KEY: Your Action Network API Key.
 - AN_API_URL: Your Action Network API URL (https://actionnetwork.org/api/v2/).
 - AN_EMAIL_REPLY_TO: The email you want generated AN email drafts to use as the reply-to address.
-- AN_EMAIL_SENDER: The name you want displayed as the sender for generated AN email drafts.
+- AN_EMAIL_SENDER: The name you want displayed as the sender for generated AN email.
 - AN_EMAIL_WRAPPER: The wrapper you want to use for the generated AN email drafts.
 - AN_EMAIL_CREATOR: The AN Network User to use for the generated AN email drafts.
 - EMAIL_SUBJECT: The subject you want used for the generated AN email drafts.
