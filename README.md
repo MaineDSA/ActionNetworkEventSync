@@ -17,7 +17,6 @@ To use these features, you must configure [Script Properties](https://developers
 - AN_EMAIL_SUBJECT: The subject you want used for the generated AN email drafts.
 - AN_EMAIL_WRAPPER: The wrapper you want to use for the generated AN email drafts.
 - AN_EMAIL_CREATOR: The AN Network User to use for the generated AN email drafts.
-- AN_ORIGIN_SYSTEM: Internal code used to show where an AN entry originated from. We use ActionNetworkScript.
 - EVENTS_EMAIL: The email you want to send a list of events to (such as when not using AN draft generation).
 - GCAL_ID: The calendar ID of your Google Calendar including the @domain.com part.
 - LINK_COLOR: Preferred color for HTML links in HTML-formatted email bodies as a hex code. We use ec1f27.

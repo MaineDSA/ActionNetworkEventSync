@@ -9,7 +9,7 @@ const draftANMessage = (doc) => {
     "subject": subject,
     "body": doc,
     "from": scriptProperties.getProperty("AN_EMAIL_SENDER"),
-    "origin_system": scriptProperties.getProperty("AN_ORIGIN_SYSTEM"),
+    "origin_system": "ActionNetworkEventSync",
     "reply_to": scriptProperties.getProperty("AN_EMAIL_REPLY_TO"),
     "_links": {
       "osdi:wrapper": {
