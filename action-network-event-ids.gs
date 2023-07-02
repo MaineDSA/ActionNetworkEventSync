@@ -1,6 +1,8 @@
 // This function returns event IDs from Action Network. If a filter is provided, it appends it to the API URL.
 const getANEventIDs = (filter) => {
 
+  if (scriptProperties.getProperty("AN_API_URL") === null) { Logger.log('No Action Network API URL "AN_API_URL" provided, cannot continue.'); return }
+
 	let url = scriptProperties.getProperty("AN_API_URL") + "events/"
 	if (filter != null) {
 		Logger.log("Finding upcoming events via filter query " + filter + ".")

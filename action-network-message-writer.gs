@@ -2,7 +2,13 @@
 // Values for Subject, Sender, Reply-To, Origin System, and Wrapper are obtained via defined Script Properties.
 const draftANMessage = (doc) => {
 
-  const subject = '🌹 ' + scriptProperties.getProperty("AN_EMAIL_SUBJECT") + ' for ' + Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd") + ' 🌹'
+  if (scriptProperties.getProperty("AN_API_KEY") === null) { Logger.log('No Action Network Api Key "AN_API_KEY" provided, cannot continue.'); return }
+  if (scriptProperties.getProperty("AN_EMAIL_REPLY_TO") === null) { Logger.log('No Email Reply-To Address "AN_EMAIL_REPLY_TO" provided, cannot continue.'); return }
+  if (scriptProperties.getProperty("AN_EMAIL_WRAPPER") === null) { Logger.log('No Action Network Email Wrapper Address "AN_EMAIL_WRAPPER" provided, cannot continue.'); return }
+  if (scriptProperties.getProperty("AN_EMAIL_CREATOR") === null) { Logger.log('No Action Network email creator UUID "AN_EMAIL_CREATOR" provided, cannot continue.'); return }
+  if (scriptProperties.getProperty("EMAIL_SUBJECT") === null) { Logger.log('No email subject "EMAIL_SUBJECT" provided, cannot continue.'); return }
+
+  const subject = '🌹 ' + scriptProperties.getProperty("EMAIL_SUBJECT") + ' for ' + Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd") + ' 🌹'
 
   // Creates payload for POST request to Action Network
   const payload = JSON.stringify({

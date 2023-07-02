@@ -1,6 +1,9 @@
 // This function tags an Action Network event with the Google ID for its corresponding Google Calendar event
 const tagANEvent = async (action_network_id, google_id) => {
 
+  if (scriptProperties.getProperty("AN_API_KEY") === null) { Logger.log('No Action Network API Key "AN_API_KEY" provided, cannot continue.'); return }
+  if (scriptProperties.getProperty("AN_API_URL") === null) { Logger.log('No Action Network API URL "AN_API_URL" provided, cannot continue.'); return }
+
 	Logger.log("Tagging Action Network event " + action_network_id + " with Google Calendar event ID " + google_id)
 
 	// Create a payload for the PUT request to Action Network, adding the Google ID as an identifier on the event
