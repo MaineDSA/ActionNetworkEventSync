@@ -55,23 +55,25 @@ const formatEvent = (event) => {
 
   // Define the event title template and format it with the event date and title
   const template_title =
-    '<h2 style="font-size:1.8em;margin-bottom:-.9rem">%EVENTTITLE%</h2>'
+    '<h2 style="font-size:1.8em; margin-top: 0.002em; margin-bottom:-.9rem">%EVENTTITLE%</h2>'
   const formatted_title = template_title.replace("%EVENTTITLE%", event.title.trim())
 
   // Define the event time and link template and format it with the event duration and URL
   const template_time_and_link =
-    '<h3 style="font-style:italic;margin-bottom:-.5rem">%EVENTDATE% | %EVENTDURATION% | <a style="color:#'+ scriptProperties.getProperty("LINK_COLOR") +';text-decoration:none" href="%EVENTURL%">RSVP HERE</a></h3>'
+    '<h3 style="font-style:italic;margin-bottom:-.5rem">%EVENTDATE% | %EVENTDURATION%</h3>'
   const event_date = start.toLocaleDateString("en-US", { weekday: "long" , month: 'long', day: "2-digit" })
   const startTime = start.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
   const endTime = end_date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
-  const eventURL = encodeURI(event.browser_url)
   const formatted_date_and_link = template_time_and_link
     .replace("%EVENTDATE%", event_date)
     .replace("%EVENTDURATION%", startTime + " - " + endTime)
-    .replace("%EVENTURL%", eventURL)
+  let image_url = ''
+  Logger.log(event.featured_image_url)
+  if (event.featured_image_url != null) { image_url = '<a href="' + encodeURI(event.browser_url) + '" target="_blank"><img style="height: 100%; width: 100%; object-fit: contain; margin-top: 20px" src="' + encodeURI(event.featured_image_url) + '" alt="Promo Image"></a>' }
+  const button_rsvp = '<a href="' + encodeURI(event.browser_url) + '" target="_blank"><button type="button" style="background-color: #' + scriptProperties.getProperty("LINK_COLOR") + '; border: 0.5px solid ' + scriptProperties.getProperty("LINK_COLOR") + '; border-radius: 10px; color: #fff; padding: 8px; margin-top: 18px">Sign Me Up</button></a>'
 
   // Combine the formatted title, date, link, and description
-  let formatted_body = '<article style="flex-basis:calc(100% - 4rem)">' + formatted_title + formatted_date_and_link + event.description + "</article>"
+  let formatted_body = '<article style="outline: #' + scriptProperties.getProperty("LINK_COLOR") + ' dotted 2.5px; padding: 1em; margin-top: 1.5em; padding-bottom: 1.5em; margin-bottom: 1.25em">' + formatted_title + formatted_date_and_link + image_url + button_rsvp + event.description + "</article>"
 
   // Set custom link colors by replacing anchor tags with a style attribute containing a custom color value
   formatted_body = formatted_body.replace(
