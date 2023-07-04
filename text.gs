@@ -1,20 +1,3 @@
-const formattedDescriptionFooter = (description) => {
-
-  let mask = ''
-
-  if (['no mask policy', 'masks are required'].some(r=> description.toLocaleLowerCase().indexOf(r) >= 0)) {
-    Logger.log("Skipping event due to mask policy override.")
-  } else {
-    mask += '<h5><strong>Mask Policy:</strong></h5>'
-    mask += '<p>If this event is in-person and you would like this to be a masked event, please contact the event organizer at least 3 days ahead of time.</p>'
-    mask += '<p>Contact information for the event organizer should be listed at the RSVP link found above.</p>'
-    mask += '<p>For complete details about this policy, <a style="color:#'+ scriptProperties.getProperty("LINK_COLOR") +';text-decoration:none" href="https://mainedsa.org/covid">click here</a>.</p>'
-  }
-
-  return mask
-
-}
-
 // This function takes a string argument 'description' and formats it by replacing various HTML tags and whitespace characters
 const formattedDescription = (description) => {
   
@@ -40,8 +23,9 @@ const calDescription = (event) => {
   const moreInfo = "<h5><strong>More Info and RSVP:</strong></h5>" + '<p><a style="color:#'+ scriptProperties.getProperty("LINK_COLOR") +';text-decoration:none" href="' + event.browser_url + '">' + event.browser_url + "</a>" + "</p>"
   // Generate a string that describes the event with a "Description" label and a formatted description using the 'formattedDescription' function defined above
   const calDesc = "<h5><strong>Description:</strong></h5>" + formattedDescription(event.description)
-  // Create a string that provides a hyperlink to the chapter's COVID policy URL and label it as "Mask Policy"
-  const calDescFooter = formattedDescriptionFooter(event.description)
+  // Get custom event footer if configured (create "customizations.gs" file and add a function returning string to be appended to each event)
+  let calDescFooter = ''
+  if (typeof formattedDescriptionFooter === 'function') { calDescFooter = formattedDescriptionFooter(event.description) }
 
   return moreInfo + calDesc + calDescFooter // Return the concatenated string
   
@@ -134,9 +118,10 @@ const getHTMLEvents = (events) => {
 
   // Upcoming Events
   doc += '<br /><hr class="rounded"><h1><center>Upcoming Events</center></h1>'
-  doc += '<p><center><a style="color:#'+ scriptProperties.getProperty("LINK_COLOR") +';text-decoration:none" href="' + scriptProperties.getProperty("GCAL_LINK") + '">Google Calendar Link</a></center></p>'
-  doc += '<p><center><a style="color:#'+ scriptProperties.getProperty("LINK_COLOR") +';text-decoration:none" href="' + 'https://mainedsa.org/covid' + '">Mask Policy Link</a></center></p>'
-  doc += '<section">'
+  // Get custom calendar subtitle/links if configured (create "customizations.gs" file and add a function returning a string to be added here)
+  if (typeof formattedCalendarText === 'function') { doc += formattedCalendarText(events) }
+  doc += '<section>'
+
   for (let i = 0; i < events.length; i++) {
 
     const event = getAllANEventData(events[i].href) // Get all event data for the current event ID
