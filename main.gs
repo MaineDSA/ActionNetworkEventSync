@@ -17,6 +17,7 @@ const days_upcoming_slack = 1
 const syncANtoGCal = () => {
 
   if (scriptProperties.getProperty("AN_API_URL") === null) {Logger.log('No Action Network API Key "AN_API_URL" provided, cannot continue.'); return }
+  if (scriptProperties.getProperty("GCAL_ID") === null) { Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.'); return }
 
 	const events = getRecentlyModifiedEventIDs(recently_modified); // Get an array of event IDs for events modified in the last week
 	Logger.log("Found " + events.length + " events modified in the last " + recently_modified + " days that have not started yet.");
@@ -43,7 +44,7 @@ const syncANtoGCal = () => {
 		} else { // If the event is in Google Calendar
 
 			// If the event was cancelled in Action Network, cancel it in Google Calendar
-			if (event.status === 'cancelled') {
+			if (event.status === 'cancelled' && CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID")).getEventById(google_id) === null) {
 
 				cancelGoogleEvent(event, action_network_id, google_id);
         if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") != null) { sendSlackMessage('Calendar Event Canceled:' + formatSlackEventAnnouncement(event)) }
