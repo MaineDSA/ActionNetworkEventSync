@@ -8,7 +8,7 @@ const draftANMessage = (doc) => {
   if (scriptProperties.getProperty("AN_EMAIL_CREATOR") === null) { Logger.log('No Action Network email creator UUID "AN_EMAIL_CREATOR" provided, cannot continue.'); return }
   if (scriptProperties.getProperty("EMAIL_SUBJECT") === null) { Logger.log('No email subject "EMAIL_SUBJECT" provided, cannot continue.'); return }
 
-  const subject = '🌹 ' + scriptProperties.getProperty("EMAIL_SUBJECT") + ' for ' + Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd") + ' 🌹'
+  const subject = scriptProperties.getProperty("EMAIL_SUBJECT") + ' for ' + Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd") + ' 🌹'
 
   // Creates payload for POST request to Action Network
   const payload = JSON.stringify({
