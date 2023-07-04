@@ -101,7 +101,7 @@ const getUpcomingEventDateFilter = (nextdays) => {
 
 const getHTMLTopAnnouncement = () => {
 
-  doc = ''
+  let doc = ''
 
   // Priority Announcement
   doc += '<br /><hr class="rounded">'
@@ -114,7 +114,7 @@ const getHTMLTopAnnouncement = () => {
 
 const getHTMLEvents = (events) => {
 
-  doc = ''
+  let doc = ''
 
   // Upcoming Events
   doc += '<br /><hr class="rounded"><h1><center>Upcoming Events</center></h1>'
@@ -139,7 +139,7 @@ const getHTMLEvents = (events) => {
 
 const getHTMLAnnouncements = () => {
 
-  doc = ''
+  let doc = ''
 
   // Additional Announcement(s)
   doc += '<br /><hr class="rounded"><h1><center>Even More</center></h1>'
