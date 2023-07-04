@@ -8,6 +8,13 @@ This Google Apps Script code simplifies some more labor-intensive Action Network
 - **emailFormattedEventList()** Retriving a list of upcoming Action Network events and compiling them into an HTML-formatted Gmail email.
 - **postTodaysEvents()** Retriving a list of upcoming Action Network events and compiling them into a regular Slack post.
 
+## Screenshots
+### Generated Email
+<a href="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/7a017df7-5a18-408e-aa7d-d85ec40fcfc1"><img src="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/7a017df7-5a18-408e-aa7d-d85ec40fcfc1" alt="Example of Generated Action Network Draft" align="left" height="520"></a>
+
+### New Event Notification in Slack
+<a href="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/a211d773-0be6-4421-a6b4-d63bfb7b2bf9"><img src="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/a211d773-0be6-4421-a6b4-d63bfb7b2bf9" alt="Slack Message announcing new event" height="480"></a>
+
 ## Script Properties
 To use these features, you must configure [Script Properties](https://developers.google.com/apps-script/reference/properties) in your Google Apps script.
 - AN_API_KEY: Your Action Network API Key.
