@@ -1,4 +1,6 @@
-// Get the u properties object for use throughout the script
+// Get the user properties object for use throughout the script
+const apiUrlAn = 'https://actionnetwork.org/api/v2/'
+// Get the user properties object for use throughout the script
 const userProperties = PropertiesService.getUserProperties()
 // Get the script properties object for use throughout the script
 const scriptProperties = PropertiesService.getScriptProperties()
@@ -16,7 +18,6 @@ const days_upcoming_slack = 1
 // This function syncs events modified in the last week from Action Network to Google Calendar
 const syncANtoGCal = () => {
 
-  if (scriptProperties.getProperty("AN_API_URL") === null) {Logger.log('No Action Network API Key "AN_API_URL" provided, cannot continue.'); return }
   if (scriptProperties.getProperty("GCAL_ID") === null) { Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.'); return }
 
 	const events = getRecentlyModifiedEventIDs(recently_modified); // Get an array of event IDs for events modified in the last week
@@ -71,7 +72,6 @@ const draftANEventMessage= () => {
 const postTodaysEvents = () => {
 
   if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") === null) { Logger.log('No Slack Webhook URL "SLACK_WEBHOOK_URL" provided, cannot continue.'); return }
-  if (scriptProperties.getProperty("AN_API_URL") === null) { Logger.log('No Action Network API Key "AN_API_URL" provided, cannot continue.'); return }
 
    events = getSortedUpcomingANEventIDs(getUpcomingEventDateFilter(days_upcoming_slack)); // Get an array of event IDs for events modified in the last week
   Logger.log("Found " + events.length + " events coming up in the next " + days_upcoming_slack + " day(s).");
