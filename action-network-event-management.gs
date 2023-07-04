@@ -2,7 +2,6 @@
 const tagANEvent = async (action_network_id, google_id) => {
 
   if (scriptProperties.getProperty("AN_API_KEY") === null) { Logger.log('No Action Network API Key "AN_API_KEY" provided, cannot continue.'); return }
-  if (scriptProperties.getProperty("AN_API_URL") === null) { Logger.log('No Action Network API URL "AN_API_URL" provided, cannot continue.'); return }
 
 	Logger.log("Tagging Action Network event " + action_network_id + " with Google Calendar event ID " + google_id)
 
@@ -19,6 +18,6 @@ const tagANEvent = async (action_network_id, google_id) => {
 		}
 	}
 
-	UrlFetchApp.fetch(scriptProperties.getProperty("AN_API_URL") + "events/" + action_network_id, options)
+	UrlFetchApp.fetch(apiUrlAn + "events/" + action_network_id, options)
 
 }

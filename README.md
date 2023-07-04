@@ -11,7 +11,6 @@ This Google Apps Script code simplifies some more labor-intensive Action Network
 ## Script Properties
 To use these features, you must configure [Script Properties](https://developers.google.com/apps-script/reference/properties) in your Google Apps script.
 - AN_API_KEY: Your Action Network API Key.
-- AN_API_URL: Your Action Network API URL (https://actionnetwork.org/api/v2/).
 - AN_EMAIL_REPLY_TO: The email you want generated AN email drafts to use as the reply-to address.
 - AN_EMAIL_SENDER: The name you want displayed as the sender for generated AN email.
 - AN_EMAIL_WRAPPER: The wrapper you want to use for the generated AN email drafts.
