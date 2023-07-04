@@ -42,10 +42,3 @@ const draftANMessage = (doc) => {
   Logger.log("Created Action Network Message " + action_network_id + " with subject " + subject + '.')
 
 }
-
-// Calls the draftANMessage function with the output of the compileHTMLEmail() function as an argument.
-const draftANEventMessage= () => {
-
-  draftANMessage(compileHTMLEmail(getUpcomingEventDateFilter(days_upcoming_email)))
-
-}
