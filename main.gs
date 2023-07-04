@@ -71,7 +71,9 @@ const postTodaysEvents = () => {
 
   if (events.length <= 0) { return } // stop if there are no events today
 
-  let doc = "Today's Events:"
+  const today_events = "Today's Events:"
+
+  let doc = today_events
   for (let i = 0; i < events.length; i++) {
 
     const event = getAllANEventData(events[i].href); // Get all event data for the current event ID
@@ -80,6 +82,9 @@ const postTodaysEvents = () => {
     if (event.status != 'cancelled') { doc += formatSlackEventAnnouncement(event) }
 
   }
+
+  // stop if today's events have all been cancelled
+  if (doc === today_events) { Logger.log('All events for today have been canceled. No message will be posted.'); return } 
 
   sendSlackMessage(doc)
 
