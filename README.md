@@ -24,6 +24,13 @@ To use these features, you must configure [Script Properties](https://developers
 - TIME_STANDARD: The time zone you use outside of Daylight Savings Time. We use GMT-05:00
 - SLACK_WEBHOOK_URL (optional): A Slack webhook URL to notify when creating or canceling upcoming Google Calendar events and for the daily upcoming events digest.
 
+# Additional Customization
+As some desired customization cannot be attained through properties, some tie-in points are provided.
+Creating the following functions in a new script file will allow you to insert additional text at key places.
+If not configured, these will be skipped.
+- formattedDescriptionFooter(formatted_event_description): Creating this function allows you to add an HTML-formatted string to the end of each event, as posted to Google Calendar.
+- formattedCalendarText(events): Creating this function allows you to add additional information to the "Upcoming Events" section, between the header and list of events.
+
 ## Triggering
 - Our script is set to call syncANtoGCal() every 10 minutes.
 - Our script is set to call draftANEventMessage() every Tuesday morning.
