@@ -11,26 +11,27 @@ const draftANMessage = (doc) => {
   const subject = scriptProperties.getProperty("EMAIL_SUBJECT") + ' for ' + Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd") + ' 🌹'
 
   // Creates payload for POST request to Action Network
-  const payload = JSON.stringify({
+  let payload = {
     "subject": subject,
     "body": doc,
     "from": scriptProperties.getProperty("AN_EMAIL_SENDER"),
     "origin_system": "ActionNetworkEventSync",
     "reply_to": scriptProperties.getProperty("AN_EMAIL_REPLY_TO"),
     "_links": {
-      "osdi:wrapper": {
-        "href": apiUrlAn + "wrappers/" + scriptProperties.getProperty("AN_EMAIL_WRAPPER")
-        },
-      "osdi:creator": {
-        "href": apiUrlAn + "people/" + scriptProperties.getProperty("AN_EMAIL_CREATOR")
-        },
+      "osdi:wrapper": { "href": apiUrlAn + "wrappers/" + scriptProperties.getProperty("AN_EMAIL_WRAPPER") },
+      "osdi:creator": { "href": apiUrlAn + "people/" + scriptProperties.getProperty("AN_EMAIL_CREATOR") },
     }
-  })
+  }
+
+  if (scriptProperties.getProperty("EMAIL_TARGET") != null) {
+    payload.targets = [{ "href": apiUrlAn + "queries/" + scriptProperties.getProperty("EMAIL_TARGET") }]
+    Logger.log('Message targeting query: ' + scriptProperties.getProperty("EMAIL_TARGET"))
+  }
 
   // Sets options and sends request to Action Network, logs with "action_network" identifier after completion.
   const options = {
     method: "post",
-    payload: payload,
+    payload: JSON.stringify(payload),
     headers: {
       'Content-Type': 'application/json',
       'OSDI-API-Token': scriptProperties.getProperty("AN_API_KEY")
