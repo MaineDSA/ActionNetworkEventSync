@@ -10,13 +10,14 @@ const formatSlackEventAnnouncement = (event) => {
 }
 
 // Sends a message via Slack.
-const sendSlackMessage = (message) => {
+const sendSlackMessage = (message, image) => {
 
   if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") === null) {Logger.log('No Slack Webhook URL "SLACK_WEBHOOK_URL" provided, cannot continue.'); return }
 
-  let slackMessage = {
-    text: message
-  };
+  let slackMessage = { attachments: [ {} ] }
+  if (message != null) { slackMessage.text = message }
+  if (image != null) { slackMessage.attachments = [ { 'image_url': encodeURI(image) } ] }
+  if (slackMessage === { attachments: [ {} ] }) { return }
 
   let options = {
     method: 'POST',

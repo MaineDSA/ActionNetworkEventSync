@@ -38,7 +38,7 @@ const syncANtoGCal = () => {
 			if (event.status != 'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
       
 				createGoogleEvent(event, action_network_id);
-        if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") != null) { sendSlackMessage('New Event Added to the Calendar:' + formatSlackEventAnnouncement(event)) }
+        if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") != null) { sendSlackMessage('New Event Added to the Calendar:' + formatSlackEventAnnouncement(event), event.featured_image_url) }
 
 			}
 
