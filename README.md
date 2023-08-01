@@ -24,7 +24,7 @@ To use these features, you must configure [Script Properties](https://developers
 - AN_EMAIL_CREATOR: (OPTIONAL) The AN Network User to use for the generated AN email drafts.
 - EMAIL_SUBJECT: The subject you want used for the generated AN email drafts.
 - EMAIL_TARGET: (OPTIONAL) The default AN Query you want used for the generated AN email drafts.
-- EVENTS_EMAIL: The email you want to send a list of events to (such as when not using AN draft generation).
+- EVENTS_EMAIL: (OPTIONAL) The email you want to send a list of events to (such as when not using AN draft generation).
 - GCAL_ID: The calendar ID of your Google Calendar including the @domain.com part.
 - LINK_COLOR: Preferred color for HTML links in HTML-formatted email bodies as a hex code. We use ec1f27.
 - TIME_DST: The time zone you use during Daylight Savings Time. We use GMT-04:00.

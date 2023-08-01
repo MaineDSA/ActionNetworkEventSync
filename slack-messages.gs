@@ -4,7 +4,7 @@ const formatSlackEventAnnouncement = (event) => {
   let message = ''
   message += '\n*' + event.title.trim() + '*'
   message += '\n' + event_date
-  message += '\n' + 'RSVP: ' + event.browser_url
+  message += '\n' + 'RSVP: ' + encodeURI(event.browser_url)
 
   return message
 }

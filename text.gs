@@ -68,7 +68,6 @@ const formatEvent = (event) => {
     .replace("%EVENTDATE%", event_date)
     .replace("%EVENTDURATION%", startTime + " - " + endTime)
   let image_url = ''
-  Logger.log(event.featured_image_url)
   if (event.featured_image_url != null) { image_url = '<a href="' + encodeURI(event.browser_url) + '" target="_blank"><img style="height: 100%; width: 100%; object-fit: contain; margin-top: 20px" src="' + encodeURI(event.featured_image_url) + '" alt="Promo Image"></a>' }
   const button_rsvp = '<a href="' + encodeURI(event.browser_url) + '" target="_blank"><button type="button" style="background-color: #' + scriptProperties.getProperty("LINK_COLOR") + '; border: 0.5px solid ' + scriptProperties.getProperty("LINK_COLOR") + '; border-radius: 10px; color: #fff; padding: 8px; margin-top: 18px">Sign Me Up</button></a>'
 
