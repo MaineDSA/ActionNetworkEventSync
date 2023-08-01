@@ -20,8 +20,8 @@ To use these features, you must configure [Script Properties](https://developers
 - AN_API_KEY: Your Action Network API Key.
 - AN_EMAIL_REPLY_TO: The email you want generated AN email drafts to use as the reply-to address.
 - AN_EMAIL_SENDER: The name you want displayed as the sender for generated AN email.
-- AN_EMAIL_WRAPPER: The wrapper you want to use for the generated AN email drafts.
-- AN_EMAIL_CREATOR: The AN Network User to use for the generated AN email drafts.
+- AN_EMAIL_WRAPPER: (OPTIONAL) The wrapper you want to use for the generated AN email drafts.
+- AN_EMAIL_CREATOR: (OPTIONAL) The AN Network User to use for the generated AN email drafts.
 - EMAIL_SUBJECT: The subject you want used for the generated AN email drafts.
 - EMAIL_TARGET: (OPTIONAL) The default AN Query you want used for the generated AN email drafts.
 - EVENTS_EMAIL: The email you want to send a list of events to (such as when not using AN draft generation).
