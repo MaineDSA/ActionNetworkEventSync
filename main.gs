@@ -20,45 +20,45 @@ const syncANtoGCal = () => {
 
   if (scriptProperties.getProperty("GCAL_ID") === null) { Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.'); return }
 
-	const events = getRecentlyModifiedEventIDs(recently_modified); // Get an array of event IDs for events modified in the last week
-	Logger.log("Found " + events.length + " events modified in the last " + recently_modified + " days that have not started yet.");
+  const events = getRecentlyModifiedEventIDs(recently_modified); // Get an array of event IDs for events modified in the last week
+  Logger.log("Found " + events.length + " events modified in the last " + recently_modified + " days that have not started yet.");
 
-	for (let i = 0; i < events.length; i++) {
+  for (let i = 0; i < events.length; i++) {
 
-		const event = getAllANEventData(events[i].href); // Get all event data for the current event ID
+    const event = getAllANEventData(events[i].href); // Get all event data for the current event ID
 
-		const action_network_id = getEventIDFromAN(event, "action_network"); // Get the Action Network ID for the event
+    const action_network_id = getEventIDFromAN(event, "action_network"); // Get the Action Network ID for the event
 
     Logger.log(event.title.trim() + " is listed as " + event.status + " in Action Network at " + action_network_id + ".");
 
     // If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
-		const google_id = getEventIDFromAN(event, "google_id");
+    const google_id = getEventIDFromAN(event, "google_id");
     if (google_id === null) { // If the event is not in Google Calendar
 
-			if (event.status != 'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
+      if (event.status != 'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
       
-				createGoogleEvent(event, action_network_id);
+        createGoogleEvent(event, action_network_id);
         if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") != null) { sendSlackMessage('New Event Added to the Calendar:' + formatSlackEventAnnouncement(event), event.featured_image_url) }
 
-			}
+      }
 
-		} else { // If the event is in Google Calendar
+    } else { // If the event is in Google Calendar
 
-			// If the event was cancelled in Action Network, cancel it in Google Calendar
-			if (event.status === 'cancelled' && CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID")).getEventById(google_id) === null) {
+      // If the event was cancelled in Action Network, cancel it in Google Calendar
+      if (event.status === 'cancelled' && CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID")).getEventById(google_id) === null) {
 
-				cancelGoogleEvent(event, action_network_id, google_id);
+        cancelGoogleEvent(event, action_network_id, google_id);
         if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") != null) { sendSlackMessage('Calendar Event Canceled:' + formatSlackEventAnnouncement(event)) }
 
-			} else {
+      } else {
 
-				updateGoogleEvent(event, action_network_id, google_id);
+        updateGoogleEvent(event, action_network_id, google_id);
 
-			}
+      }
 
-		}
+    }
 
-	}
+  }
 
 }
 
