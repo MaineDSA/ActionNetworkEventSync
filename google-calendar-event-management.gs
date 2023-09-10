@@ -63,7 +63,7 @@ const updateGoogleEvent = async (event, action_network_id, google_id) => {
   const desc_old = eventGoogle.getDescription()
   if (desc_old !== event_description) {
   Logger.log("Updating description of event " + eventName + ".");
-    eventGoogle.setDescription(eventName);
+    eventGoogle.setDescription(event_description);
   }
 
   Logger.log("Updating start time of event " + eventName + " from " + eventGoogle.getStartTime() + " to " + end_time + ".");
