@@ -10,18 +10,17 @@ const createGoogleEvent = async (event, action_network_id) => {
     location: formatLocation(event)
   }
 
-  // Get the Google Calendar by ID from the script properties
-  const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"));
   // Create the event in Google Calendar and get the Google ID for the new event
+  const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"));
   const eventGoogle = calendarGoogle.createEvent(eventName, getStartTime(event), getEndTime(event), eventDetails);
   const google_id = eventGoogle.getId();
+  Logger.log("Created event " + eventName + " in Google Calendar at " + google_id + ".");
 
   // Tag the Action Network event with the Google ID for future reference
   tagANEvent(action_network_id, google_id);
+  Logger.log("Tagged AN event " + eventName + " with google_id " + google_id + ".");
 
-  Logger.log("Created event " + eventName + " in Google Calendar at " + google_id + ".");
-
-  return eventGoogle.getId(); // Return the Google ID for the new event
+  return google_id; // Return the Google ID for the new event
 
 }
 

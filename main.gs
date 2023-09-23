@@ -37,8 +37,8 @@ const syncANtoGCal = () => {
 
       if (event.status != 'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
       
-        createGoogleEvent(event, action_network_id);
-        if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") != null) { sendSlackMessage('New Event Added to the Calendar:' + formatSlackEventAnnouncement(event), event.featured_image_url) }
+        const google_id = createGoogleEvent(event, action_network_id);
+        if ((scriptProperties.getProperty("SLACK_WEBHOOK_URL") != null) && (google_id)) { sendSlackMessage('New Event Added to the Calendar:' + formatSlackEventAnnouncement(event), event.featured_image_url) }
 
       }
 
@@ -47,8 +47,8 @@ const syncANtoGCal = () => {
       // If the event was cancelled in Action Network, cancel it in Google Calendar
       if (event.status === 'cancelled' && CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID")).getEventById(google_id) === null) {
 
-        cancelGoogleEvent(event, action_network_id, google_id);
-        if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") != null) { sendSlackMessage('Calendar Event Canceled:' + formatSlackEventAnnouncement(event)) }
+        const google_id = cancelGoogleEvent(event, action_network_id, google_id);
+        if ((scriptProperties.getProperty("SLACK_WEBHOOK_URL") != null) && (google_id)) { sendSlackMessage('Calendar Event Canceled:' + formatSlackEventAnnouncement(event)) }
 
       } else {
 
