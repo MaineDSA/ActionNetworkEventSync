@@ -41,8 +41,8 @@ const formatEvent = (event) => {
   const button_rsvp = `<a href="${encodeURI(event.browser_url)}" target="_blank"><button type="button" style="background-color: #${scriptProperties.getProperty("LINK_COLOR")}; border: 0.5px solid ${scriptProperties.getProperty("LINK_COLOR")}; border-radius: 10px; color: #fff; padding: 8px; margin-top: 18px">Sign Me Up</button></a>`;
 
   let formatted_body = `<article style="outline: #${scriptProperties.getProperty("LINK_COLOR")} dotted 2.5px; padding: 1em; margin-top: 1.5em; padding-bottom: 1.5em">${template_title}${template_time_and_link}${image_url}${button_rsvp}${event.description}</article>`;
-  formatted_body = formatted_body.replace(new RegExp("<a ", "g"), `<a style="color: #${scriptProperties.getProperty("LINK_COLOR")}" `);
-  formatted_body = formatted_body.replace(new RegExp("<p>", "g"), '<p style="margin-bottom:-.5rem">');
+  formatted_body = formatted_body.replace(/<a /g, `<a style="color: #${scriptProperties.getProperty("LINK_COLOR")}" `);
+  formatted_body = formatted_body.replace(/<p>/g, '<p style="margin-bottom:-.5rem">');
 
   return formatted_body;
 };
@@ -55,16 +55,18 @@ const getUpcomingEventDateFilter = (nextdays) => {
 };
 
 const getHTMLTopAnnouncement = () => {
-  let doc = '';
-  doc += '<br /><hr class="rounded">';
-  doc += '<h1><center>Priority Announcement</center></h1>';
-  doc += '<br /><p>Description of priority announcement.</p>';
-  return doc;
+  return `
+    <br /><hr class="rounded">
+    <h1><center>Priority Announcement</center></h1>
+    <br /><p>Description of priority announcement.</p>
+  `;
 };
 
 const getHTMLEvents = (events) => {
-  let doc = '';
-  doc += '<br /><hr class="rounded"><h1><center>Upcoming Events</center></h1>';
+  let doc = `
+    <br /><hr class="rounded">
+    <h1><center>Upcoming Events</center></h1>
+  `;
   if (typeof formattedCalendarText === 'function') {
     doc += formattedCalendarText(events);
   }
@@ -80,13 +82,14 @@ const getHTMLEvents = (events) => {
 };
 
 const getHTMLAnnouncements = () => {
-  let doc = '';
-  doc += '<br /><hr class="rounded"><h1><center>Even More</center></h1>';
-  doc += '<section style="display:flex;flex-direction:row;flex-wrap:wrap">';
-  doc += '<article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>First title</h2><p>Description of first announcement.</p></article>';
-  doc += '<article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>Second title</h2><p>Description of second announcement.</p></article>';
-  doc += '</section>';
-  return doc;
+  return `
+    <br /><hr class="rounded">
+    <h1><center>Even More</center></h1>
+    <section style="display:flex;flex-direction:row;flex-wrap:wrap">
+      <article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>First title</h2><p>Description of first announcement.</p></article>
+      <article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>Second title</h2><p>Description of second announcement.</p></article>
+    </section>
+  `;
 };
 
 // This function compiles an HTML message of upcoming events and returns it as a string
