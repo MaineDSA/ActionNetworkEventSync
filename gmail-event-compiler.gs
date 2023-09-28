@@ -1,20 +1,22 @@
 // Sends an email via Gmail.
-const sendEmail = (doc) => {
-
-  if (scriptProperties.getProperty("EVENTS_EMAIL") === null) { Logger.log('No destination email "EVENTS_EMAIL" found, cannot continue.'); return }
-  if (scriptProperties.getProperty("EMAIL_SUBJECT") === null) { Logger.log('No email subject "EMAIL_SUBJECT" provided, cannot continue.'); return }
-
+const sendEmail = (doc, eventsEmail, emailSubject) => {
   // The MailApp.sendEmail method is used to send an email using the Gmail service provided by Google.
-  // The recipient's email address is obtained from the ScriptProperty "EVENTS_EMAIL".
-  // The default subject is obtained from the ScriptProperty "EMAIL_SUBJECT".
-  MailApp.sendEmail(scriptProperties.getProperty("EVENTS_EMAIL"), scriptProperties.getProperty("EMAIL_SUBJECT"), doc, { htmlBody: doc })
+  // The recipient's email address is obtained from the eventsEmail parameter.
+  // The default subject is obtained from the emailSubject parameter.
+  MailApp.sendEmail(eventsEmail, emailSubject, doc, { htmlBody: doc });
+};
 
-}
-
-// Defines a function named emailFormattedEventList with no parameters
 const emailFormattedEventList = () => {
+  // Retrieve the script properties
+  const eventsEmail = scriptProperties.getProperty("EVENTS_EMAIL");
+  const emailSubject = scriptProperties.getProperty("EMAIL_SUBJECT");
+
+  // Check if the required script properties are present
+  if (!eventsEmail || !emailSubject) {
+    Logger.log('No destination email "EVENTS_EMAIL" found, or no email subject "EMAIL_SUBJECT" provided, cannot continue.');
+    return;
+  }
 
   // Calls the sendEmail function with the output of the compileHTMLEmail() function as the message body.
-  sendEmail(compileHTMLEmail(getUpcomingEventDateFilter(days_upcoming_email)))
-
-}
+  sendEmail(compileHTMLEmail(getUpcomingEventDateFilter(days_upcoming_email)), eventsEmail, emailSubject);
+};

@@ -15,7 +15,7 @@ const sendSlackMessage = (message) => {
   let slackMessage = { attachments: [ {} ] }
   if (message) { slackMessage.text = message } else { return }
 
-  let options = {
+  const options = {
     method: 'POST',
     contentType: 'application/json',
     payload: JSON.stringify(slackMessage)

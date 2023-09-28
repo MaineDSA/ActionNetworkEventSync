@@ -10,9 +10,8 @@ const formattedDescription = (description) => {
 
 // This function takes an event object as an argument and generates a formatted description string for the event
 const calDescription = (event) => {
-  const moreInfo = `<h5><strong>More Info and RSVP:</strong></h5><p><a style="color:#${scriptProperties.getProperty(
-    "LINK_COLOR"
-  )};text-decoration:none" href="${event.browser_url}">${event.browser_url}</a></p>`;
+  const moreInfo = `<h5><strong>More Info and RSVP:</strong></h5><p><a style="color:#${scriptProperties.getProperty("LINK_COLOR")};
+    text-decoration:none" href="${event.browser_url}">${event.browser_url}</a></p>`;
   const calDesc = `<h5><strong>Description:</strong></h5>${formattedDescription(event.description)}`;
   let calDescFooter = '';
   if (typeof formattedDescriptionFooter === 'function') {

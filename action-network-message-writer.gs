@@ -1,48 +1,60 @@
 // Creates a new Action Network Email Message with the provided HTML-formatted text as the body.
 // Values for Subject, Sender, Reply-To, Origin System, and Wrapper are obtained via defined Script Properties.
 const draftANMessage = (doc) => {
+  const apiKey = scriptProperties.getProperty("AN_API_KEY");
+  const emailReplyTo = scriptProperties.getProperty("AN_EMAIL_REPLY_TO");
+  const emailSender = scriptProperties.getProperty("AN_EMAIL_SENDER");
+  const emailWrapper = scriptProperties.getProperty("AN_EMAIL_WRAPPER");
+  const emailCreator = scriptProperties.getProperty("AN_EMAIL_CREATOR");
+  const emailTarget = scriptProperties.getProperty("EMAIL_TARGET");
+  const emailSubject = scriptProperties.getProperty("EMAIL_SUBJECT");
 
-  if (scriptProperties.getProperty("AN_API_KEY") === null) { Logger.log('No Action Network Api Key "AN_API_KEY" provided, cannot continue.'); return }
-  if (scriptProperties.getProperty("AN_EMAIL_REPLY_TO") === null) { Logger.log('No Email Reply-To Address "AN_EMAIL_REPLY_TO" provided, cannot continue.'); return }
-  if (scriptProperties.getProperty("EMAIL_SUBJECT") === null) { Logger.log('No email subject "EMAIL_SUBJECT" provided, cannot continue.'); return }
-
-  const subject = scriptProperties.getProperty("EMAIL_SUBJECT") + ' for ' + Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd") + ' 🌹'
-
-  // Creates payload for POST request to Action Network
-  let payload = {
-    "subject": subject,
-    "body": doc,
-    "from": scriptProperties.getProperty("AN_EMAIL_SENDER"),
-    "origin_system": "ActionNetworkEventSync",
-    "reply_to": scriptProperties.getProperty("AN_EMAIL_REPLY_TO"),
-    "_links": {}
+  if (!apiKey) {
+    Logger.log('No Action Network Api Key "AN_API_KEY" provided, cannot continue.');
+    return;
+  }
+  if (!emailReplyTo) {
+    Logger.log('No Email Reply-To Address "AN_EMAIL_REPLY_TO" provided, cannot continue.');
+    return;
+  }
+  if (!emailSubject) {
+    Logger.log('No Email Subject "EMAIL_SUBJECT" provided, cannot continue.');
+    return;
   }
 
-  if (scriptProperties.getProperty("EMAIL_TARGET") != null) {
-    payload.targets = [{ "href": apiUrlAn + "queries/" + scriptProperties.getProperty("EMAIL_TARGET") }]
-    Logger.log('Message targeting query: ' + scriptProperties.getProperty("EMAIL_TARGET"))
-  }
+  const subject = `🌹 ${emailSubject} for ${Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd")} 🌹`;
 
-  if (scriptProperties.getProperty("AN_EMAIL_WRAPPER") != null) {
-    payload["_links"]["osdi:wrapper"] = { "href": apiUrlAn + "wrappers/" + scriptProperties.getProperty("AN_EMAIL_WRAPPER") }
-  }
+  const payload = {
+    subject,
+    body: doc,
+    from: emailSender,
+    origin_system: "ActionNetworkEventSync",
+    reply_to: emailReplyTo,
+    _links: {}
+  };
 
-  if (scriptProperties.getProperty("AN_EMAIL_CREATOR") != null) {
-    payload["_links"]["osdi:creator"] = { "href": apiUrlAn + "people/" + scriptProperties.getProperty("AN_EMAIL_CREATOR") }
-  }
+  payload.targets = emailTarget
+    ? [{ href: `${apiUrlAn}queries/${emailTarget}` }]
+    : undefined;
 
-  // Sets options and sends request to Action Network, logs with "action_network" identifier after completion.
+  payload._links["osdi:wrapper"] = emailWrapper
+    ? { href: `${apiUrlAn}wrappers/${emailWrapper}` }
+    : undefined;
+
+  payload._links["osdi:creator"] = emailCreator
+    ? { href: `${apiUrlAn}people/${emailCreator}` }
+    : undefined;
+
   const options = {
     method: "post",
     payload: JSON.stringify(payload),
     headers: {
       'Content-Type': 'application/json',
-      'OSDI-API-Token': scriptProperties.getProperty("AN_API_KEY")
+      'OSDI-API-Token': apiKey
     }
-  }
+  };
 
-  const response = UrlFetchApp.fetch(apiUrlAn + "messages/", options)
-  const action_network_id = getEventIDFromAN(JSON.parse(response), "action_network")
-  Logger.log("Created Action Network Message " + action_network_id + " with subject " + subject + '.')
-
-}
+  const response = UrlFetchApp.fetch(`${apiUrlAn}messages/`, options);
+  const actionNetworkId = getEventIDFromAN(JSON.parse(response), "action_network");
+  Logger.log(`Created Action Network Message ${actionNetworkId} with subject ${subject}.`);
+};
