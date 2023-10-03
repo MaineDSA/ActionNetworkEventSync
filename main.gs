@@ -1,11 +1,11 @@
-// Get the user properties object for use throughout the script
-const userProperties = PropertiesService.getUserProperties();
 // Get the script properties object for use throughout the script
 const scriptProperties = PropertiesService.getScriptProperties();
 
 // Set standard API parameters for use in requests to the Action Network API
 const standard_api_params = {
-  headers: { "OSDI-API-Token": scriptProperties.getProperty("AN_API_KEY") },
+  headers: {
+    "OSDI-API-Token": scriptProperties.getProperty("AN_API_KEY")
+  },
   contentType: "application/hal+json"
 };
 
@@ -16,9 +16,10 @@ const recently_modified = 14;
 const days_upcoming_email = 28;
 const days_upcoming_slack = 1;
 
+const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"));
+
 // This function syncs events modified in the last week from Action Network to Google Calendar
 const syncANtoGCal = () => {
-  const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"));
 
   if (!calendarGoogle) {
     Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.');
@@ -38,22 +39,21 @@ const syncANtoGCal = () => {
     const google_id = getEventIDFromAN(event, "google_id");
     if (!google_id) { // If the event is not in Google Calendar
       if (event.status != 'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
-        const google_id_new = createGoogleEvent(event, action_network_id);
+        const google_id_new = createEvent(event, action_network_id);
         if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
-          if (typeof(google_id_new) == 'string') {
+          if (typeof (google_id_new) == 'string') {
             sendSlackMessage(`New Event Added to the Calendar: ${formatSlackEventAnnouncement(event)}`);
             Logger.log(`Sent Slack message for ID: ${google_id_new}`);
-          } else {
-            Logger.log('ERROR! Google Calendar event not created!');
           }
         }
       }
     } else { // If the event is in Google Calendar
       // If the event was cancelled in Action Network, cancel it in Google Calendar
-      if (event.status === 'cancelled' && !CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID")).getEventById(google_id)) {
+      if (event.status === 'cancelled' && !CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"))
+        .getEventById(google_id)) {
         const google_id_new = cancelGoogleEvent(event, action_network_id, google_id);
         if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
-          if (typeof(google_id_new) == 'string') {
+          if (typeof (google_id_new) == 'string') {
             sendSlackMessage(`Calendar Event Canceled: ${formatSlackEventAnnouncement(event)}`);
             Logger.log(`Sent Slack message for ID: ${google_id_new}`);
           } else {

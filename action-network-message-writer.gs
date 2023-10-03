@@ -33,17 +33,20 @@ const draftANMessage = (doc) => {
     _links: {}
   };
 
-  payload.targets = emailTarget
-    ? [{ href: `${apiUrlAn}queries/${emailTarget}` }]
-    : undefined;
+  payload.targets = emailTarget ? [{
+      href: `${apiUrlAn}queries/${emailTarget}`
+    }] :
+    undefined;
 
-  payload._links["osdi:wrapper"] = emailWrapper
-    ? { href: `${apiUrlAn}wrappers/${emailWrapper}` }
-    : undefined;
+  payload._links["osdi:wrapper"] = emailWrapper ? {
+      href: `${apiUrlAn}wrappers/${emailWrapper}`
+    } :
+    undefined;
 
-  payload._links["osdi:creator"] = emailCreator
-    ? { href: `${apiUrlAn}people/${emailCreator}` }
-    : undefined;
+  payload._links["osdi:creator"] = emailCreator ? {
+      href: `${apiUrlAn}people/${emailCreator}`
+    } :
+    undefined;
 
   const options = {
     method: "post",

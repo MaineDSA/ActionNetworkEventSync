@@ -1,23 +1,36 @@
-// This function creates a Google Calendar event from an Action Network event
-const createGoogleEvent = async (event, action_network_id) => {
-  const eventName = event.title.trim();
+// This function creates a Google Calendar event with data from an Action Network event
+function createEvent(an_event, action_network_id) {
+  const eventName = an_event.title.trim();
   Logger.log(`Creating event ${eventName} from Action Network at ${action_network_id}.`);
 
-  const eventDetails = {
-    description: calDescription(event),
-    location: formatLocation(event)
+  const calendarId = 'primary';
+  // event details for creating event.
+  let event = {
+    summary: eventName,
+    //location: formatLocation(an_event.location),
+    description: calDescription(an_event),
+    start: {
+      dateTime: getStartTime(an_event)
+        .toISOString()
+    },
+    end: {
+      dateTime: getEndTime(an_event)
+        .toISOString()
+    }
   };
+  try {
+    // call method to insert/create new event in provided calandar
+    event = Calendar.Events.insert(event, calendarId);
+    Logger.log(`Created event ${eventName} in Google Calendar at ${event.id}.`);
 
-  const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"));
-  const eventGoogle = calendarGoogle.createEvent(eventName, getStartTime(event), getEndTime(event), eventDetails);
-  const google_id = eventGoogle.getId();
-  Logger.log(`Created event ${eventName} in Google Calendar at ${google_id}.`);
+    tagANEvent(action_network_id, event.id);
+    Logger.log(`Tagged AN event ${eventName} with google_id ${event.id}.`);
 
-  tagANEvent(action_network_id, google_id);
-  Logger.log(`Tagged AN event ${eventName} with google_id ${google_id}.`);
-
-  return google_id;
-};
+    return event.id;
+  } catch (err) {
+    console.log(`Creating Google event ${eventName} failed with error %s`, err.message);
+  }
+}
 
 // This function updates a Google Calendar event with data from an updated Action Network event
 const updateGoogleEvent = async (event, action_network_id, google_id) => {
