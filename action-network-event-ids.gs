@@ -42,5 +42,7 @@ const getRecentlyModifiedEventIDs = (daysago) => {
   const now = new Date();
   const lastWeek = new Date(now.getTime() - (MILLIS_PER_DAY * daysago));
   const filter_date = Utilities.formatDate(lastWeek, "UTC", "yyyy-MM-dd");
-  return getANEventIDs(`?filter=modified_date gt '${filter_date}' and start_date gt '${Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd")}'`);
+  return getANEventIDs(
+    `?filter=modified_date gt '${filter_date}' and start_date gt '${Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd")}'`
+    );
 }

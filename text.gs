@@ -1,6 +1,7 @@
 // This function takes a string argument 'description' and formats it by replacing various HTML tags and whitespace characters
 const formattedDescription = (description) => {
   return description
+    .trim()
     .replace(/<br><br>|<br><\/p>|  | <\/p>|<p>/g, (match) => {
       switch (match) {
       case '<br><br>':
@@ -19,8 +20,7 @@ const formattedDescription = (description) => {
 
 // This function takes an event object as an argument and generates a formatted description string for the event
 const calDescription = (event) => {
-  const moreInfo = `<h5><strong>More Info and RSVP:</strong></h5><p><a style="color:#${scriptProperties.getProperty("LINK_COLOR")};
-    text-decoration:none" href="${event.browser_url}">${event.browser_url}</a></p>`;
+  const moreInfo = `<h5><strong>More Info and RSVP:</strong></h5><p><a style="color:#${scriptProperties.getProperty("LINK_COLOR")};text-decoration:none" href="${event.browser_url}">${event.browser_url}</a></p>`;
   const calDesc = `<h5><strong>Description:</strong></h5>${formattedDescription(event.description)}`;
   let calDescFooter = '';
   if (typeof formattedDescriptionFooter === 'function') {
@@ -79,18 +79,11 @@ const getUpcomingEventDateFilter = (nextdays) => {
 };
 
 const getHTMLTopAnnouncement = () => {
-  return `
-        <br /><hr class="rounded">
-        <h1><center>Priority Announcement</center></h1>
-        <br /><p>Description of priority announcement.</p>
-    `;
+  return `<br /><hr class="rounded"><h1><center>Priority Announcement</center></h1><br /><p>Description of priority announcement.</p>`;
 };
 
 const getHTMLEvents = (events) => {
-  let doc = `
-        <br /><hr class="rounded">
-        <h1><center>Upcoming Events</center></h1>
-    `;
+  let doc = `<br /><hr class="rounded"><h1><center>Upcoming Events</center></h1>`;
   if (typeof formattedCalendarText === 'function') {
     doc += formattedCalendarText(events);
   }
@@ -106,14 +99,7 @@ const getHTMLEvents = (events) => {
 };
 
 const getHTMLAnnouncements = () => {
-  return `
-        <br /><hr class="rounded">
-        <h1><center>Even More</center></h1>
-        <section style="display:flex;flex-direction:row;flex-wrap:wrap">
-        <article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>First title</h2><p>Description of first announcement.</p></article>
-        <article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>Second title</h2><p>Description of second announcement.</p></article>
-        </section>
-    `;
+  return `<br /><hr class="rounded"><h1><center>Even More</center></h1><section style="display:flex;flex-direction:row;flex-wrap:wrap"><article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>First title</h2><p>Description of first announcement.</p></article><article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>Second title</h2><p>Description of second announcement.</p></article></section>`;
 };
 
 // This function compiles an HTML message of upcoming events and returns it as a string
