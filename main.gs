@@ -52,13 +52,13 @@ const syncANtoGCal = () => {
       if (event.status === 'cancelled' && !CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"))
         .getEventById(google_id)) {
         const google_id_new = cancelGoogleEvent(event, action_network_id, google_id);
-        if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
-          if (typeof(google_id_new) == 'string') {
+        if (typeof(google_id_new) == 'string') {
+          if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
             sendSlackMessage(`Calendar Event Canceled: ${formatSlackEventAnnouncement(event)}`);
             Logger.log(`Sent Slack message for ID: ${google_id_new}`);
-          } else {
-            Logger.log('ERROR! Google Calendar event not canceled!');
           }
+        } else {
+          Logger.log('ERROR! Google Calendar event not canceled!');
         }
       } else {
         updateGoogleEvent(event, action_network_id, google_id);
