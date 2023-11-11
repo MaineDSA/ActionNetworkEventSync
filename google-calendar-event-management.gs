@@ -73,18 +73,12 @@ const updateGoogleEvent = async (event, action_network_id, google_id) => {
 
 // This function cancels a Google Calendar event that has been cancelled in Action Network
 const cancelGoogleEvent = async (event, action_network_id, google_id) => {
-  const eventGoogle = CalendarApp.getEventById(google_id);
-
-  if (!eventGoogle) {
-    return;
-  }
-
   const eventName = event.title.trim();
 
   try {
-    eventGoogle.deleteEvent();
+    Calendar.Events.delete('primary', google_id);
   } catch (e) {
-    Logger.log(`${eventName} was already deleted from Google Calendar at ${google_id}.`);
+    Logger.log(`${eventName} may have already been deleted from Google Calendar at ${google_id}.`);
     return false;
   }
 
