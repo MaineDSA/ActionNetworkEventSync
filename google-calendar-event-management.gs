@@ -30,7 +30,7 @@ function createEvent(an_event, action_network_id) {
   } catch (err) {
     console.log(`Creating Google event ${eventName} failed with error %s`, err.message);
   }
-}
+};
 
 // This function updates a Google Calendar event with data from an updated Action Network event
 const updateGoogleEvent = async (event, action_network_id, google_id) => {

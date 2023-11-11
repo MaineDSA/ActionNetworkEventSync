@@ -20,7 +20,8 @@ const formattedDescription = (description) => {
 
 // This function takes an event object as an argument and generates a formatted description string for the event
 const calDescription = (event) => {
-  const moreInfo = `<h5><strong>More Info and RSVP:</strong></h5><p><a style="color:#${scriptProperties.getProperty("LINK_COLOR")};text-decoration:none" href="${event.browser_url}">${event.browser_url}</a></p>`;
+  const moreInfo =
+    `<h5><strong>More Info and RSVP:</strong></h5><p><a style="color:#${scriptProperties.getProperty("LINK_COLOR")};text-decoration:none" href="${event.browser_url}">${event.browser_url}</a></p>`;
   const calDesc = `<h5><strong>Description:</strong></h5>${formattedDescription(event.description)}`;
   let calDescFooter = '';
   if (typeof formattedDescriptionFooter === 'function') {
@@ -46,7 +47,8 @@ const formatEvent = (event) => {
   const start = getStartTime(event);
   const end_date = getEndTime(event);
 
-  const template_title = `<h2 style="font-size:1.8em; margin-top: 0.002em; margin-bottom:-.9rem">${event.title.trim()}</h2>`;
+  const template_title =
+    `<h2 style="font-size:1.8em; margin-top: 0.002em; margin-bottom:-.9rem">${event.title.trim()}</h2>`;
   const event_date = start.toLocaleDateString("en-US", {
     weekday: "long",
     month: 'long',
@@ -60,11 +62,16 @@ const formatEvent = (event) => {
     hour: "numeric",
     minute: "2-digit"
   });
-  const template_time_and_link = `<h3 style="font-style:italic;margin-bottom:-.5rem">${event_date} | ${startTime} - ${endTime}</h3>`;
-  const image_url = event.featured_image_url ? `<a href="${encodeURI(event.browser_url)}" target="_blank"><img style="height: 100%; width: 100%; object-fit: contain; margin-top: 20px" src="${encodeURI(event.featured_image_url)}" alt="Promo Image"></a>` : '';
-  const button_rsvp = `<a href="${encodeURI(event.browser_url)}" target="_blank"><button type="button" style="background-color: #${scriptProperties.getProperty("LINK_COLOR")}; border: 0.5px solid ${scriptProperties.getProperty("LINK_COLOR")}; border-radius: 10px; color: #fff; padding: 8px; margin-top: 18px">Sign Me Up</button></a>`;
+  const template_time_and_link =
+    `<h3 style="font-style:italic;margin-bottom:-.5rem">${event_date} | ${startTime} - ${endTime}</h3>`;
+  const image_url = event.featured_image_url ?
+    `<a href="${encodeURI(event.browser_url)}" target="_blank"><img style="height: 100%; width: 100%; object-fit: contain; margin-top: 20px" src="${encodeURI(event.featured_image_url)}" alt="Promo Image"></a>` :
+    '';
+  const button_rsvp =
+    `<a href="${encodeURI(event.browser_url)}" target="_blank"><button type="button" style="background-color: #${scriptProperties.getProperty("LINK_COLOR")}; border: 0.5px solid ${scriptProperties.getProperty("LINK_COLOR")}; border-radius: 10px; color: #fff; padding: 8px; margin-top: 18px">Sign Me Up</button></a>`;
 
-  let formatted_body = `<article style="outline: #${scriptProperties.getProperty("LINK_COLOR")} dotted 2.5px; padding: 1em; margin-top: 1.5em; padding-bottom: 1.5em">${template_title}${template_time_and_link}${image_url}${button_rsvp}${event.description}</article>`;
+  let formatted_body =
+    `<article style="outline: #${scriptProperties.getProperty("LINK_COLOR")} dotted 2.5px; padding: 1em; margin-top: 1.5em; padding-bottom: 1.5em">${template_title}${template_time_and_link}${image_url}${button_rsvp}${event.description}</article>`;
   formatted_body = formatted_body.replace(/<a /g, `<a style="color: #${scriptProperties.getProperty("LINK_COLOR")}" `)
     .replace(/<p>/g, '<p style="margin-bottom:-.5rem">');
 

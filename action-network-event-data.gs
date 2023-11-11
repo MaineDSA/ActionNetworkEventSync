@@ -3,7 +3,7 @@ const getStartTime = (event) => {
   const start_date = new Date(event.start_date);
   const output_date = new Date(start_date.toUTCString() + ' ' + dstOffset(start_date));
   return output_date;
-}
+};
 
 // This function gets the end time of an event, based on the event's location time zone.
 const getEndTime = (event) => {
@@ -14,7 +14,8 @@ const getEndTime = (event) => {
     output_date = new Date(start_date.getTime() + (60 * 1000 * default_length_mins))
   }
   return output_date;
-}
+};
+
 // This function returns the requested event ID if it is found in the Action Network event data.
 const getEventIDFromAN = (contentJSON, search_id) => {
   const identifiers = contentJSON.identifiers;
@@ -31,12 +32,12 @@ const getEventIDFromAN = (contentJSON, search_id) => {
   Logger.log(`${search_id} found in Action Network event identifiers: ${found_id}`);
 
   return found_id;
-}
+};
 
 // This function returns all event data for an event ID from Action Network.
 const getAllANEventData = (event_url) => {
   return JSON.parse(UrlFetchApp.fetch(event_url, standard_api_params))
-}
+};
 
 // This function tags an Action Network event with the Google ID for its corresponding Google Calendar event
 const tagANEvent = async (action_network_id, google_id) => {

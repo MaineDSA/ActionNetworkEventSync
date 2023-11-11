@@ -8,7 +8,7 @@ const formatSlackEventAnnouncement = (event) => {
       minute: "2-digit"
     })
   return `\n*${event.title.trim()}*\n${startstring}\nRSVP: ${encodeURI(event.browser_url)}`;
-}
+};
 
 // Sends a message via Slack.
 const sendSlackMessage = (message) => {
@@ -33,4 +33,4 @@ const sendSlackMessage = (message) => {
   };
 
   UrlFetchApp.fetch(scriptProperties.getProperty("SLACK_WEBHOOK_URL"), options);
-}
+};

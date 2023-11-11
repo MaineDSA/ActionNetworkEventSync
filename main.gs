@@ -26,10 +26,8 @@ const syncANtoGCal = () => {
     return;
   }
 
-  const events = getRecentlyModifiedEventIDs(
-  recently_modified); // Get an array of event IDs for events modified in the last week
-  Logger.log(
-    `Found ${events.length} events modified in the last ${recently_modified} days that have not started yet.`);
+  const events = getRecentlyModifiedEventIDs(recently_modified); // Get an array of event IDs for events modified in the last week
+  Logger.log(`Found ${events.length} events modified in the last ${recently_modified} days that have not started yet.`);
 
   for (let i = 0; i < events.length; i++) {
     const event = getAllANEventData(events[i].href); // Get all event data for the current event ID
@@ -40,11 +38,10 @@ const syncANtoGCal = () => {
     // If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
     const google_id = getEventIDFromAN(event, "google_id");
     if (!google_id) { // If the event is not in Google Calendar
-      if (event.status !=
-        'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
+      if (event.status != 'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
         const google_id_new = createEvent(event, action_network_id);
         if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
-          if (typeof (google_id_new) == 'string') {
+          if (typeof(google_id_new) == 'string') {
             sendSlackMessage(`New Event Added to the Calendar: ${formatSlackEventAnnouncement(event)}`);
             Logger.log(`Sent Slack message for ID: ${google_id_new}`);
           }
@@ -56,7 +53,7 @@ const syncANtoGCal = () => {
         .getEventById(google_id)) {
         const google_id_new = cancelGoogleEvent(event, action_network_id, google_id);
         if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
-          if (typeof (google_id_new) == 'string') {
+          if (typeof(google_id_new) == 'string') {
             sendSlackMessage(`Calendar Event Canceled: ${formatSlackEventAnnouncement(event)}`);
             Logger.log(`Sent Slack message for ID: ${google_id_new}`);
           } else {
