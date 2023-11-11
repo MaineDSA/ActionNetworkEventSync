@@ -1,9 +1,10 @@
+const calendarId = 'primary';
+
 // This function creates a Google Calendar event with data from an Action Network event
 function createEvent(an_event, action_network_id) {
   const eventName = an_event.title.trim();
   Logger.log(`Creating event ${eventName} from Action Network at ${action_network_id}.`);
 
-  const calendarId = 'primary';
   // event details for creating event.
   let event = {
     summary: eventName,
@@ -76,7 +77,7 @@ const cancelGoogleEvent = async (event, action_network_id, google_id) => {
   const eventName = event.title.trim();
 
   try {
-    Calendar.Events.delete('primary', google_id);
+    Calendar.Events.delete(calendarId, google_id);
   } catch (e) {
     Logger.log(`${eventName} may have already been deleted from Google Calendar at ${google_id}.`);
     return false;
