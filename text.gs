@@ -1,19 +1,20 @@
 // This function takes a string argument 'description' and formats it by replacing various HTML tags and whitespace characters
 const formattedDescription = (description) => {
   return description
-    .trim()
     .replace(/<br><br>|<br><\/p>|  | <\/p>|<p>/g, (match) => {
       switch (match) {
-      case '<br><br>':
-        return '<br>';
-      case '<br></p>':
-        return '</p>';
-      case '  ':
-        return ' ';
-      case ' </p>':
-        return '</p>';
-      case '<p>':
-        return '<p>';
+        case '  ':
+          return ' ';
+        case '<br><br>':
+          return '<br>';
+        case '<br></p>':
+          return '</p>';
+        case '^<p> ':
+          return '<p>';
+        case ' </p>':
+          return '</p>';
+        case '<p>':
+          return '<p>';
       }
     });
 };
