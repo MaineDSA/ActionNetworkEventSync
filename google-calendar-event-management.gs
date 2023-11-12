@@ -84,6 +84,4 @@ const cancelGoogleEvent = async (event, action_network_id, google_id) => {
     Logger.log(`${eventName} may have already been deleted from Google Calendar at ${google_id}.`);
     return false;
   }
-
-  return false;
 };
