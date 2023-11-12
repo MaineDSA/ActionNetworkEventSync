@@ -49,16 +49,13 @@ const syncANtoGCal = () => {
       }
     } else { // If the event is in Google Calendar
       // If the event was cancelled in Action Network, cancel it in Google Calendar
-      if (event.status === 'cancelled' && !CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"))
-        .getEventById(google_id)) {
+      if (event.status === 'cancelled') {
         const google_id_new = cancelGoogleEvent(event, action_network_id, google_id);
         if (typeof(google_id_new) == 'string') {
           if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
             sendSlackMessage(`Calendar Event Canceled: ${formatSlackEventAnnouncement(event)}`);
             Logger.log(`Sent Slack message for ID: ${google_id_new}`);
           }
-        } else {
-          Logger.log('ERROR! Google Calendar event not canceled!');
         }
       } else {
         updateGoogleEvent(event, action_network_id, google_id);
