@@ -1,5 +1,7 @@
+[![CodeQL](https://github.com/MaineDSA/ActionNetworkEventSync/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/MaineDSA/ActionNetworkEventSync/actions/workflows/github-code-scanning/codeql)
+
 # ActionNetworkScript
-Automation for Action Network
+Automation for Action Network, Google Calendar, and Slack
 
 ## Features
 This Google Apps Script code simplifies some more labor-intensive Action Network tasks:
