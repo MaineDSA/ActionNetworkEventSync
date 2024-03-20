@@ -90,7 +90,7 @@ const postTodaysEvents = () => {
     for (const api_key of api_keys) {
 
         // Get an array of event IDs for events modified in the last week
-        const events = getSortedUpcomingANEventIDs(getUpcomingEventDateFilter(days_upcoming_slack, api_key));
+        const events = getSortedUpcomingANEventIDs(getUpcomingEventDateFilter(days_upcoming_slack), api_key);
         Logger.log(`Found ${events.length} events coming up in the next ${days_upcoming_slack} day(s).`);
 
         // Stop if there are no events today
