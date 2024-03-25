@@ -119,5 +119,4 @@ const postTodaysEvents = () => {
 
     const doc = eventAnnouncements.join(' ');
     sendSlackMessage(doc);
-
 };
