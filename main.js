@@ -97,7 +97,7 @@ const postTodaysEvents = () => {
         // Stop if there are no events today
         if (events.length === 0) {
             Logger.log('There are no events today. No message will be posted.');
-            return;
+            continue;
         }
 
 
