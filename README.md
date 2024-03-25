@@ -1,4 +1,5 @@
 [![CodeQL](https://github.com/MaineDSA/ActionNetworkEventSync/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/MaineDSA/ActionNetworkEventSync/actions/workflows/github-code-scanning/codeql)
+[![DevSkim](https://github.com/MaineDSA/ActionNetworkEventSync/actions/workflows/devskim.yml/badge.svg)](https://github.com/MaineDSA/ActionNetworkEventSync/actions/workflows/devskim.yml)
 
 # ActionNetworkScript
 Automation for Action Network, Google Calendar, and Slack
@@ -19,7 +20,7 @@ This Google Apps Script code simplifies some more labor-intensive Action Network
 
 ## Script Properties
 To use these features, you must configure [Script Properties](https://developers.google.com/apps-script/reference/properties) in your Google Apps script.
-- AN_API_KEY: Your Action Network API Key (or a comma-separated list if you have multiple groups)
+- AN_API_KEY: Your Action Network API Key (or a comma-separated list if you have multiple groups).
 - AN_EMAIL_REPLY_TO: The email you want generated AN email drafts to use as the reply-to address.
 - AN_EMAIL_SENDER: The name you want displayed as the sender for generated AN email.
 - AN_EMAIL_WRAPPER: (OPTIONAL) The wrapper you want to use for the generated AN email drafts.
