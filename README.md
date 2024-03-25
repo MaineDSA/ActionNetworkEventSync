@@ -1,3 +1,6 @@
+[![CodeQL](https://github.com/MaineDSA/ActionNetworkEventSync/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/MaineDSA/ActionNetworkEventSync/actions/workflows/github-code-scanning/codeql)
+[![DevSkim](https://github.com/MaineDSA/ActionNetworkEventSync/actions/workflows/devskim.yml/badge.svg)](https://github.com/MaineDSA/ActionNetworkEventSync/actions/workflows/devskim.yml)
+
 # ActionNetworkScript
 Automation for Action Network
 
