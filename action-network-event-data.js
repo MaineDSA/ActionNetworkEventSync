@@ -46,22 +46,18 @@ const tagANEvent = (action_network_id, google_id, api_key) => {
         return;
     }
 
-    Logger.log(`Tagging Action Network event ${action_network_id} with Google Calendar event ID ${google_id}`);
-
-    // Create a payload for the PUT request to Action Network, adding the Google ID as an identifier on the event
-    const payload = JSON.stringify({
-        "identifiers": [`google_id:${google_id}`]
-    });
-
     // Set the options for the request and send it to Action Network, logging the response
     const options = {
         method: "put",
-        payload: payload,
+        payload: JSON.stringify({
+            "identifiers": [`google_id:${google_id}`]
+        }),
         headers: {
             'Content-Type': 'application/json',
             'OSDI-API-Token': api_key
         }
     };
 
+    Logger.log(`Tagging Action Network event ${action_network_id} with Google Calendar event ID ${google_id}`);
     UrlFetchApp.fetch(apiUrlAn + `events/${action_network_id}`, options);
 };
