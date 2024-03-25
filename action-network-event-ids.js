@@ -31,7 +31,7 @@ const getSortedUpcomingANEventIDs = (extrafilters, api_key) => {
     }
 
     const eventsByCreation = getANEventIDs(filter, api_key).map(event => getAllANEventData(event.href, api_key));
-    console.log("Sorting " + eventsByCreation.length + " Events By Soonest");
+    Logger.log("Sorting " + eventsByCreation.length + " Events By Soonest");
 
     return eventsByCreation.sort(sortByDate);
 };

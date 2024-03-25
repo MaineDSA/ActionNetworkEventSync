@@ -29,7 +29,7 @@ function createEvent(an_event, action_network_id, api_key) {
 
         return event.id;
     } catch (err) {
-        console.log(`Creating Google event ${eventName} failed with error %s`, err.message);
+        Logger.log(`Creating Google event ${eventName} failed with error %s`, err.message);
     }
 }
 
