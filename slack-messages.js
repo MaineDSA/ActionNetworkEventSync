@@ -1,5 +1,5 @@
 const formatSlackEventAnnouncement = (event) => {
-    startstring = getStartTime(event)
+    const startstring = getStartTime(event)
         .toLocaleDateString("en-US", {
             weekday: "long",
             month: 'long',

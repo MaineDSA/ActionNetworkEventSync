@@ -1,7 +1,7 @@
 const calendarId = 'primary';
 
 // This function creates a Google Calendar event with data from an Action Network event
-function createEvent(an_event, action_network_id) {
+function createEvent(an_event, action_network_id, api_key) {
     const eventName = an_event.title.trim();
     Logger.log(`Creating event ${eventName} from Action Network at ${action_network_id}.`);
 
@@ -24,17 +24,17 @@ function createEvent(an_event, action_network_id) {
         event = Calendar.Events.insert(event, calendarId);
         Logger.log(`Created event ${eventName} in Google Calendar at ${event.id}.`);
 
-        tagANEvent(action_network_id, event.id);
+        tagANEvent(action_network_id, event.id, api_key);
         Logger.log(`Tagged AN event ${eventName} with google_id ${event.id}.`);
 
         return event.id;
     } catch (err) {
-        console.log(`Creating Google event ${eventName} failed with error %s`, err.message);
+        Logger.log(`Creating Google event ${eventName} failed with error %s`, err.message);
     }
-};
+}
 
 // This function updates a Google Calendar event with data from an updated Action Network event
-const updateGoogleEvent = async (event, action_network_id, google_id) => {
+const updateGoogleEvent = (event, action_network_id, google_id) => {
     const eventName = event.title.trim();
     Logger.log(`Updating event ${eventName} from Action Network at ${action_network_id}.`);
 
@@ -73,7 +73,7 @@ const updateGoogleEvent = async (event, action_network_id, google_id) => {
 };
 
 // This function cancels a Google Calendar event that has been cancelled in Action Network
-const cancelGoogleEvent = async (event, action_network_id, google_id) => {
+const cancelGoogleEvent = (event, action_network_id, google_id) => {
     const eventName = event.title.trim();
 
     try {
