@@ -29,13 +29,13 @@ const syncANtoGCal = () => {
     }
 
     const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
-    for (const api_key of api_keys) {
+    for (let api_key of api_keys) {
 
-        const events = getRecentlyModifiedEventIDs(recently_modified, api_key); // Get an array of event IDs for events modified in the last week
-        Logger.log(`Found ${events.length} events modified in the last ${recently_modified} days that have not started yet.`);
+        const event_ids = getRecentlyModifiedEventIDs(recently_modified, api_key); // Get an array of event IDs for events modified in the last week
+        Logger.log(`Found ${event_ids.length} events modified in the last ${recently_modified} days that have not started yet.`);
 
-        for (let i = 0; i < events.length; i++) {
-            const event = getAllANEventData(events[i].href, api_key); // Get all event data for the current event ID
+        for (let event_id of event_ids) {
+            const event = getAllANEventData(event_id.href, api_key); // Get all event data for the current event ID
 
             const action_network_id = getEventIDFromAN(event, "action_network"); // Get the Action Network ID for the event
             Logger.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${action_network_id}.`);
@@ -88,7 +88,7 @@ const postTodaysEvents = () => {
     const eventAnnouncements = ["Today's Events:"];
 
     const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
-    for (const api_key of api_keys) {
+    for (let api_key of api_keys) {
 
         // Get an array of event IDs for events modified in the last week
         const events = getSortedUpcomingANEventIDs(getUpcomingEventDateFilter(days_upcoming_slack), api_key);
@@ -100,9 +100,8 @@ const postTodaysEvents = () => {
             continue;
         }
 
-
-        for (const event of events) {
-            const eventData = getAllANEventData(event.href, api_key); // Get all event data for the current event ID
+        for (let event of events) {
+            const eventData = getAllANEventData(event.href, api_key);
             Logger.log(`${eventData.title.trim()} is listed as ${eventData.status} in Action Network.`);
 
             if (eventData.status !== 'cancelled') {
