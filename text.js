@@ -109,6 +109,6 @@ const getHTMLAnnouncements = () => {
 };
 
 // This function compiles an HTML message of upcoming events and returns it as a string
-const compileHTMLEmail = (nextdays, api_key) => {
-    return getHTMLTopAnnouncement() + getHTMLEvents(getSortedUpcomingANEventIDs(nextdays, api_key), api_key) + getHTMLAnnouncements();
+const compileHTMLEmail = (event_ids, api_key) => {
+    return getHTMLTopAnnouncement() + getHTMLEvents(event_ids, api_key) + getHTMLAnnouncements();
 };

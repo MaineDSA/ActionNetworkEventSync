@@ -72,10 +72,11 @@ const syncANtoGCal = () => {
 
 // Calls the draftANMessage function with the output of the compileHTMLEmail() function as an argument.
 const draftANEventMessage = () => {
-    const upcomingEventDateFilter = getUpcomingEventDateFilter(days_upcoming_email);
-    const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
-    const htmlEmail = compileHTMLEmail(upcomingEventDateFilter, api_keys[0]);
-    draftANMessage(htmlEmail, api_keys[0]);
+    const date_filter = getUpcomingEventDateFilter(days_upcoming_email);
+    const first_api_key = scriptProperties.getProperty("AN_API_KEY").split(",")[0];
+    const event_ids = getSortedUpcomingANEventIDs(date_filter, first_api_key)
+    const email_html = compileHTMLEmail(event_ids, first_api_key);
+    draftANMessage(email_html, first_api_key);
 };
 
 const postTodaysEvents = () => {
