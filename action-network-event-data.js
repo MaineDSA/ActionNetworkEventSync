@@ -35,7 +35,8 @@ const getEventIDFromAN = (contentJSON, search_id) => {
 
 // This function returns all event data for an event ID from Action Network.
 const getAllANEventData = (event_url, api_key) => {
-    return JSON.parse(UrlFetchApp.fetch(event_url, standard_api_params(api_key)))
+    const event_data = UrlFetchApp.fetch(event_url, standard_api_params(api_key));
+    return JSON.parse(event_data)
 };
 
 // This function tags an Action Network event with the Google ID for its corresponding Google Calendar event
