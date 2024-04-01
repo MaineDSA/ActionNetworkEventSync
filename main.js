@@ -90,18 +90,20 @@ const postTodaysEvents = () => {
     const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
     for (let api_key of api_keys) {
 
-        // Get an array of event IDs for events modified in the last week
-        const events = getSortedUpcomingANEventIDs(getUpcomingEventDateFilter(days_upcoming_slack), api_key);
-        Logger.log(`Found ${events.length} events coming up in the next ${days_upcoming_slack} ${days_upcoming_slack === 1 ? "day" : "days"}.`);
+        const event_ids = getSortedUpcomingANEventIDs(getUpcomingEventDateFilter(days_upcoming_slack), api_key);
+        Logger.log(`Found ${event_ids.length} events coming up in the next ${days_upcoming_slack} ${days_upcoming_slack === 1 ? "day" : "days"}.`);
 
-        // Stop if there are no events today
-        if (events.length === 0) {
+        // Skip this AN group if there are no events today
+        if (event_ids.length === 0) {
             Logger.log('There are no events today. No message will be posted.');
             continue;
         }
 
-        for (let event of events) {
-            const eventData = getAllANEventData(event.href, api_key);
+        for (let event_id of event_ids) {
+            const event = getAllANEventData(event_id.href, api_key); // Get all event data for the current event ID
+
+            Logger.log(`Getting data for event at url: ${event.href}`);
+            const eventData = getAllANEventData(event_id.href, api_key);
             Logger.log(`${eventData.title.trim()} is listed as ${eventData.status} in Action Network.`);
 
             if (eventData.status !== 'cancelled') {
