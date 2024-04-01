@@ -101,13 +101,10 @@ const postTodaysEvents = () => {
 
         for (let event_id of event_ids) {
             const event = getAllANEventData(event_id.href, api_key); // Get all event data for the current event ID
+            Logger.log(`${event.title.trim()} is listed as ${event.status} in Action Network.`);
 
-            Logger.log(`Getting data for event at url: ${event.href}`);
-            const eventData = getAllANEventData(event_id.href, api_key);
-            Logger.log(`${eventData.title.trim()} is listed as ${eventData.status} in Action Network.`);
-
-            if (eventData.status !== 'cancelled') {
-                eventAnnouncements.push(formatSlackEventAnnouncement(eventData));
+            if (event.status !== 'cancelled') {
+                eventAnnouncements.push(formatSlackEventAnnouncement(event));
             }
         }
     }
