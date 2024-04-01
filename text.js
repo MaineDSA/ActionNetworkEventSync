@@ -89,16 +89,17 @@ const getHTMLTopAnnouncement = () => {
     return `<br /><hr class="rounded"><h1><div style="text-align: center;">Priority Announcement</div></h1><br /><p>Description of priority announcement.</p>`;
 };
 
+const getEventDescBody = (event, api_key) => {
+    const eventData = getAllANEventData(event.href, api_key);
+    return eventData.status !== 'cancelled' ? formatEvent(eventData) : '';
+};
+
 const getHTMLEvents = (events, api_key) => {
     let doc = `<br /><hr class="rounded"><h1><div style="text-align: center;">Upcoming Events</div></h1>`;
     if (typeof formattedCalendarText === 'function') {
         doc += formattedCalendarText(events);
     }
-    const eventBodies = events.map((event) => {
-        const eventData = getAllANEventData(event.href, api_key);
-        const eventBody = formatEvent(eventData);
-        return eventData.status !== 'cancelled' ? eventBody : '';
-    });
+    const eventBodies = events.map(getEventDescBody, api_key);
     doc += `<section>${eventBodies.join('')}</section>`;
     return doc;
 };
