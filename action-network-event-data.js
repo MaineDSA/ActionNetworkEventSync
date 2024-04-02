@@ -1,7 +1,7 @@
 // This function gets the start time of an event, based on the event's location time zone.
 const getStartTime = (event) => {
     const start_date = new Date(event.start_date);
-    return new Date(start_date.toUTCString() + ' ' + dstOffset(start_date));
+    return new Date(`${start_date.toUTCString()} ${dstOffset(start_date)}`);
 };
 
 // This function gets the end time of an event, based on the event's location time zone.
@@ -60,5 +60,5 @@ const tagANEvent = (action_network_id, google_id, api_key) => {
     };
 
     Logger.log(`Tagging Action Network event ${action_network_id} with Google Calendar event ID ${google_id}`);
-    UrlFetchApp.fetch(apiUrlAn + `events/${action_network_id}`, options);
+    UrlFetchApp.fetch(`${apiUrlAn}events/${action_network_id}`, options);
 };
