@@ -9,10 +9,13 @@ Automation for Action Network, Google Calendar, and Slack
 
 This Google Apps Script code simplifies some more labor-intensive Action Network tasks:
 
-- **syncANtoGCal()** Retrieving a list of recently-edited Action Network events from each API key and syncing them to Google Calendar.
-- **draftANEventMessage()** Retriving a list of upcoming Action Network events from the first API key and compiling them into an HTML-formatted
+- **syncANtoGCal()** Retrieving a list of recently-edited Action Network events from each API key and syncing
+  them to Google Calendar.
+- **draftANEventMessage()** Retriving a list of upcoming Action Network events from the first API key and
+  compiling them into an HTML-formatted
   email draft on Action Network.
-- **postTodaysEvents()** Retriving a list of upcoming Action Network events from each API key and compiling them into a regular Slack
+- **postTodaysEvents()** Retriving a list of upcoming Action Network events from each API key and compiling
+  them into a regular Slack
   post.
 
 ## Screenshots
@@ -28,7 +31,8 @@ This Google Apps Script code simplifies some more labor-intensive Action Network
 ## Script Properties
 
 To use these features, you must
-configure [Script Properties](https://developers.google.com/apps-script/reference/properties) in your Google Apps
+configure [Script Properties](https://developers.google.com/apps-script/reference/properties) in your Google
+Apps
 script.
 
 - AN_API_KEY: Your Action Network API Key (or a comma-separated list if you have multiple groups).
@@ -38,12 +42,14 @@ script.
 - AN_EMAIL_CREATOR: (OPTIONAL) The AN Network User to use for the generated AN email drafts.
 - EMAIL_SUBJECT: The subject you want used for the generated AN email drafts.
 - EMAIL_TARGET: (OPTIONAL) The default AN Query you want used for the generated AN email drafts.
-- EVENTS_EMAIL: (OPTIONAL) The email you want to send a list of events to (such as when not using AN draft generation).
+- EVENTS_EMAIL: (OPTIONAL) The email you want to send a list of events to (such as when not using AN draft
+  generation).
 - GCAL_ID: The calendar ID of your Google Calendar including the @domain.com part.
 - LINK_COLOR: Preferred color for HTML links in HTML-formatted email bodies as a hex code. We use ec1f27.
 - TIME_DST: The time zone you use during Daylight Savings Time. We use GMT-04:00.
 - TIME_STANDARD: The time zone you use outside of Daylight Savings Time. We use GMT-05:00
-- SLACK_WEBHOOK_URL: (OPTIONAL) A Slack webhook URL to notify when creating or canceling upcoming Google Calendar events
+- SLACK_WEBHOOK_URL: (OPTIONAL) A Slack webhook URL to notify when creating or canceling upcoming Google
+  Calendar events
   and for the daily upcoming events digest.
 
 # Additional Customization
@@ -52,9 +58,11 @@ As some desired customization cannot be attained through properties, some tie-in
 Creating the following functions in a new script file will allow you to insert additional text at key places.
 If not configured, these will be skipped.
 
-- formattedDescriptionFooter(formatted_event_description): Creating this function allows you to add an HTML-formatted
+- formattedDescriptionFooter(formatted_event_description): Creating this function allows you to add an
+  HTML-formatted
   string to the end of each event, as posted to Google Calendar.
-- formattedCalendarText(events): Creating this function allows you to add additional information to the "Upcoming
+- formattedCalendarText(events): Creating this function allows you to add additional information to the "
+  Upcoming
   Events" section, between the header and list of events.
 
 ## Triggering
