@@ -9,14 +9,6 @@ const getANEventIDs = (filter, api_key) => {
     return JSON.parse(content)["_links"]["osdi:events"];
 };
 
-// This function sorts events by date, based on the start time of the event.
-// It is used by the getSortedANEventIDs function to sort the event IDs by the soonest event first.
-const sortByDate = (a, b) => {
-    const startTimeA = getStartTime(a);
-    const startTimeB = getStartTime(b);
-    return startTimeA - startTimeB;
-}
-
 // This function sorts event IDs by date, based on the start time of the event.
 // It is used by the getSortedANEventIDs function to sort the event IDs by the soonest event first.
 const sortIDByDate = (a, b, api_key) => {
