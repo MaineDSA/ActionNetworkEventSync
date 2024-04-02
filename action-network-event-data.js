@@ -8,9 +8,9 @@ const getStartTime = (event) => {
 const getEndTime = (event) => {
     const start_date = getStartTime(event);
     const end_date = new Date(event.end_date);
-    let output_date = new Date(end_date.toUTCString() + ' ' + dstOffset(end_date))
+    const output_date = new Date(end_date.toUTCString() + ' ' + dstOffset(end_date))
     if (isNaN(output_date.getUTCFullYear())) {
-        output_date = new Date(start_date.getTime() + (60 * 1000 * default_length_mins))
+        return new Date(start_date.getTime() + (60 * 1000 * default_length_mins))
     }
     return output_date;
 };

@@ -29,12 +29,12 @@ const syncANtoGCal = () => {
     }
 
     const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
-    for (let api_key of api_keys) {
+    for (const api_key of api_keys) {
 
         const event_ids = getRecentlyModifiedEventIDs(recently_modified, api_key); // Get an array of event IDs for events modified in the last week
         Logger.log(`Found ${event_ids.length} events modified in the last ${recently_modified} days that have not started yet.`);
 
-        for (let event_id of event_ids) {
+        for (const event_id of event_ids) {
             const event = getAllANEventData(event_id.href, api_key); // Get all event data for the current event ID
 
             const action_network_id = getEventIDFromAN(event, "action_network"); // Get the Action Network ID for the event
@@ -89,7 +89,7 @@ const postTodaysEvents = () => {
     const eventAnnouncements = ["Today's Events:"];
 
     const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
-    for (let api_key of api_keys) {
+    for (const api_key of api_keys) {
 
         const event_ids = getSortedANEventIDs(getUpcomingEventLimitFilter(days_upcoming_slack), api_key);
         Logger.log(`Found ${event_ids.length} events coming up in the next ${days_upcoming_slack} ${days_upcoming_slack === 1 ? "day" : "days"}.`);
@@ -100,8 +100,7 @@ const postTodaysEvents = () => {
             continue;
         }
 
-        Logger.log(event_ids)
-        for (let event_id of event_ids) {
+        for (const event_id of event_ids) {
             const event = getAllANEventData(event_id.href, api_key); // Get all event data for the current event ID
             Logger.log(`${event.title.trim()} is listed as ${event.status} in Action Network.`);
 

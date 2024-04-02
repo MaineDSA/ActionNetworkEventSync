@@ -65,17 +65,15 @@ const formatEvent = (event) => {
     });
     const template_time_and_link =
         `<h3 style="font-style:italic;margin-bottom:-.5rem">${event_date} | ${startTime} - ${endTime}</h3>`;
-    const image_url = event.featured_image_url ?
-        `<a href="${encodeURI(event.browser_url)}" target="_blank"><img style="height: 100%; width: 100%; object-fit: contain; margin-top: 20px" src="${encodeURI(event.featured_image_url)}" alt="Promo Image"></a>` : '';
+    const image_url =
+        event.featured_image_url ? `<a href="${encodeURI(event.browser_url)}" target="_blank"><img style="height: 100%; width: 100%; object-fit: contain; margin-top: 20px" src="${encodeURI(event.featured_image_url)}" alt="Promo Image"></a>` : '';
     const button_rsvp =
         `<a href="${encodeURI(event.browser_url)}" target="_blank"><button type="button" style="background-color: #${scriptProperties.getProperty("LINK_COLOR")}; border: 1px solid ${scriptProperties.getProperty("LINK_COLOR")}; border-radius: 10px; color: #fff; padding: 8px; margin-top: 18px">Sign Me Up</button></a>`;
 
-    let formatted_body =
+    const formatted_body =
         `<article style="outline: #${scriptProperties.getProperty("LINK_COLOR")} dotted 3px; margin-top: 1.5em; padding: 1em 1em 1.5em;">${template_title}${template_time_and_link}${image_url}${button_rsvp}${event.description}</article>`;
-    formatted_body = formatted_body.replace(/<a /g, `<a style="color: #${scriptProperties.getProperty("LINK_COLOR")}" `)
-        .replace(/<p>/g, '<p style="margin-bottom:-.5rem">');
 
-    return formatted_body;
+    return formatted_body.replace(/<a /g, `<a style="color: #${scriptProperties.getProperty("LINK_COLOR")}" `).replace(/<p>/g, '<p style="margin-bottom:-.5rem">');
 };
 
 const getUpcomingEventLimitFilter = (nextdays) => {

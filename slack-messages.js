@@ -16,20 +16,20 @@ const sendSlackMessage = (message) => {
         Logger.log('No Slack Webhook URL "SLACK_WEBHOOK_URL" provided, cannot continue.');
         return
     }
-
-    let slackMessage = {
-        attachments: [{}]
-    }
-    if (message) {
-        slackMessage.text = message
-    } else {
+    if (message === null) {
+        Logger.log('No Slack message provided, cannot continue.');
         return
+    }
+
+    const slack_webhook_message = {
+        attachments: [{}],
+        text: message
     }
 
     const options = {
         method: 'POST',
         contentType: 'application/json',
-        payload: JSON.stringify(slackMessage)
+        payload: JSON.stringify(slack_webhook_message)
     };
 
     UrlFetchApp.fetch(scriptProperties.getProperty("SLACK_WEBHOOK_URL"), options);
