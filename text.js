@@ -99,7 +99,7 @@ const getHTMLEvents = (events, api_key) => {
     if (typeof formattedCalendarText === 'function') {
         doc += formattedCalendarText(events);
     }
-    const eventBodies = events.map(getEventDescBody, api_key);
+    const eventBodies = events.map((event) => getEventDescBody(event, api_key));
     doc += `<section>${eventBodies.join('')}</section>`;
     return doc;
 };
