@@ -78,10 +78,10 @@ const formatEvent = (event) => {
     return formatted_body;
 };
 
-const getUpcomingEventDateFilter = (nextdays) => {
+const getUpcomingEventLimitFilter = (nextdays) => {
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + nextdays);
-    const queryFutureDate = ` and start_date lt '${Utilities.formatDate(futureDate, "UTC", "yyyy-MM-dd")}'`;
+    const queryFutureDate = `start_date lt '${Utilities.formatDate(futureDate, "UTC", "yyyy-MM-dd")}'`;
     return [queryFutureDate];
 };
 

@@ -72,9 +72,9 @@ const syncANtoGCal = () => {
 
 // Calls the draftANMessage function with the output of the compileHTMLEmail() function as an argument.
 const draftANEventMessage = () => {
-    const date_filter = getUpcomingEventDateFilter(days_upcoming_email);
+    const date_filter = getUpcomingEventLimitFilter(days_upcoming_email);
     const first_api_key = scriptProperties.getProperty("AN_API_KEY").split(",")[0];
-    const event_ids = getSortedUpcomingANEventIDs(date_filter, first_api_key)
+    const event_ids = getSortedANEventIDs(date_filter, first_api_key)
     const email_html = compileHTMLEmail(event_ids, first_api_key);
     draftANMessage(email_html, first_api_key);
 };
@@ -91,7 +91,7 @@ const postTodaysEvents = () => {
     const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
     for (let api_key of api_keys) {
 
-        const event_ids = getSortedUpcomingANEventIDs(getUpcomingEventDateFilter(days_upcoming_slack), api_key);
+        const event_ids = getSortedANEventIDs(getUpcomingEventLimitFilter(days_upcoming_slack), api_key);
         Logger.log(`Found ${event_ids.length} events coming up in the next ${days_upcoming_slack} ${days_upcoming_slack === 1 ? "day" : "days"}.`);
 
         // Skip this AN group if there are no events today
@@ -100,6 +100,7 @@ const postTodaysEvents = () => {
             continue;
         }
 
+        Logger.log(event_ids)
         for (let event_id of event_ids) {
             const event = getAllANEventData(event_id.href, api_key); // Get all event data for the current event ID
             Logger.log(`${event.title.trim()} is listed as ${event.status} in Action Network.`);
