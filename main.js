@@ -51,7 +51,10 @@ const syncANtoGCal = () => {
           const google_id_new = createEvent(event, action_network_id, api_key);
           if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
             if (typeof google_id_new == "string") {
-              sendSlackMessage(`New Event Added to the Calendar: ${formatSlackEventAnnouncement(event)}`);
+              sendSlackMessage(
+                `New Event Added to the Calendar: ${formatSlackEventAnnouncement(event)}`,
+                event,
+              );
               Logger.log(`Sent Slack message for ID: ${google_id_new}`);
             }
           }
@@ -63,7 +66,7 @@ const syncANtoGCal = () => {
           const google_id_new = cancelGoogleEvent(event, action_network_id, google_id);
           if (typeof google_id_new == "string") {
             if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
-              sendSlackMessage(`Calendar Event Canceled: ${formatSlackEventAnnouncement(event)}`);
+              sendSlackMessage(`Calendar Event Canceled: ${formatSlackEventAnnouncement(event)}`, event);
               Logger.log(`Sent Slack message for ID: ${google_id_new}`);
             }
           }
@@ -122,6 +125,5 @@ const postTodaysEvents = () => {
     return;
   }
 
-  const doc = eventAnnouncements.join(" ");
-  sendSlackMessage(doc);
+  sendSlackMessage(eventAnnouncements.join(" "), null);
 };

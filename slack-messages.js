@@ -10,7 +10,7 @@ const formatSlackEventAnnouncement = (event) => {
 };
 
 // Sends a message via Slack.
-const sendSlackMessage = (message) => {
+const sendSlackMessage = (message, event) => {
   if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") === null) {
     Logger.log('No Slack Webhook URL "SLACK_WEBHOOK_URL" provided, cannot continue.');
     return;
@@ -21,10 +21,23 @@ const sendSlackMessage = (message) => {
   }
 
   const slack_webhook_message = {
-    attachments: [{}],
-    text: message,
+    blocks: [
+      {
+        type: "section",
+        block_id: "event_info",
+        text: {
+          type: "mrkdwn",
+          text: message,
+        },
+        accessory: event
+          ? {
+              type: "image",
+              image_url: event.featured_image_url,
+            }
+          : null,
+      },
+    ],
   };
-
   const options = {
     method: "POST",
     contentType: "application/json",
