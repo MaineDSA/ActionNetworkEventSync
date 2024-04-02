@@ -2,11 +2,13 @@
 const scriptProperties = PropertiesService.getScriptProperties();
 
 // Set standard API parameters for use in requests to the Action Network API
-const standard_api_params = {
-    headers: {
-        "OSDI-API-Token": scriptProperties.getProperty("AN_API_KEY")
-    },
-    contentType: "application/hal+json"
+const standard_api_params = (api_key) => {
+    return {
+        headers: {
+            "OSDI-API-Token": api_key
+        },
+        contentType: "application/hal+json"
+    }
 };
 
 // Set constants for API URLs and default values
@@ -26,39 +28,43 @@ const syncANtoGCal = () => {
         return;
     }
 
-    const events = getRecentlyModifiedEventIDs(recently_modified); // Get an array of event IDs for events modified in the last week
-    Logger.log(`Found ${events.length} events modified in the last ${recently_modified} days that have not started yet.`);
+    const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
+    for (let api_key of api_keys) {
 
-    for (let i = 0; i < events.length; i++) {
-        const event = getAllANEventData(events[i].href); // Get all event data for the current event ID
+        const event_ids = getRecentlyModifiedEventIDs(recently_modified, api_key); // Get an array of event IDs for events modified in the last week
+        Logger.log(`Found ${event_ids.length} events modified in the last ${recently_modified} days that have not started yet.`);
 
-        const action_network_id = getEventIDFromAN(event, "action_network"); // Get the Action Network ID for the event
-        Logger.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${action_network_id}.`);
+        for (let event_id of event_ids) {
+            const event = getAllANEventData(event_id.href, api_key); // Get all event data for the current event ID
 
-        // If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
-        const google_id = getEventIDFromAN(event, "google_id");
-        if (!google_id) { // If the event is not in Google Calendar
-            if (event.status != 'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
-                const google_id_new = createEvent(event, action_network_id);
-                if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
-                    if (typeof (google_id_new) == 'string') {
-                        sendSlackMessage(`New Event Added to the Calendar: ${formatSlackEventAnnouncement(event)}`);
-                        Logger.log(`Sent Slack message for ID: ${google_id_new}`);
-                    }
-                }
-            }
-        } else { // If the event is in Google Calendar
-            // If the event was cancelled in Action Network, cancel it in Google Calendar
-            if (event.status === 'cancelled') {
-                const google_id_new = cancelGoogleEvent(event, action_network_id, google_id);
-                if (typeof (google_id_new) == 'string') {
+            const action_network_id = getEventIDFromAN(event, "action_network"); // Get the Action Network ID for the event
+            Logger.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${action_network_id}.`);
+
+            // If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
+            const google_id = getEventIDFromAN(event, "google_id");
+            if (!google_id) { // If the event is not in Google Calendar
+                if (event.status !== 'cancelled') { // If the event is not cancelled in Action Network, create it in Google Calendar
+                    const google_id_new = createEvent(event, action_network_id, api_key);
                     if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
-                        sendSlackMessage(`Calendar Event Canceled: ${formatSlackEventAnnouncement(event)}`);
-                        Logger.log(`Sent Slack message for ID: ${google_id_new}`);
+                        if (typeof (google_id_new) == 'string') {
+                            sendSlackMessage(`New Event Added to the Calendar: ${formatSlackEventAnnouncement(event)}`);
+                            Logger.log(`Sent Slack message for ID: ${google_id_new}`);
+                        }
                     }
                 }
-            } else {
-                updateGoogleEvent(event, action_network_id, google_id);
+            } else { // If the event is in Google Calendar
+                // If the event was cancelled in Action Network, cancel it in Google Calendar
+                if (event.status === 'cancelled') {
+                    const google_id_new = cancelGoogleEvent(event, action_network_id, google_id);
+                    if (typeof (google_id_new) == 'string') {
+                        if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
+                            sendSlackMessage(`Calendar Event Canceled: ${formatSlackEventAnnouncement(event)}`);
+                            Logger.log(`Sent Slack message for ID: ${google_id_new}`);
+                        }
+                    }
+                } else {
+                    updateGoogleEvent(event, action_network_id, google_id);
+                }
             }
         }
     }
@@ -66,9 +72,11 @@ const syncANtoGCal = () => {
 
 // Calls the draftANMessage function with the output of the compileHTMLEmail() function as an argument.
 const draftANEventMessage = () => {
-    const upcomingEventDateFilter = getUpcomingEventDateFilter(days_upcoming_email);
-    const htmlEmail = compileHTMLEmail(upcomingEventDateFilter);
-    draftANMessage(htmlEmail);
+    const date_filter = getUpcomingEventLimitFilter(days_upcoming_email);
+    const first_api_key = scriptProperties.getProperty("AN_API_KEY").split(",")[0];
+    const event_ids = getSortedANEventIDs(date_filter, first_api_key)
+    const email_html = compileHTMLEmail(event_ids, first_api_key);
+    draftANMessage(email_html, first_api_key);
 };
 
 const postTodaysEvents = () => {
@@ -78,24 +86,28 @@ const postTodaysEvents = () => {
         return;
     }
 
-    // Get an array of event IDs for events modified in the last week
-    const events = getSortedUpcomingANEventIDs(getUpcomingEventDateFilter(days_upcoming_slack));
-    Logger.log(`Found ${events.length} events coming up in the next ${days_upcoming_slack} day(s).`);
-
-    // Stop if there are no events today
-    if (events.length === 0) {
-        Logger.log('There are no events today. No message will be posted.');
-        return;
-    }
-
     const eventAnnouncements = ["Today's Events:"];
 
-    for (const event of events) {
-        const eventData = getAllANEventData(event.href); // Get all event data for the current event ID
-        Logger.log(`${eventData.title.trim()} is listed as ${eventData.status} in Action Network.`);
+    const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
+    for (let api_key of api_keys) {
 
-        if (eventData.status !== 'cancelled') {
-            eventAnnouncements.push(formatSlackEventAnnouncement(eventData));
+        const event_ids = getSortedANEventIDs(getUpcomingEventLimitFilter(days_upcoming_slack), api_key);
+        Logger.log(`Found ${event_ids.length} events coming up in the next ${days_upcoming_slack} ${days_upcoming_slack === 1 ? "day" : "days"}.`);
+
+        // Skip this AN group if there are no events today
+        if (event_ids.length === 0) {
+            Logger.log('There are no events today. No message will be posted.');
+            continue;
+        }
+
+        Logger.log(event_ids)
+        for (let event_id of event_ids) {
+            const event = getAllANEventData(event_id.href, api_key); // Get all event data for the current event ID
+            Logger.log(`${event.title.trim()} is listed as ${event.status} in Action Network.`);
+
+            if (event.status !== 'cancelled') {
+                eventAnnouncements.push(formatSlackEventAnnouncement(event));
+            }
         }
     }
 

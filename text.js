@@ -1,7 +1,7 @@
 // This function takes a string argument 'description' and formats it by replacing various HTML tags and whitespace characters
 const formattedDescription = (description) => {
     return description
-        .replace(/<br><br>|<br><\/p>|  | <\/p>|<p>/g, (match) => {
+        .replace(/<br><br>|<br><\/p>| {2}| <\/p>|<p>/g, (match) => {
             switch (match) {
                 case '  ':
                     return ' ';
@@ -66,51 +66,49 @@ const formatEvent = (event) => {
     const template_time_and_link =
         `<h3 style="font-style:italic;margin-bottom:-.5rem">${event_date} | ${startTime} - ${endTime}</h3>`;
     const image_url = event.featured_image_url ?
-        `<a href="${encodeURI(event.browser_url)}" target="_blank"><img style="height: 100%; width: 100%; object-fit: contain; margin-top: 20px" src="${encodeURI(event.featured_image_url)}" alt="Promo Image"></a>` :
-        '';
+        `<a href="${encodeURI(event.browser_url)}" target="_blank"><img style="height: 100%; width: 100%; object-fit: contain; margin-top: 20px" src="${encodeURI(event.featured_image_url)}" alt="Promo Image"></a>` : '';
     const button_rsvp =
-        `<a href="${encodeURI(event.browser_url)}" target="_blank"><button type="button" style="background-color: #${scriptProperties.getProperty("LINK_COLOR")}; border: 0.5px solid ${scriptProperties.getProperty("LINK_COLOR")}; border-radius: 10px; color: #fff; padding: 8px; margin-top: 18px">Sign Me Up</button></a>`;
+        `<a href="${encodeURI(event.browser_url)}" target="_blank"><button type="button" style="background-color: #${scriptProperties.getProperty("LINK_COLOR")}; border: 1px solid ${scriptProperties.getProperty("LINK_COLOR")}; border-radius: 10px; color: #fff; padding: 8px; margin-top: 18px">Sign Me Up</button></a>`;
 
     let formatted_body =
-        `<article style="outline: #${scriptProperties.getProperty("LINK_COLOR")} dotted 2.5px; padding: 1em; margin-top: 1.5em; padding-bottom: 1.5em">${template_title}${template_time_and_link}${image_url}${button_rsvp}${event.description}</article>`;
+        `<article style="outline: #${scriptProperties.getProperty("LINK_COLOR")} dotted 3px; margin-top: 1.5em; padding: 1em 1em 1.5em;">${template_title}${template_time_and_link}${image_url}${button_rsvp}${event.description}</article>`;
     formatted_body = formatted_body.replace(/<a /g, `<a style="color: #${scriptProperties.getProperty("LINK_COLOR")}" `)
         .replace(/<p>/g, '<p style="margin-bottom:-.5rem">');
 
     return formatted_body;
 };
 
-const getUpcomingEventDateFilter = (nextdays) => {
+const getUpcomingEventLimitFilter = (nextdays) => {
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + nextdays);
-    const queryFutureDate = ` and start_date lt '${Utilities.formatDate(futureDate, "UTC", "yyyy-MM-dd")}'`;
+    const queryFutureDate = `start_date lt '${Utilities.formatDate(futureDate, "UTC", "yyyy-MM-dd")}'`;
     return [queryFutureDate];
 };
 
 const getHTMLTopAnnouncement = () => {
-    return `<br /><hr class="rounded"><h1><center>Priority Announcement</center></h1><br /><p>Description of priority announcement.</p>`;
+    return `<br /><hr class="rounded"><h1><div style="text-align: center;">Priority Announcement</div></h1><br /><p>Description of priority announcement.</p>`;
 };
 
-const getHTMLEvents = (events) => {
-    let doc = `<br /><hr class="rounded"><h1><center>Upcoming Events</center></h1>`;
+const getEventDescBody = (event, api_key) => {
+    const eventData = getAllANEventData(event.href, api_key);
+    return eventData.status !== 'cancelled' ? formatEvent(eventData) : '';
+};
+
+const getHTMLEvents = (events, api_key) => {
+    let doc = `<br /><hr class="rounded"><h1><div style="text-align: center;">Upcoming Events</div></h1>`;
     if (typeof formattedCalendarText === 'function') {
         doc += formattedCalendarText(events);
     }
-    doc += '<section>';
-    const eventBodies = events.map((event) => {
-        const eventData = getAllANEventData(event.href);
-        const eventBody = formatEvent(eventData);
-        return eventData.status !== 'cancelled' ? eventBody : '';
-    });
-    doc += eventBodies.join('');
-    doc += '</section>';
+    const eventBodies = events.map((event) => getEventDescBody(event, api_key));
+    doc += `<section>${eventBodies.join('')}</section>`;
     return doc;
 };
 
 const getHTMLAnnouncements = () => {
-    return `<br /><hr class="rounded"><h1><center>Even More</center></h1><section style="display:flex;flex-direction:row;flex-wrap:wrap"><article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>First title</h2><p>Description of first announcement.</p></article><article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>Second title</h2><p>Description of second announcement.</p></article></section>`;
+    return `<br /><hr class="rounded"><h1><div style="text-align: center;">Even More</div></h1><section style="display:flex;flex-direction:row;flex-wrap:wrap"><article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>First title</h2><p>Description of first announcement.</p></article><article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>Second title</h2><p>Description of second announcement.</p></article></section>`;
 };
 
 // This function compiles an HTML message of upcoming events and returns it as a string
-const compileHTMLEmail = (nextdays) => {
-    return getHTMLTopAnnouncement() + getHTMLEvents(getSortedUpcomingANEventIDs(nextdays)) + getHTMLAnnouncements();
+const compileHTMLEmail = (event_ids, api_key) => {
+    return getHTMLTopAnnouncement() + getHTMLEvents(event_ids, api_key) + getHTMLAnnouncements();
 };

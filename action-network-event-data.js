@@ -1,8 +1,7 @@
 // This function gets the start time of an event, based on the event's location time zone.
 const getStartTime = (event) => {
     const start_date = new Date(event.start_date);
-    const output_date = new Date(start_date.toUTCString() + ' ' + dstOffset(start_date));
-    return output_date;
+    return new Date(`${start_date.toUTCString()} ${dstOffset(start_date)}`);
 };
 
 // This function gets the end time of an event, based on the event's location time zone.
@@ -35,34 +34,31 @@ const getEventIDFromAN = (contentJSON, search_id) => {
 };
 
 // This function returns all event data for an event ID from Action Network.
-const getAllANEventData = (event_url) => {
-    return JSON.parse(UrlFetchApp.fetch(event_url, standard_api_params))
+const getAllANEventData = (event_url, api_key) => {
+    const event_data = UrlFetchApp.fetch(event_url, standard_api_params(api_key));
+    return JSON.parse(event_data)
 };
 
 // This function tags an Action Network event with the Google ID for its corresponding Google Calendar event
-const tagANEvent = async (action_network_id, google_id) => {
+const tagANEvent = (action_network_id, google_id, api_key) => {
     // Check if the "AN_API_KEY" property is null
-    if (scriptProperties.getProperty("AN_API_KEY") === null) {
+    if (api_key === null) {
         Logger.log('No Action Network API Key "AN_API_KEY" provided, cannot continue.');
         return;
     }
 
-    Logger.log(`Tagging Action Network event ${action_network_id} with Google Calendar event ID ${google_id}`);
-
-    // Create a payload for the PUT request to Action Network, adding the Google ID as an identifier on the event
-    const payload = JSON.stringify({
-        "identifiers": [`google_id:${google_id}`]
-    });
-
     // Set the options for the request and send it to Action Network, logging the response
     const options = {
         method: "put",
-        payload: payload,
+        payload: JSON.stringify({
+            "identifiers": [`google_id:${google_id}`]
+        }),
         headers: {
             'Content-Type': 'application/json',
-            'OSDI-API-Token': scriptProperties.getProperty("AN_API_KEY")
+            'OSDI-API-Token': api_key
         }
     };
 
-    UrlFetchApp.fetch(apiUrlAn + `events/${action_network_id}`, options);
+    Logger.log(`Tagging Action Network event ${action_network_id} with Google Calendar event ID ${google_id}`);
+    UrlFetchApp.fetch(`${apiUrlAn}events/${action_network_id}`, options);
 };

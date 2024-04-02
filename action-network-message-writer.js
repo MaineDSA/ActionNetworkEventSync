@@ -1,7 +1,6 @@
 // Creates a new Action Network Email Message with the provided HTML-formatted text as the body.
 // Values for Subject, Sender, Reply-To, Origin System, and Wrapper are obtained via defined Script Properties.
-const draftANMessage = (doc) => {
-    const apiKey = scriptProperties.getProperty("AN_API_KEY");
+const draftANMessage = (doc, apiKey) => {
     const emailReplyTo = scriptProperties.getProperty("AN_EMAIL_REPLY_TO");
     const emailSender = scriptProperties.getProperty("AN_EMAIL_SENDER");
     const emailWrapper = scriptProperties.getProperty("AN_EMAIL_WRAPPER");
