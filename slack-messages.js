@@ -6,11 +6,11 @@ const formatSlackEventAnnouncement = (event) => {
     hour: "numeric",
     minute: "2-digit",
   });
-  return `*${event.title.trim()}*\n${startstring}\nRSVP: ${encodeURI(event.browser_url)}`;
+  return `*${event.title.trim()}*\n${startstring}`;
 };
 
 // Sends a message via Slack.
-const sendSlackMessage = (title, message, image) => {
+const sendSlackMessage = (title, message, url, image) => {
   if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") === null) {
     Logger.log('No Slack Webhook URL "SLACK_WEBHOOK_URL" provided, cannot continue.');
     return;
@@ -24,9 +24,9 @@ const sendSlackMessage = (title, message, image) => {
     text: `${title}:\n${message}`,
     blocks: [
       {
-        type: "section",
+        type: "header",
         text: {
-          type: "mrkdwn",
+          type: "plain_text",
           text: title,
         },
       },
@@ -37,16 +37,25 @@ const sendSlackMessage = (title, message, image) => {
           type: "mrkdwn",
           text: message,
         },
-        ...(image
-          ? {
-              accessory: {
-                type: "image",
-                image_url: image,
-                alt_text: "featured event image",
-              },
-            }
-          : null),
       },
+      {
+        type: "button",
+        text: {
+          type: "plain_text",
+          text: "Details and RSVP",
+        },
+        url: encodeURI(url),
+        accessibility_label: "Open Action Network in a browser for full event details",
+      },
+      ...(image
+        ? {
+            accessory: {
+              type: "image",
+              image_url: image,
+              alt_text: "featured event image",
+            },
+          }
+        : null),
     ],
   };
   const options = {
