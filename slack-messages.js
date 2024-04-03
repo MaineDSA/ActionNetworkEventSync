@@ -24,7 +24,6 @@ const sendSlackMessage = (title, message, image) => {
     blocks: [
       {
         type: "section",
-        block_id: "message_title",
         text: {
           type: "mrkdwn",
           text: title,
@@ -42,7 +41,7 @@ const sendSlackMessage = (title, message, image) => {
               type: "image",
               image_url: image,
             }
-          : null,
+          : {},
       },
     ],
   };
