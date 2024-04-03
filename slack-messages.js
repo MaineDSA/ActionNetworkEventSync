@@ -38,15 +38,17 @@ const sendSlackMessage = (title, message, url, image) => {
           text: message,
         },
       },
-      {
-        type: "button",
-        text: {
-          type: "plain_text",
-          text: "Details and RSVP",
-        },
-        url: encodeURI(url),
-        accessibility_label: "Open Action Network in a browser for full event details",
-      },
+      ...(url
+        ? {
+            type: "button",
+            text: {
+              type: "plain_text",
+              text: "Details and RSVP",
+            },
+            url: encodeURI(url),
+            accessibility_label: "Open Action Network in a browser for full event details",
+          }
+        : null),
       ...(image
         ? {
             accessory: {
