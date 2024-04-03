@@ -21,6 +21,7 @@ const sendSlackMessage = (title, message, image) => {
   }
 
   const slack_webhook_message = {
+    text: `${title}:\n${message}`,
     blocks: [
       {
         type: "section",
