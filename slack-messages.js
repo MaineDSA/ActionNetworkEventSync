@@ -6,17 +6,17 @@ const formatSlackEventAnnouncement = (event) => {
     hour: "numeric",
     minute: "2-digit",
   });
-  return `\n*${event.title.trim()}*\n${startstring}\nRSVP: ${encodeURI(event.browser_url)}`;
+  return `*${event.title.trim()}*\n${startstring}\nRSVP: ${encodeURI(event.browser_url)}`;
 };
 
 // Sends a message via Slack.
-const sendSlackMessage = (message, event) => {
+const sendSlackMessage = (title, message, image) => {
   if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") === null) {
     Logger.log('No Slack Webhook URL "SLACK_WEBHOOK_URL" provided, cannot continue.');
     return;
   }
-  if (message === null) {
-    Logger.log("No Slack message provided, cannot continue.");
+  if (title === null || message === null) {
+    Logger.log("Slack message or title not provided, cannot continue.");
     return;
   }
 
@@ -24,15 +24,23 @@ const sendSlackMessage = (message, event) => {
     blocks: [
       {
         type: "section",
+        block_id: "message_title",
+        text: {
+          type: "mrkdwn",
+          text: title,
+        },
+      },
+      {
+        type: "section",
         block_id: "event_info",
         text: {
           type: "mrkdwn",
           text: message,
         },
-        accessory: event
+        accessory: image
           ? {
               type: "image",
-              image_url: event.featured_image_url,
+              image_url: image,
             }
           : null,
       },

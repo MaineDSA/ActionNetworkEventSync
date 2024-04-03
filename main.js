@@ -52,8 +52,9 @@ const syncANtoGCal = () => {
           if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
             if (typeof google_id_new == "string") {
               sendSlackMessage(
-                `New Event Added to the Calendar: ${formatSlackEventAnnouncement(event)}`,
-                event,
+                "New Event Added to the Calendar",
+                formatSlackEventAnnouncement(event),
+                event.featured_image_url,
               );
               Logger.log(`Sent Slack message for ID: ${google_id_new}`);
             }
@@ -66,7 +67,11 @@ const syncANtoGCal = () => {
           const google_id_new = cancelGoogleEvent(event, action_network_id, google_id);
           if (typeof google_id_new == "string") {
             if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
-              sendSlackMessage(`Calendar Event Canceled: ${formatSlackEventAnnouncement(event)}`, event);
+              sendSlackMessage(
+                "Calendar Event Canceled",
+                formatSlackEventAnnouncement(event),
+                event.featured_image_url,
+              );
               Logger.log(`Sent Slack message for ID: ${google_id_new}`);
             }
           }
@@ -94,7 +99,7 @@ const postTodaysEvents = () => {
     return;
   }
 
-  const eventAnnouncements = ["Today's Events:"];
+  const eventAnnouncements = [];
 
   const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
   for (const api_key of api_keys) {
@@ -120,10 +125,10 @@ const postTodaysEvents = () => {
   }
 
   // Stop if today's events have all been cancelled
-  if (eventAnnouncements.length === 1) {
+  if (eventAnnouncements.length === 0) {
     Logger.log("All events for today have been canceled. No message will be posted.");
     return;
   }
 
-  sendSlackMessage(eventAnnouncements.join(" "), null);
+  sendSlackMessage("Today's Events", eventAnnouncements.join(" "), null);
 };
