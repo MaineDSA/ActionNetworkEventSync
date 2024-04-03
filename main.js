@@ -67,11 +67,7 @@ const syncANtoGCal = () => {
           const google_id_new = cancelGoogleEvent(event, action_network_id, google_id);
           if (typeof google_id_new == "string") {
             if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
-              sendSlackMessage(
-                "Calendar Event Canceled",
-                formatSlackEventAnnouncement(event),
-                event.featured_image_url,
-              );
+              sendSlackMessage("Calendar Event Canceled", formatSlackEventAnnouncement(event), null);
               Logger.log(`Sent Slack message for ID: ${google_id_new}`);
             }
           }
