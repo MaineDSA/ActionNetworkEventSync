@@ -42,6 +42,7 @@ const sendSlackMessage = (title, message, image) => {
               accessory: {
                 type: "image",
                 image_url: image,
+                alt_text: "featured event image",
               },
             }
           : null),
