@@ -51,12 +51,9 @@ const syncANtoGCal = () => {
           const google_id_new = createEvent(event, action_network_id, api_key);
           if (scriptProperties.getProperty("SLACK_WEBHOOK_URL")) {
             if (typeof google_id_new == "string") {
-              sendSlackMessage(
-                "New Event Added to the Calendar",
-                formatSlackEventAnnouncement(event),
-                event.browser_url,
-                event.featured_image_url,
-              );
+              const link_url = event.browser_url
+              const image_url = event.featured_image_url ? event.featured_image_url : null;
+              sendSlackMessage("New Event Added to the Calendar", formatSlackEventAnnouncement(event), link_url, image_url);
               Logger.log(`Sent Slack message for ID: ${google_id_new}`);
             }
           }
@@ -96,8 +93,6 @@ const postTodaysEvents = () => {
     return;
   }
 
-  const eventAnnouncements = [];
-
   const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
   for (const api_key of api_keys) {
     const event_ids = getSortedANEventIDs(getUpcomingEventLimitFilter(days_upcoming_slack), api_key);
@@ -116,16 +111,10 @@ const postTodaysEvents = () => {
       Logger.log(`${event.title.trim()} is listed as ${event.status} in Action Network.`);
 
       if (event.status !== "cancelled") {
-        eventAnnouncements.push(formatSlackEventAnnouncement(event));
+        const link_url = event.browser_url
+        const image_url = event.featured_image_url ? event.featured_image_url : null;
+        sendSlackMessage("Upcoming Event", formatSlackEventAnnouncement(event), link_url, image_url);
       }
     }
   }
-
-  // Stop if today's events have all been cancelled
-  if (eventAnnouncements.length === 0) {
-    Logger.log("All events for today have been canceled. No message will be posted.");
-    return;
-  }
-
-  sendSlackMessage("Today's Events", eventAnnouncements.join(" "), null, null);
 };
