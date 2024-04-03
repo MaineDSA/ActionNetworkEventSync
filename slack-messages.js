@@ -37,12 +37,14 @@ const sendSlackMessage = (title, message, image) => {
           type: "mrkdwn",
           text: message,
         },
-        accessory: image
+        ...(image
           ? {
-              type: "image",
-              image_url: image,
+              accessory: {
+                type: "image",
+                image_url: image,
+              },
             }
-          : {},
+          : null),
       },
     ],
   };
