@@ -38,28 +38,28 @@ const sendSlackMessage = (title, message, url, image) => {
           text: message,
         },
       },
-      ...(url
-        ? {
-            type: "button",
-            text: {
-              type: "plain_text",
-              text: "Details and RSVP",
-            },
-            url: encodeURI(url),
-            accessibility_label: "Open Action Network in a browser for full event details",
-          }
-        : null),
-      ...(image
-        ? {
-            accessory: {
-              type: "image",
-              image_url: image,
-              alt_text: "featured event image",
-            },
-          }
-        : null),
     ],
   };
+  if (url) {
+    slack_webhook_message.blocks.push({
+      type: "button",
+      text: {
+        type: "plain_text",
+        text: "Details and RSVP",
+      },
+      url: encodeURI(url),
+      accessibility_label: "Open Action Network in a browser for full event details",
+    })
+  }
+  if (image) {
+    slack_webhook_message.blocks.push({
+      accessory: {
+        type: "image",
+        image_url: image,
+        alt_text: "featured event image",
+      },
+    })
+  }
   const options = {
     method: "POST",
     contentType: "application/json",
