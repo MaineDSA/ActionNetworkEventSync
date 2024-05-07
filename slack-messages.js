@@ -15,7 +15,7 @@ const sendSlackMessage = (title, message, url, image) => {
     Logger.log('No Slack Webhook URL "SLACK_WEBHOOK_URL" provided, cannot continue.');
     return;
   }
-  if (title === null || message === null) {
+  if (!title || !message) {
     Logger.log("Slack message or title not provided, cannot continue.");
     return;
   }
