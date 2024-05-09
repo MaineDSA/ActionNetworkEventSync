@@ -26,7 +26,7 @@ This Google Apps Script code simplifies some more labor-intensive Action Network
 
 ### New Event Notification in Slack
 
-<a href="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/a211d773-0be6-4421-a6b4-d63bfb7b2bf9"><img src="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/a211d773-0be6-4421-a6b4-d63bfb7b2bf9" alt="Slack Message announcing new event" height="480"></a>
+<a href="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/f71bfd4a-90e7-4911-979d-b3c538ce47cd"><img src="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/f71bfd4a-90e7-4911-979d-b3c538ce47cd" alt="Slack Message announcing new event" height="275"></a>
 
 ## Script Properties
 
