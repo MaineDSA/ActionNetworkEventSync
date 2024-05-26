@@ -6,25 +6,62 @@ const formatSlackEventAnnouncement = (event) => {
     hour: "numeric",
     minute: "2-digit",
   });
-  return `\n*${event.title.trim()}*\n${startstring}\nRSVP: ${encodeURI(event.browser_url)}`;
+  return `*${event.title.trim()}*\n${startstring}`;
 };
 
 // Sends a message via Slack.
-const sendSlackMessage = (message) => {
+const sendSlackMessage = (title, message, url, image) => {
   if (scriptProperties.getProperty("SLACK_WEBHOOK_URL") === null) {
     Logger.log('No Slack Webhook URL "SLACK_WEBHOOK_URL" provided, cannot continue.');
     return;
   }
-  if (message === null) {
-    Logger.log("No Slack message provided, cannot continue.");
+  if (!title || !message) {
+    Logger.log("Slack message or title not provided, cannot continue.");
     return;
   }
 
   const slack_webhook_message = {
-    attachments: [{}],
-    text: message,
+    "blocks": [
+      {
+        "type": "header",
+        "text": {
+          "type": "plain_text",
+          "text": title
+        }
+      },
+      {
+        "type": "section",
+        "block_id": "event_info",
+        "text": {
+          "type": "mrkdwn",
+          "text": message
+        }
+      },
+    ],
   };
-
+  if (url) {
+    slack_webhook_message.blocks.push({
+      "type": "actions",
+      "elements": [
+        {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Details and RSVP"
+          },
+          "url": encodeURI(url),
+          "accessibility_label": "Open Action Network in a browser for full event details"
+        }
+      ]
+    })
+  }
+  if (image) {
+    slack_webhook_message.blocks.find(block => block.block_id === 'event_info')['accessory'] = {
+      "type": "image",
+      "image_url": image,
+      "alt_text": "featured event image"
+    };
+  }
   const options = {
     method: "POST",
     contentType: "application/json",
