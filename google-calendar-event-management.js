@@ -1,9 +1,12 @@
-const calendarId = "primary";
-
 // This function creates a Google Calendar event with data from an Action Network event
 function createEvent(an_event, action_network_id, api_key) {
   const eventName = an_event.title.trim();
   Logger.log(`Creating event ${eventName} from Action Network at ${action_network_id}.`);
+
+  if (!scriptProperties.getProperty("GCAL_ID")) {
+    Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.');
+    return;
+  }
 
   // event details for creating event.
   let event = {
@@ -19,7 +22,7 @@ function createEvent(an_event, action_network_id, api_key) {
   };
   try {
     // call method to insert/create new event in provided calandar
-    event = Calendar.Events.insert(event, calendarId);
+    event = Calendar.Events.insert(event, scriptProperties.getProperty("GCAL_ID"));
     Logger.log(`Created event ${eventName} in Google Calendar at ${event.id}.`);
 
     tagANEvent(action_network_id, event.id, api_key);
@@ -72,10 +75,15 @@ const updateGoogleEvent = (event, action_network_id, google_id) => {
 
 // This function cancels a Google Calendar event that has been cancelled in Action Network
 const cancelGoogleEvent = (event, action_network_id, google_id) => {
+  if (!scriptProperties.getProperty("GCAL_ID")) {
+    Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.');
+    return;
+  }
+
   const eventName = event.title.trim();
 
   try {
-    Calendar.Events.remove(calendarId, google_id);
+    Calendar.Events.remove(scriptProperties.getProperty("GCAL_ID"), google_id);
     Logger.log(`${eventName} has now been deleted from Google Calendar at ${google_id}.`);
     return google_id;
   } catch (e) {
