@@ -20,7 +20,7 @@ const formattedDescription = (description) => {
 
 // This function takes an event object as an argument and generates a formatted description string for the event
 const calDescription = (event) => {
-  const moreInfo = `<h5><strong>More Info and RSVP:</strong></h5><p><a style="color:#${scriptProperties.getProperty("LINK_COLOR")};text-decoration:none" href="${event.browser_url}">${event.browser_url}</a></p>`;
+  const moreInfo = `<h5><strong>More Info and RSVP:</strong></h5><p><a href="${event.browser_url}">${event.browser_url}</a></p>`;
   const calDesc = `<h5><strong>Description:</strong></h5>${formattedDescription(event.description)}`;
   let calDescFooter = "";
   if (typeof formattedDescriptionFooter === "function") {
@@ -40,7 +40,7 @@ const formatEvent = (event) => {
   const start = getStartTime(event);
   const end_date = getEndTime(event);
 
-  const template_title = `<h2 style="font-size:1.8em; margin-top: 0.002em; margin-bottom:-.9rem">${event.title.trim()}</h2>`;
+  const template_title = `<h2>${event.title.trim()}</h2>`;
   const event_date = start.toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
@@ -54,17 +54,16 @@ const formatEvent = (event) => {
     hour: "numeric",
     minute: "2-digit",
   });
-  const template_time_and_link = `<h3 style="font-style:italic;margin-bottom:-.5rem">${event_date} | ${startTime} - ${endTime}</h3>`;
+  const template_time_and_link = `<h3>${event_date} | ${startTime} - ${endTime}</h3>`;
   const image_url = event.featured_image_url
-    ? `<a href="${encodeURI(event.browser_url)}" target="_blank"><img style="height: 100%; width: 100%; object-fit: contain; margin-top: 20px" src="${encodeURI(event.featured_image_url)}" alt="Promo Image"></a>`
+    ? `<a href="${encodeURI(event.browser_url)}" target="_blank"><img src="${encodeURI(event.featured_image_url)}" alt="Event Promo Image"></a>`
     : "";
-  const button_rsvp = `<a href="${encodeURI(event.browser_url)}" target="_blank"><button type="button" style="background-color: #${scriptProperties.getProperty("LINK_COLOR")}; border: 1px solid ${scriptProperties.getProperty("LINK_COLOR")}; border-radius: 10px; color: #fff; padding: 8px; margin-top: 18px">Sign Me Up</button></a>`;
+  const button_rsvp = `<a href="${encodeURI(event.browser_url)}" target="_blank"><button type="button">Sign Me Up</button></a>`;
 
-  const formatted_body = `<article style="outline: #${scriptProperties.getProperty("LINK_COLOR")} dotted 3px; margin-top: 1.5em; padding: 1em 1em 1.5em;">${template_title}${template_time_and_link}${image_url}${button_rsvp}${event.description}</article>`;
+  const formatted_body = `<article class="event_article">${template_title}${template_time_and_link}${image_url}${button_rsvp}${event.description}</article>`;
 
   return formatted_body
-    .replace(/<a /g, `<a style="color: #${scriptProperties.getProperty("LINK_COLOR")}" `)
-    .replace(/<p>/g, '<p style="margin-bottom:-.5rem">');
+    .replace(/<a /g, `<a `)
 };
 
 const getUpcomingEventLimitFilter = (nextdays) => {
@@ -75,7 +74,7 @@ const getUpcomingEventLimitFilter = (nextdays) => {
 };
 
 const getHTMLTopAnnouncement = () => {
-  return `<br /><hr class="rounded"><h1><div style="text-align: center;">Priority Announcement</div></h1><br /><p>Description of priority announcement.</p>`;
+  return `<br /><hr class="rounded"><h1>Priority Announcement</h1><br /><p>Description of priority announcement.</p>`;
 };
 
 const getEventDescBody = (event, api_key) => {
@@ -84,7 +83,7 @@ const getEventDescBody = (event, api_key) => {
 };
 
 const getHTMLEvents = (events, api_key) => {
-  let doc = `<br /><hr class="rounded"><h1><div style="text-align: center;">Upcoming Events</div></h1>`;
+  let doc = `<br /><hr class="rounded"><h1>Upcoming Events</h1>`;
   if (typeof formattedCalendarText === "function") {
     doc += formattedCalendarText(events);
   }
@@ -94,7 +93,15 @@ const getHTMLEvents = (events, api_key) => {
 };
 
 const getHTMLAnnouncements = () => {
-  return `<br /><hr class="rounded"><h1><div style="text-align: center;">Even More</div></h1><section style="display:flex;flex-direction:row;flex-wrap:wrap"><article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>First title</h2><p>Description of first announcement.</p></article><article style="padding:0 .8em;flex-basis:calc((100% - 4rem)/2)"><h2>Second title</h2><p>Description of second announcement.</p></article></section>`;
+  return `
+  <br />
+  <hr class="rounded">
+  <h1>Even More</h1>
+  <section class="announce_section">
+  <article class="announce_article"><h2>First title</h2><p>Description of first announcement.</p></article>
+  <article class="announce_article"><h2>Second title</h2><p>Description of second announcement.</p></article>
+  </section>
+  `;
 };
 
 // This function compiles an HTML message of upcoming events and returns it as a string
