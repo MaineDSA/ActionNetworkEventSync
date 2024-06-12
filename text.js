@@ -60,10 +60,7 @@ const formatEvent = (event) => {
     : "";
   const button_rsvp = `<a href="${encodeURI(event.browser_url)}" target="_blank"><button type="button">Sign Me Up</button></a>`;
 
-  const formatted_body = `<article class="event_article">${template_title}${template_time_and_link}${image_url}${button_rsvp}${event.description}</article>`;
-
-  return formatted_body
-    .replace(/<a /g, `<a `)
+  return `<article class="event_article">${template_title}${template_time_and_link}${image_url}${button_rsvp}${event.description}</article>`;
 };
 
 const getUpcomingEventLimitFilter = (nextdays) => {
