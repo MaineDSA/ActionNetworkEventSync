@@ -21,7 +21,7 @@ const draftANMessage = (doc, apiKey) => {
     return;
   }
 
-  const subject = `🌹 ${emailSubject} for ${Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd")} 🌹`;
+  const subject = `🌹 ${emailSubject} for ${Utilities.formatDate(new Date(), "UTC", "yyyy-MM-dd")} 🫎`;
 
   const payload = {
     subject,
@@ -34,22 +34,22 @@ const draftANMessage = (doc, apiKey) => {
 
   payload.targets = emailTarget
     ? [
-      {
-        href: `${apiUrlAn}queries/${emailTarget}`,
-      },
-    ]
+        {
+          href: `${apiUrlAn}queries/${emailTarget}`,
+        },
+      ]
     : undefined;
 
   payload._links["osdi:wrapper"] = emailWrapper
     ? {
-      href: `${apiUrlAn}wrappers/${emailWrapper}`,
-    }
+        href: `${apiUrlAn}wrappers/${emailWrapper}`,
+      }
     : undefined;
 
   payload._links["osdi:creator"] = emailCreator
     ? {
-      href: `${apiUrlAn}people/${emailCreator}`,
-    }
+        href: `${apiUrlAn}people/${emailCreator}`,
+      }
     : undefined;
 
   const options = {

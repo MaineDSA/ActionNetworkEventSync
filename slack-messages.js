@@ -65,7 +65,7 @@ const sendSlackMessage = (title, message, url, image) => {
   const options = {
     method: "POST",
     contentType: "application/json",
-    payload: JSON.stringify(slack_webhook_message),
+    payload: JSON.stringify(slack_webhook_message)
   };
 
   UrlFetchApp.fetch(scriptProperties.getProperty("SLACK_WEBHOOK_URL"), options);
