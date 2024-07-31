@@ -14,7 +14,7 @@ const standard_api_params = (api_key) => {
 // Set constants for API URLs and default values
 const apiUrlAn = "https://actionnetwork.org/api/v2/";
 const default_length_mins = 90;
-const recently_modified = 14;
+const recently_modified = 28;
 const days_upcoming_email = 28;
 const days_upcoming_slack = 1;
 
@@ -29,7 +29,7 @@ const syncANtoGCal = () => {
 
   const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
   for (const api_key of api_keys) {
-    const event_ids = getRecentlyModifiedEventIDs(recently_modified, api_key); // Get an array of event IDs for events modified in the last week
+    const event_ids = getRecentlyModifiedEventIDs(recently_modified, api_key);
     Logger.log(
       `Found ${event_ids.length} events modified in the last ${recently_modified} days that have not started yet.`,
     );
