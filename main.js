@@ -14,7 +14,7 @@ const standard_api_params = (api_key) => {
 // Set constants for API URLs and default values
 const apiUrlAn = "https://actionnetwork.org/api/v2/";
 const default_length_mins = 90;
-const recently_modified = 14;
+const recently_modified = 28;
 const days_upcoming_email = 28;
 const days_upcoming_slack = 1;
 
