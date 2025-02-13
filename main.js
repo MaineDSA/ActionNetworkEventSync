@@ -29,7 +29,7 @@ const syncANtoGCal = () => {
 
   const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
   for (const api_key of api_keys) {
-    const event_ids = getRecentlyModifiedEventIDs(recently_modified, api_key); // Get an array of event IDs for events modified in the last week
+    const event_ids = getRecentlyModifiedEventIDs(recently_modified, api_key);
     Logger.log(
       `Found ${event_ids.length} events modified in the last ${recently_modified} days that have not started yet.`,
     );
