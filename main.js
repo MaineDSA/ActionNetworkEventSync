@@ -80,10 +80,25 @@ const syncANtoGCal = () => {
 // Calls the draftANMessage function with the output of the compileHTMLEmail() function as an argument.
 const draftANEventMessage = () => {
   const date_filter = getUpcomingEventLimitFilter(days_upcoming_email);
-  const first_api_key = scriptProperties.getProperty("AN_API_KEY").split(",")[0];
-  const event_ids = getSortedANEventIDs(date_filter, first_api_key);
-  const email_html = compileHTMLEmail(event_ids, first_api_key);
-  draftANMessage(email_html, first_api_key);
+  const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
+  let all_event_ids = [];
+
+  const eventApiKeyMap = new Map();
+  for (const api_key of api_keys) {
+    const event_ids = getSortedANEventIDs(api_key, date_filter);
+    event_ids.forEach(eventID => {
+      eventApiKeyMap.set(eventID, api_key);
+    });
+    all_event_ids.concat(event_ids);
+  }
+
+  Logger.log(`Sorting ${all_event_ids.length} events by soonest`);
+  const sorted_event_ids = all_event_ids.sort((a, b) => sortIDByDate(a, b, eventApiKeyMap.get(a),
+    eventApiKeyMap.get(
+      b)));
+
+  const email_html = compileHTMLEmail(sorted_event_ids, api_keys[0]);
+  draftANMessage(email_html, api_keys[0]);
 };
 
 const postTodaysEvents = () => {
@@ -95,7 +110,7 @@ const postTodaysEvents = () => {
 
   const api_keys = scriptProperties.getProperty("AN_API_KEY").split(",");
   for (const api_key of api_keys) {
-    const event_ids = getSortedANEventIDs(getUpcomingEventLimitFilter(days_upcoming_slack), api_key);
+    const event_ids = getSortedANEventIDs(api_key, getUpcomingEventLimitFilter(days_upcoming_slack));
     Logger.log(
       `Found ${event_ids.length} events coming up in the next ${days_upcoming_slack} ${days_upcoming_slack === 1 ? "day" : "days"}.`,
     );

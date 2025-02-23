@@ -11,12 +11,10 @@ This Google Apps Script code simplifies some more labor-intensive Action Network
 
 - **syncANtoGCal()** Retrieving a list of recently-edited Action Network events from each API key and syncing
   them to Google Calendar.
-- **draftANEventMessage()** Retriving a list of upcoming Action Network events from the first API key and
-  compiling them into an HTML-formatted
-  email draft on Action Network.
+- **draftANEventMessage()** Retriving a list of upcoming Action Network events and
+  compiling them into an HTML-formatted email draft on the Action Network group found at the first API key.
 - **postTodaysEvents()** Retriving a list of upcoming Action Network events from each API key and compiling
-  them into a regular Slack
-  post.
+  them into a regular Slack post.
 
 ## Screenshots
 
