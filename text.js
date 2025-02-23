@@ -31,7 +31,7 @@ const calDescription = (event) => {
 
 // This function takes a location object as an argument and generates a string with the venue, address, locality, region, and postal code
 const formatLocation = (location) => {
-  const {venue, address_lines, locality, region, postal_code} = location;
+  const { venue, address_lines, locality, region, postal_code } = location;
   return `${venue}, ${address_lines.join()}, ${locality}, ${region} ${postal_code}`;
 };
 
@@ -62,8 +62,7 @@ const formatEvent = (event) => {
 
   const formatted_body = `<article class="event_article">${template_title}${template_time_and_link}${image_url}${button_rsvp}${event.description}</article>`;
 
-  return formatted_body
-    .replace(/<a /g, `<a `)
+  return formatted_body.replace(/<a /g, `<a `);
 };
 
 const getUpcomingEventLimitFilter = (nextdays) => {
