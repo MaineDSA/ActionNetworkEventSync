@@ -1,22 +1,12 @@
 // This function takes a string argument 'description' and formats it by replacing various HTML tags and whitespace characters
-const formattedDescription = (description) => {
-  return description.replace(/<br><br>|<br><\/p>| {2}| <\/p>|<p>/g, (match) => {
-    switch (match) {
-      case "  ":
-        return " ";
-      case "<br><br>":
-        return "<br>";
-      case "<br></p>":
-        return "</p>";
-      case "^<p> ":
-        return "<p>";
-      case " </p>":
-        return "</p>";
-      case "<p>":
-        return "<p>";
-    }
-  });
-};
+function formattedDescription (description) {
+  return description
+    .replace(/<br><br>/g, '<br>')
+    .replace(/<br><\/p>/g, '</p>')
+    .replace(/^<p> /g, '<p>')
+    .replace(/ <\/p>/g, '</p>')
+    .replace(/ {2}/g, ' ')
+}
 
 // This function takes an event object as an argument and generates a formatted description string for the event
 const calDescription = (event) => {
