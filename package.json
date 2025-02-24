@@ -1,5 +1,47 @@
 {
+  "name": "action_network_event_sync",
   "devDependencies": {
-    "prettier": "3.2.5"
+    "prettier": "3.5.2",
+    "standard": "17.1.2"
+  },
+  "standard": {
+    "globals": [
+      "dstOffset",
+      "getEndTime",
+      "defultLengthMinutes",
+      "getEventIDFromAN",
+      "Logger",
+      "getAllANEventData",
+      "UrlFetchApp",
+      "standardApiParameters",
+      "tagANEvent",
+      "apiUrlAn",
+      "getStartTime",
+      "Utilities",
+      "scriptProperties",
+      "calDescription",
+      "Calendar",
+      "CalendarApp",
+      "PropertiesService",
+      "getRecentlyModifiedEventIDs",
+      "createEvent",
+      "dstOffset",
+      "sendSlackMessage",
+      "formatSlackEventAnnouncement",
+      "cancelGoogleEvent",
+      "sendSlackMessage",
+      "updateGoogleEvent",
+      "draftANEventMessage",
+      "getUpcomingEventLimitFilter",
+      "getSortedANEventIDs",
+      "sortIDByDate",
+      "compileHTMLEmail",
+      "draftANMessage",
+      "formattedDescriptionFooter",
+      "formattedCalendarText"
+    ]
+  },
+  "scripts": {
+    "test": "standard"
   }
 }
