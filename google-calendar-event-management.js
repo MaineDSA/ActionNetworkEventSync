@@ -1,94 +1,95 @@
+/* eslint-disable no-unused-vars */
 // This function creates a Google Calendar event with data from an Action Network event
-function createEvent(an_event, action_network_id, api_key) {
-  const eventName = an_event.title.trim();
-  Logger.log(`Creating event ${eventName} from Action Network at ${action_network_id}.`);
+function createEvent (actionNetworkEvent, actionNetwrkID, apiKey) {
+  const eventName = actionNetworkEvent.title.trim()
+  Logger.log(`Creating event ${eventName} from Action Network at ${actionNetwrkID}.`)
 
-  if (!scriptProperties.getProperty("GCAL_ID")) {
-    Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.');
-    return;
+  if (!scriptProperties.getProperty('GCAL_ID')) {
+    Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
+    return
   }
 
   // event details for creating event.
   let event = {
     summary: eventName,
-    //location: formatLocation(an_event.location),
-    description: calDescription(an_event),
+    // location: formatLocation(an_event.location),
+    description: calDescription(actionNetworkEvent),
     start: {
-      dateTime: getStartTime(an_event).toISOString(),
+      dateTime: getStartTime(actionNetworkEvent).toISOString()
     },
     end: {
-      dateTime: getEndTime(an_event).toISOString(),
-    },
-  };
+      dateTime: getEndTime(actionNetworkEvent).toISOString()
+    }
+  }
   try {
     // call method to insert/create new event in provided calandar
-    event = Calendar.Events.insert(event, scriptProperties.getProperty("GCAL_ID"));
-    Logger.log(`Created event ${eventName} in Google Calendar at ${event.id}.`);
+    event = Calendar.Events.insert(event, scriptProperties.getProperty('GCAL_ID'))
+    Logger.log(`Created event ${eventName} in Google Calendar at ${event.id}.`)
 
-    tagANEvent(action_network_id, event.id, api_key);
-    Logger.log(`Tagged AN event ${eventName} with google_id ${event.id}.`);
+    tagANEvent(actionNetwrkID, event.id, apiKey)
+    Logger.log(`Tagged AN event ${eventName} with google_id ${event.id}.`)
 
-    return event.id;
+    return event.id
   } catch (err) {
-    Logger.log(`Creating Google event ${eventName} failed with error %s`, err.message);
+    Logger.log(`Creating Google event ${eventName} failed with error %s`, err.message)
   }
 }
 
 // This function updates a Google Calendar event with data from an updated Action Network event
-const updateGoogleEvent = (event, action_network_id, google_id) => {
-  const eventName = event.title.trim();
-  Logger.log(`Updating event ${eventName} from Action Network at ${action_network_id}.`);
+function updateGoogleEvent (event, actionNetworkID, googleID) {
+  const eventName = event.title.trim()
+  Logger.log(`Updating event ${eventName} from Action Network at ${actionNetworkID}.`)
 
-  if (!scriptProperties.getProperty("GCAL_ID")) {
-    Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.');
-    return;
+  if (!scriptProperties.getProperty('GCAL_ID')) {
+    Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
+    return
   }
 
-  const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty("GCAL_ID"));
-  const eventGoogle = calendarGoogle.getEventById(google_id);
+  const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty('GCAL_ID'))
+  const eventGoogle = calendarGoogle.getEventById(googleID)
 
   if (!eventGoogle) {
-    Logger.log(`Google Calendar event ${google_id} not found.`);
-    return;
+    Logger.log(`Google Calendar event ${googleID} not found.`)
+    return
   }
 
-  const event_description = calDescription(event);
-  const start_time = getStartTime(event);
-  const end_time = getEndTime(event);
+  const eventDescription = calDescription(event)
+  const startTime = getStartTime(event)
+  const endTime = getEndTime(event)
 
-  const title_old = eventGoogle.getTitle();
-  if (title_old !== eventName) {
-    eventGoogle.setTitle(eventName);
+  const titleOld = eventGoogle.getTitle()
+  if (titleOld !== eventName) {
+    eventGoogle.setTitle(eventName)
   }
 
-  const desc_old = eventGoogle.getDescription();
-  if (desc_old !== event_description) {
-    eventGoogle.setDescription(event_description);
+  const descriptionOld = eventGoogle.getDescription()
+  if (descriptionOld !== eventDescription) {
+    eventGoogle.setDescription(eventDescription)
   }
 
-  eventGoogle.setTime(start_time, end_time);
+  eventGoogle.setTime(startTime, endTime)
 
-  Logger.log(`Updated event ${eventName} in Google Calendar at ${eventGoogle.getId()}.`);
+  Logger.log(`Updated event ${eventName} in Google Calendar at ${eventGoogle.getId()}.`)
 
-  return eventGoogle.getId();
-};
+  return eventGoogle.getId()
+}
 
 // This function cancels a Google Calendar event that has been cancelled in Action Network
-const cancelGoogleEvent = (event, action_network_id, google_id) => {
-  if (!scriptProperties.getProperty("GCAL_ID")) {
-    Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.');
-    return;
+function cancelGoogleEvent (event, actionNetworkID, googleID) {
+  if (!scriptProperties.getProperty('GCAL_ID')) {
+    Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
+    return
   }
 
-  const eventName = event.title.trim();
+  const eventName = event.title.trim()
 
   try {
-    Calendar.Events.remove(scriptProperties.getProperty("GCAL_ID"), google_id);
-    Logger.log(`${eventName} has now been deleted from Google Calendar at ${google_id}.`);
-    return google_id;
+    Calendar.Events.remove(scriptProperties.getProperty('GCAL_ID'), googleID)
+    Logger.log(`${eventName} has now been deleted from Google Calendar at ${googleID}.`)
+    return googleID
   } catch (e) {
-    Logger.log(`Unable to delete ${eventName} from Google Calendar due to error ${e}.`);
-    Logger.log(`${eventName} may have already been deleted from Google Calendar at ${google_id}.`);
-    return false;
+    Logger.log(`Unable to delete ${eventName} from Google Calendar due to error ${e}.`)
+    Logger.log(`${eventName} may have already been deleted from Google Calendar at ${googleID}.`)
+    return false
   }
-};
+}
