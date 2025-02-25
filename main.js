@@ -87,7 +87,6 @@ function syncANtoGCal () {
 function draftANEventMessage () {
   const dateFilter = getUpcomingEventLimitFilter(daysUpcomingEmail)
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
-  const allEventIDs = []
 
   const eventApiKeyMap = new Map()
   for (const apiKey of apiKeys) {
@@ -95,10 +94,10 @@ function draftANEventMessage () {
     eventIDs.forEach((eventID) => {
       eventApiKeyMap.set(eventID, apiKey)
     })
-    allEventIDs.concat(eventIDs)
   }
   Logger.log(`EventApiKeyMap contains ${eventApiKeyMap.length} pairs`)
 
+  const allEventIDs = eventApiKeyMap.keys()
   Logger.log(`Sorting all ${allEventIDs.length} events from ${apiKeys.length} api keys by soonest`)
   const sortedEventIDs = allEventIDs.sort((a, b) =>
     sortIDByDate(a, b, eventApiKeyMap.get(a), eventApiKeyMap.get(b))
