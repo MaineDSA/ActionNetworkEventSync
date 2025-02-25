@@ -97,7 +97,7 @@ function draftANEventMessage () {
   }
   Logger.log(`EventApiKeyMap contains ${eventApiKeyMap.size} pairs`)
 
-  const allEventIDs = eventApiKeyMap.keys()
+  const allEventIDs = Array.from(eventApiKeyMap)
   Logger.log(`Sorting all ${allEventIDs.length} events from ${apiKeys.length} api keys by soonest`)
   const sortedEventIDs = allEventIDs.sort((a, b) =>
     sortIDByDate(a, b, eventApiKeyMap.get(a), eventApiKeyMap.get(b))
