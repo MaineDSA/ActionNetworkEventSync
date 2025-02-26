@@ -104,6 +104,10 @@ function draftANEventMessage () {
     sortIDByDate(idFirst, idSecond, eventApiKeyMap.get(idFirst), eventApiKeyMap.get(idSecond))
   )
 
+  if (allEventIDs.length < 1) {
+    return
+  }
+
   const emailHTML = compileHTMLEmail(sortedEventIDs, apiKeys[0])
   draftANMessage(emailHTML, apiKeys[0])
 }
