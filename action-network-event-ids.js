@@ -12,10 +12,10 @@ function getANEventIDs (filter, apiKey) {
 
 // This function sorts event IDs by date, based on the start time of the event.
 // It is used by the getSortedANEventIDs function to sort the event IDs by the soonest event first.
-function sortIDByDate (a, b, apiKeyFirst, apiKeySecond) {
-  const startTimeA = getStartTime(getAllANEventData(a.href, apiKeyFirst))
-  const startTimeB = getStartTime(getAllANEventData(b.href, apiKeySecond))
-  return startTimeA - startTimeB
+function sortIDByDate (idFirst, idSecond, apiKeyFirst, apiKeySecond) {
+  const startTimeFirst = getStartTime(getAllANEventData(idFirst.href, apiKeyFirst))
+  const startTimeSecond = getStartTime(getAllANEventData(idSecond.href, apiKeySecond || apiKeyFirst))
+  return startTimeFirst - startTimeSecond
 }
 
 // This function returns upcoming event IDs from Action Network, sorted by the soonest event first.
@@ -34,7 +34,7 @@ function getSortedANEventIDs (apiKey, extraFilters) {
   const eventIDs = getANEventIDs(filter, apiKey)
   Logger.log(`Sorting ${eventIDs.length} events by soonest`)
 
-  return eventIDs.sort((a, b) => sortIDByDate(a, b, apiKey, apiKey))
+  return eventIDs.sort((idFirst, idSecond) => sortIDByDate(idFirst, idSecond, apiKey))
 }
 
 // This function returns event IDs from Action Network for events modified since a certain number of days ago that have not started yet.
