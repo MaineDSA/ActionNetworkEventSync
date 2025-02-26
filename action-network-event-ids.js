@@ -32,7 +32,7 @@ function getSortedANEventIDs (apiKey, extraFilters) {
   }
 
   const eventIDs = getANEventIDs(filter, apiKey)
-  Logger.log(`Sorting ${eventIDs.length} events by soonest`)
+  Logger.log(`Sorting ${eventIDs.length} events from API key ending in ${apiKey.slice(-4)} by soonest starting date`)
 
   return eventIDs.sort((idFirst, idSecond) => sortIDByDate(idFirst, idSecond, apiKey))
 }
