@@ -93,14 +93,15 @@ function draftANEventMessage () {
     const eventIDs = getSortedANEventIDs(apiKey, dateFilter)
     eventIDs.forEach((eventID) => {
       eventApiKeyMap.set(eventID, apiKey)
+      // Logger.log(`Adding ID ${eventID} to eventApiKeyMap with value ending in ${apiKey.slice(-4)}`)
     })
   }
   Logger.log(`EventApiKeyMap contains ${eventApiKeyMap.size} pairs`)
 
   const allEventIDs = Array.from(eventApiKeyMap)
   Logger.log(`Sorting all ${allEventIDs.length} events from ${apiKeys.length} api keys by soonest`)
-  const sortedEventIDs = allEventIDs.sort((a, b) =>
-    sortIDByDate(a, b, eventApiKeyMap.get(a), eventApiKeyMap.get(b))
+  const sortedEventIDs = allEventIDs.sort((idFirst, idSecond) =>
+    sortIDByDate(idFirst, idSecond, eventApiKeyMap.get(idFirst), eventApiKeyMap.get(idSecond))
   )
 
   const emailHTML = compileHTMLEmail(sortedEventIDs, apiKeys[0])
