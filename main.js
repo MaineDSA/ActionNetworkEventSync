@@ -105,6 +105,7 @@ function draftANEventMessage () {
   )
 
   if (allEventIDs.length === 0) {
+    Logger.log('There are no upcoming events. No newsletter will be drafted.')
     return
   }
 
