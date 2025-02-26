@@ -104,7 +104,7 @@ function draftANEventMessage () {
     sortIDByDate(idFirst, idSecond, eventApiKeyMap.get(idFirst), eventApiKeyMap.get(idSecond))
   )
 
-  if (allEventIDs.length < 1) {
+  if (allEventIDs.length === 0) {
     return
   }
 
