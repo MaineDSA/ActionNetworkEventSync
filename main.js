@@ -108,7 +108,7 @@ function draftANEventMessage () {
     return
   }
 
-  const emailHTML = compileHTMLEmail(sortedEventIDs, apiKeys[0])
+  const emailHTML = compileHTMLEmail(sortedEventIDs, eventApiKeyMap)
   draftANMessage(emailHTML, apiKeys[0])
 }
 

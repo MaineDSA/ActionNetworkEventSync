@@ -72,12 +72,12 @@ function getEventDescBody (event, apiKey) {
   return eventData.status !== 'cancelled' ? formatEvent(eventData) : ''
 }
 
-function getHTMLEvents (events, apiKey) {
+function getHTMLEvents (events, eventApiKeyMap) {
   let doc = '<br /><hr class="rounded"><h1>Upcoming Events</h1>'
   if (typeof formattedCalendarText === 'function') {
     doc += formattedCalendarText(events)
   }
-  const eventBodies = events.map((event) => getEventDescBody(event, apiKey))
+  const eventBodies = events.map((event) => getEventDescBody(event, eventApiKeyMap.get(event)))
   doc += `<section>${eventBodies.join('')}</section>`
   return doc
 }
@@ -95,6 +95,6 @@ function getHTMLAnnouncements () {
 }
 
 // This function compiles an HTML message of upcoming events and returns it as a string
-function compileHTMLEmail (eventIDs, apiKey) {
-  return getHTMLTopAnnouncement() + getHTMLEvents(eventIDs, apiKey) + getHTMLAnnouncements()
+function compileHTMLEmail (eventIDs, eventApiKeyMap) {
+  return getHTMLTopAnnouncement() + getHTMLEvents(eventIDs, eventApiKeyMap) + getHTMLAnnouncements()
 }
