@@ -68,7 +68,7 @@ function syncANtoGCal () {
         // If the event is in Google Calendar
         // If the event was cancelled in Action Network, cancel it in Google Calendar
         if (event.status === 'cancelled') {
-          const googleIDNew = cancelGoogleEvent(event, actionNetworkID, googleID)
+          const googleIDNew = cancelGoogleEvent(event, googleID)
           if (typeof googleIDNew === 'string') {
             if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
               sendSlackMessage('Calendar Event Canceled', formatSlackEventAnnouncement(event), null, null)

@@ -75,7 +75,7 @@ function updateGoogleEvent (event, actionNetworkID, googleID) {
 }
 
 // This function cancels a Google Calendar event that has been cancelled in Action Network
-function cancelGoogleEvent (event, actionNetworkID, googleID) {
+function cancelGoogleEvent (event, googleID) {
   if (!scriptProperties.getProperty('GCAL_ID')) {
     Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
     return
