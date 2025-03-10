@@ -37,36 +37,40 @@ function createEvent (actionNetworkEvent, actionNetwrkID, apiKey) {
 
 // This function updates a Google Calendar event with data from an updated Action Network event
 function updateGoogleEvent (event, actionNetworkID, googleID) {
-  const eventName = event.title.trim()
-  Logger.log(`Updating event ${eventName} from Action Network at ${actionNetworkID}.`)
 
   if (!scriptProperties.getProperty('GCAL_ID')) {
     Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
     return
   }
 
-  const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty('GCAL_ID'))
-  const eventGoogle = calendarGoogle.getEventById(googleID)
+  const eventGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty('GCAL_ID')).getEventById(googleID)
 
   if (!eventGoogle) {
     Logger.log(`Google Calendar event ${googleID} not found.`)
     return
   }
 
-  const eventDescription = calDescription(event)
-  const startTime = getStartTime(event)
-  const endTime = getEndTime(event)
-
-  const titleOld = eventGoogle.getTitle()
-  if (titleOld !== eventName) {
+  const eventName = event.title.trim()
+  if (eventGoogle.getTitle() !== eventName) {
+    Logger.log(`Updating title of event ${eventName} from Action Network at ${actionNetworkID}.`)
     eventGoogle.setTitle(eventName)
   }
 
+  const eventLocation = formatLocation(event.location)
+  if (eventGoogle.getLocation() !== eventLocation) {
+    Logger.log(`Updating location of event ${eventName} from Action Network at ${actionNetworkID}.`)
+    eventGoogle.setLocation(eventLocation)
+  }
+
+  const eventDescription = calDescription(event)
   const descriptionOld = eventGoogle.getDescription()
   if (descriptionOld !== eventDescription) {
+    Logger.log(`Updating description of event ${eventName} from Action Network at ${actionNetworkID}.`)
     eventGoogle.setDescription(eventDescription)
   }
 
+  const startTime = getStartTime(event)
+  const endTime = getEndTime(event)
   eventGoogle.setTime(startTime, endTime)
 
   Logger.log(`Updated event ${eventName} in Google Calendar at ${eventGoogle.getId()}.`)
