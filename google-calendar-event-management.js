@@ -63,8 +63,7 @@ function updateGoogleEvent (event, actionNetworkID, googleID) {
   }
 
   const eventDescription = calDescription(event)
-  const descriptionOld = eventGoogle.getDescription()
-  if (descriptionOld !== eventDescription) {
+  if (eventGoogle.getDescription() !== eventDescription) {
     Logger.log(`Updating description of event ${eventName} from Action Network at ${actionNetworkID}.`)
     eventGoogle.setDescription(eventDescription)
   }
