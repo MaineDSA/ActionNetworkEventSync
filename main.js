@@ -93,7 +93,6 @@ function draftANEventMessage () {
     const eventIDs = getSortedANEventIDs(apiKey, dateFilter)
     eventIDs.forEach((eventID) => {
       eventApiKeyMap.set(eventID, apiKey)
-      // Logger.log(`Adding ID ${eventID} to eventApiKeyMap with value ending in ${apiKey.slice(-4)}`)
     })
   }
 
@@ -108,6 +107,7 @@ function draftANEventMessage () {
     return
   }
 
+  Logger.log(`Creating newsletter via API key ending in ${apiKey.slice(-4)}.`)
   const emailHTML = compileHTMLEmail(sortedEventIDs, eventApiKeyMap)
   draftANMessage(emailHTML, apiKeys[0])
 }
