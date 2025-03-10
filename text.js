@@ -11,8 +11,14 @@ function formatDescription (description) {
 
 // This function takes an event object as an argument and generates a formatted description string for the event
 function calDescription (event) {
-  const moreInfo = `<h5><strong>More Info and RSVP:</strong></h5><p><a href="${event.browser_url}">${event.browser_url}</a></p>`
-  const calDesc = `<h5><strong>Description:</strong></h5>${formatDescription(event.description)}`
+  const moreInfo = `
+    <h5><strong>More Info and RSVP:</strong></h5>
+    <p><a href="${event.browser_url}">${event.browser_url}</a></p>
+    `
+  const calDesc = `
+    <h5><strong>Description:</strong></h5>
+    ${formatDescription(event.description)}
+    `
   let calDescFooter = ''
   if (typeof formattedDescriptionFooter === 'function') {
     calDescFooter = formattedDescriptionFooter(event.description)
@@ -54,7 +60,15 @@ function formatEvent (event) {
     : ''
   const buttonRSVP = `<a href="${encodeURI(event.browser_url)}" target="_blank"><button type="button">Sign Me Up</button></a>`
 
-  const formattedBody = `<article class="event_article">${templateTitle}${templateTimeAndLink}${imageURL}${buttonRSVP}${event.description}</article>`
+  const formattedBody = `
+    <article class="event_article">
+      ${templateTitle}
+      ${templateTimeAndLink}
+      ${imageURL}
+      ${buttonRSVP}
+      ${event.description}
+    </article>
+    `
 
   return formattedBody.replace(/<a /g, '<a ')
 }
@@ -67,7 +81,13 @@ function getUpcomingEventLimitFilter (nextdays) {
 }
 
 function getHTMLTopAnnouncement () {
-  return '<br /><hr class="rounded"><h1>Priority Announcement</h1><br /><p>Description of priority announcement.</p>'
+  return `
+    <br />
+    <hr class="rounded">
+    <h1>Priority Announcement</h1>
+    <br />
+    <p>Description of priority announcement.</p>
+    `
 }
 
 function getEventDescBody (event, apiKey) {
@@ -76,12 +96,20 @@ function getEventDescBody (event, apiKey) {
 }
 
 function getHTMLEvents (events, eventApiKeyMap) {
-  let doc = '<br /><hr class="rounded"><h1>Upcoming Events</h1>'
+  let doc = `
+    <br />
+    <hr class="rounded">
+    <h1>Upcoming Events</h1>
+    `
   if (typeof formattedCalendarText === 'function') {
     doc += formattedCalendarText(events)
   }
   const eventBodies = events.map((event) => getEventDescBody(event, eventApiKeyMap.get(event)))
-  doc += `<section>${eventBodies.join('')}</section>`
+  doc += `
+    <section>
+      ${eventBodies.join('')}
+    </section>
+  `
   return doc
 }
 
@@ -91,8 +119,14 @@ function getHTMLAnnouncements () {
   <hr class="rounded">
   <h1>Even More</h1>
   <section class="announce_section">
-  <article class="announce_article"><h2>First title</h2><p>Description of first announcement.</p></article>
-  <article class="announce_article"><h2>Second title</h2><p>Description of second announcement.</p></article>
+    <article class="announce_article">
+      <h2>First title</h2>
+      <p>Description of first announcement.</p>
+    </article>
+    <article class="announce_article">
+      <h2>Second title</h2>
+      <p>Description of second announcement.</p>
+    </article>
   </section>
   `
 }
