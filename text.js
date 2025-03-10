@@ -22,6 +22,9 @@ function calDescription (event) {
 
 // This function takes a location object as an argument and generates a string with the venue, address, locality, region, and postal code
 const formatLocation = (location) => {
+  if (location.postal_code === '') {
+    return ''
+  }
   const { venue, address_lines: addressLines, locality, region, postal_code: zipCode } = location
   return `${venue}, ${addressLines.join()}, ${locality}, ${region} ${zipCode}`
 }
