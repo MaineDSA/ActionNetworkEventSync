@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+/* global formatLocation */
 // This function creates a Google Calendar event with data from an Action Network event
 function createEvent (actionNetworkEvent, actionNetwrkID, apiKey) {
   const eventName = actionNetworkEvent.title.trim()
@@ -37,7 +38,6 @@ function createEvent (actionNetworkEvent, actionNetwrkID, apiKey) {
 
 // This function updates a Google Calendar event with data from an updated Action Network event
 function updateGoogleEvent (event, actionNetworkID, googleID) {
-
   if (!scriptProperties.getProperty('GCAL_ID')) {
     Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
     return

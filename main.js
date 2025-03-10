@@ -107,7 +107,7 @@ function draftANEventMessage () {
     return
   }
 
-  Logger.log(`Creating newsletter via API key ending in ${apiKey.slice(-4)}.`)
+  Logger.log(`Creating newsletter via API key ending in ${apiKeys[0].slice(-4)}.`)
   const emailHTML = compileHTMLEmail(sortedEventIDs, eventApiKeyMap)
   draftANMessage(emailHTML, apiKeys[0])
 }
