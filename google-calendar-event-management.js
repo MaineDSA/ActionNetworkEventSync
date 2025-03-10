@@ -12,7 +12,7 @@ function createEvent (actionNetworkEvent, actionNetwrkID, apiKey) {
   // event details for creating event.
   let event = {
     summary: eventName,
-    // location: formatLocation(an_event.location),
+    location: formatLocation(actionNetworkEvent.location),
     description: calDescription(actionNetworkEvent),
     start: {
       dateTime: getStartTime(actionNetworkEvent).toISOString()
