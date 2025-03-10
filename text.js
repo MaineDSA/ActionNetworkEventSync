@@ -54,7 +54,7 @@ function formatEvent (event) {
     hour: 'numeric',
     minute: '2-digit'
   })
-  const templateTimeAndLink = `<h3>${eventDate} | ${startTime} - ${endTime}</h3>`
+  const templateTimeAndLink = `<h3><time datetime=${startDate.toISOString()}>${eventDate}</time> | ${startTime} - ${endTime}</h3>`
   const imageURL = event.featured_image_url
     ? `<a href="${encodeURI(event.browser_url)}" target="_blank"><img src="${encodeURI(event.featured_image_url)}" alt="Event Promo Image"></a>`
     : ''
