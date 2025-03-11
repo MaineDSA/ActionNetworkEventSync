@@ -94,7 +94,7 @@ function getHTMLTopAnnouncement () {
   return `
     <br />
     <hr class="rounded">
-    <h1>Priority Announcement</h1>
+    <h1 id="announcement">Priority Announcement</h1>
     <br />
     <p>Description of priority announcement.</p>
     `
@@ -109,7 +109,7 @@ function getHTMLEvents (events, eventApiKeyMap) {
   let doc = `
     <br />
     <hr class="rounded">
-    <h1>Upcoming Events</h1>
+    <h1 id="upcoming">Upcoming Events</h1>
     `
   if (typeof formattedCalendarText === 'function') {
     doc += formattedCalendarText(events)
@@ -127,7 +127,7 @@ function getHTMLAnnouncements () {
   return `
   <br />
   <hr class="rounded">
-  <h1>Even More</h1>
+  <h1 id="extras">Even More</h1>
   <section class="announce_section">
     <article class="announce_article">
       <h2>First title</h2>
