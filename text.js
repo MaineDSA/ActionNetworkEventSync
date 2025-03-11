@@ -13,7 +13,9 @@ function formatDescription (description) {
 function calDescription (event) {
   const moreInfo = `
     <h5><strong>More Info and RSVP:</strong></h5>
-    <p><a href="${event.browser_url}">${event.browser_url}</a></p>
+    <a href="${event.browser_url}">
+      <p>${event.browser_url}</p>
+    </a>
     `
   const calDesc = `
     <h5><strong>Description:</strong></h5>
@@ -56,9 +58,17 @@ function formatEvent (event) {
   })
   const templateTimeAndLink = `<h3><time datetime=${startDate.toISOString()}>${eventDate}</time> | ${startTime} - ${endTime}</h3>`
   const imageURL = event.featured_image_url
-    ? `<a href="${encodeURI(event.browser_url)}" target="_blank"><img src="${encodeURI(event.featured_image_url)}" alt="Event Promo Image"></a>`
+    ? `
+      <a href="${encodeURI(event.browser_url)}" target="_blank">
+        <img src="${encodeURI(event.featured_image_url)}" alt="Event Promo Image">
+      </a>
+    `
     : ''
-  const buttonRSVP = `<a href="${encodeURI(event.browser_url)}" target="_blank"><button type="button">Sign Me Up</button></a>`
+  const buttonRSVP = `
+    <a href="${encodeURI(event.browser_url)}" target="_blank">
+      <button type="button">Sign Me Up</button>
+    </a>
+  `
 
   const formattedBody = `
     <article class="event_article">
