@@ -124,21 +124,11 @@ function getHTMLEvents (events, eventApiKeyMap) {
 }
 
 function getHTMLAnnouncements () {
-  return `
-  <br />
-  <hr class="rounded">
-  <h1 id="extras">Even More</h1>
-  <section class="announce_section">
-    <article class="announce_article">
-      <h2>First title</h2>
-      <p>Description of first announcement.</p>
-    </article>
-    <article class="announce_article">
-      <h2>Second title</h2>
-      <p>Description of second announcement.</p>
-    </article>
-  </section>
-  `
+  let doc = ''
+  if (typeof customAnnouncements === 'function') {
+    doc += customAnnouncements()
+  }
+  return doc
 }
 
 // This function compiles an HTML message of upcoming events and returns it as a string

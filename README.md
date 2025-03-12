@@ -57,8 +57,10 @@ If not configured, these will be skipped.
 - customEventDescriptionFooter(formatted_event_description): Creating this
 function allows you to add an HTML-formatted string to the end of each event,
 as posted to Google Calendar.
-- customNewsletterEventHeaderText(events): Creating this function allows you to add additional
-information to the "Upcoming Events" section, between the header and list of events.
+- customNewsletterEventHeaderText(events): Creating this function allows you to add additional information to the "Upcoming Events" section,
+between the header and list of events.
+- customAnnouncements(): Creating this function allows you to add additional
+announcements, articles, etc after the list of upcoming events.
 
 ## Triggering
 
