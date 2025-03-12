@@ -28,10 +28,9 @@ This Google Apps Script code simplifies some more labor-intensive Action Network
 
 ## Script Properties
 
-To use these features, you must
-configure [Script Properties](https://developers.google.com/apps-script/reference/properties) in your Google
-Apps
-script.
+To use these features, you must configure
+[Script Properties](https://developers.google.com/apps-script/reference/properties)
+in your Google Apps script.
 
 - AN_API_KEY: Your Action Network API Key (or a comma-separated list if you have multiple groups).
 - AN_EMAIL_REPLY_TO: The email you want generated AN email drafts to use as the reply-to address.
@@ -55,12 +54,11 @@ As some desired customization cannot be attained through properties, some tie-in
 Creating the following functions in a new script file will allow you to insert additional text at key places.
 If not configured, these will be skipped.
 
-- formattedDescriptionFooter(formatted_event_description): Creating this function allows you to add an
-  HTML-formatted
-  string to the end of each event, as posted to Google Calendar.
-- formattedCalendarText(events): Creating this function allows you to add additional information to the "
-  Upcoming
-  Events" section, between the header and list of events.
+- customEventDescriptionFooter(formatted_event_description): Creating this
+function allows you to add an HTML-formatted string to the end of each event,
+as posted to Google Calendar.
+- customNewsletterEventHeaderText(events): Creating this function allows you to add additional
+information to the "Upcoming Events" section, between the header and list of events.
 
 ## Triggering
 

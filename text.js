@@ -22,8 +22,8 @@ function calDescription (event) {
     ${formatDescription(event.description)}
     `
   let calDescFooter = ''
-  if (typeof formattedDescriptionFooter === 'function') {
-    calDescFooter = formattedDescriptionFooter(event.description)
+  if (typeof customEventDescriptionFooter === 'function') {
+    calDescFooter = customEventDescriptionFooter(event.description)
   }
   return moreInfo + calDesc + calDescFooter
 }
@@ -111,8 +111,8 @@ function getHTMLEvents (events, eventApiKeyMap) {
     <hr class="rounded">
     <h1 id="upcoming">Upcoming Events</h1>
     `
-  if (typeof formattedCalendarText === 'function') {
-    doc += formattedCalendarText(events)
+  if (typeof customNewsletterEventHeaderText === 'function') {
+    doc += customNewsletterEventHeaderText(events)
   }
   const eventBodies = events.map((event) => getEventDescBody(event, eventApiKeyMap.get(event)))
   doc += `

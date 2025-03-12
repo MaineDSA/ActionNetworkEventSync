@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* global formatLocation */
 // This function creates a Google Calendar event with data from an Action Network event
 function createEvent (actionNetworkEvent, actionNetwrkID, apiKey) {
   const eventName = actionNetworkEvent.title.trim()
