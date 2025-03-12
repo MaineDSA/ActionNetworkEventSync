@@ -24,7 +24,7 @@ const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty(
 // This function syncs events modified in the last week from Action Network to Google Calendar
 function syncANtoGCal () {
   if (!calendarGoogle) {
-    console.info('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
+    console.error('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
     return
   }
 
@@ -39,7 +39,7 @@ function syncANtoGCal () {
       const event = getAllANEventData(eventID.href, apiKey) // Get all event data for the current event ID
 
       const actionNetworkID = getEventIDFromAN(event, 'action_network') // Get the Action Network ID for the event
-      console.info(
+      console.log(
         `${event.title.trim()} is listed as ${event.status} in Action Network at ${actionNetworkID}.`
       )
 
@@ -104,7 +104,7 @@ function draftANEventMessage () {
     return
   }
 
-  console.info(`Creating newsletter via API key ending in ${apiKeys[0].slice(-4)}.`)
+  console.info(`Creating newsletter at API key ending in ${apiKeys[0].slice(-4)}.`)
   const emailHTML = compileHTMLEmail(sortedEventIDs, eventApiKeyMap)
   draftANMessage(emailHTML, apiKeys[0])
 }
@@ -112,28 +112,29 @@ function draftANEventMessage () {
 function postTodaysEvents () {
   // Check if the Slack Webhook URL is provided
   if (!scriptProperties.getProperty('SLACK_WEBHOOK_URL') && !scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
-    console.info('No Webhook URL "SLACK_WEBHOOK_URL" or "DISCORD_WEBHOOK_URL" provided, cannot continue.')
+    console.error('No Webhook URL "SLACK_WEBHOOK_URL" or "DISCORD_WEBHOOK_URL" provided, cannot continue.')
     return
   }
 
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
   for (const apiKey of apiKeys) {
     const eventIDs = getSortedANEventIDs(apiKey, getUpcomingEventLimitFilter(daysUpcomingSlack))
-    console.info(
+    console.log(
       `Found ${eventIDs.length} events coming up in the next ${daysUpcomingSlack} ${daysUpcomingSlack === 1 ? 'day' : 'days'}.`
     )
 
     // Skip this AN group if there are no events today
     if (eventIDs.length === 0) {
-      console.info('There are no events today. No message will be posted.')
+      console.warn('There are no events today. No message will be posted.')
       continue
     }
 
     for (const eventID of eventIDs) {
       const event = getAllANEventData(eventID.href, apiKey) // Get all event data for the current event ID
-      console.info(`${event.title.trim()} is listed as ${event.status} in Action Network.`)
+      console.log(`${event.title.trim()} is listed as ${event.status} in Action Network.`)
 
       if (event.status === 'cancelled') {
+        console.log(`Skipping cancelled event ${event.title.trim()}.`)
         continue
       }
 
