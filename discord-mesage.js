@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 // Sends a message via Discord.
 function sendDiscordMessage (title, message, url, image) {
-  if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL') === null) {
+  if (!scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
     Logger.log('No Discord Webhook URL "DISCORD_WEBHOOK_URL" provided, cannot continue.')
     return
   }

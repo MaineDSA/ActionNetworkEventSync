@@ -22,7 +22,7 @@ function getEventIDFromAN (contentJSON, searchID) {
   const fullSearchID = `${searchID}:[^,]*`
 
   const regexID = new RegExp(fullSearchID).exec(identifiers)
-  if (regexID === null) {
+  if (!regexID) {
     Logger.log(`${searchID} not found in Action Network event identifiers.`)
     return null
   }
@@ -42,7 +42,7 @@ function getAllANEventData (eventURL, apiKey) {
 // This function tags an Action Network event with the Google ID for its corresponding Google Calendar event
 function tagANEvent (actionNetworkURL, googleID, apiKey) {
   // Check if the "AN_API_KEY" property is null
-  if (apiKey === null) {
+  if (!apiKey) {
     Logger.log('No Action Network API Key "AN_API_KEY" provided, cannot continue.')
     return
   }
