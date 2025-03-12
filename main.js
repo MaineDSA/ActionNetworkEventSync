@@ -45,38 +45,35 @@ function syncANtoGCal () {
 
       // If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
       const googleID = getEventIDFromAN(event, 'google_id')
-      if (!googleID) {
-        // If the event is not in Google Calendar
-        if (event.status !== 'cancelled') {
-          // If the event is not cancelled in Action Network, create it in Google Calendar
-          const googleIDNew = createEvent(event, actionNetworkID, apiKey)
-          if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
-            if (typeof googleIDNew === 'string') {
-              const linkURL = event.browser_url
-              const imageURL = event.featured_image_url ? event.featured_image_url : null
-              sendSlackMessage(
-                'New Event Added to the Calendar',
-                formatSlackEventAnnouncement(event),
-                linkURL,
-                imageURL
-              )
-              Logger.log(`Sent Slack message for ID: ${googleIDNew}`)
-            }
-          }
+      if (!googleID && event.status !== 'cancelled') {
+        // If the event is not in Google Calendar and the event is not cancelled in Action Network, create it in Google Calendar
+        const googleIDNew = createEvent(event, actionNetworkID, apiKey)
+
+        if (typeof googleIDNew !== 'string') {
+          continue
+        }
+
+        if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
+          sendMessage('SLACK_WEBHOOK_URL', event, 'New Event Added to the Calendar', sendSlackMessage)
+        }
+        if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
+          sendMessage('DISCORD_WEBHOOK_URL', event, 'New Event Added to the Calendar', sendDiscordMessage)
         }
       } else {
-        // If the event is in Google Calendar
-        // If the event was cancelled in Action Network, cancel it in Google Calendar
-        if (event.status === 'cancelled') {
-          const googleIDNew = cancelGoogleEvent(event, googleID)
-          if (typeof googleIDNew === 'string') {
-            if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
-              sendSlackMessage('Calendar Event Canceled', formatSlackEventAnnouncement(event), null, null)
-              Logger.log(`Sent Slack message for ID: ${googleIDNew}`)
-            }
-          }
-        } else {
+        if (event.status !== 'cancelled') {
           updateGoogleEvent(event, actionNetworkID, googleID)
+          return
+        }
+
+        // If the event is in Google Calendar and the event was cancelled in Action Network, cancel it in Google Calendar
+        const googleIDNew = cancelGoogleEvent(event, googleID)
+        if (typeof googleIDNew === 'string') {
+          if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
+            sendMessage('SLACK_WEBHOOK_URL', event, 'Calendar Event Canceled', sendSlackMessage)
+          }
+          if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
+            sendMessage('DISCORD_WEBHOOK_URL', event, 'Calendar Event Canceled', sendDiscordMessage)
+          }
         }
       }
     }
@@ -114,8 +111,8 @@ function draftANEventMessage () {
 
 function postTodaysEvents () {
   // Check if the Slack Webhook URL is provided
-  if (!scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
-    Logger.log('No Slack Webhook URL "SLACK_WEBHOOK_URL" provided, cannot continue.')
+  if (!scriptProperties.getProperty('SLACK_WEBHOOK_URL') && !scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
+    Logger.log('No Webhook URL "SLACK_WEBHOOK_URL" or "DISCORD_WEBHOOK_URL" provided, cannot continue.')
     return
   }
 
@@ -136,10 +133,15 @@ function postTodaysEvents () {
       const event = getAllANEventData(eventID.href, apiKey) // Get all event data for the current event ID
       Logger.log(`${event.title.trim()} is listed as ${event.status} in Action Network.`)
 
-      if (event.status !== 'cancelled') {
-        const linkURL = event.browser_url
-        const imageURL = event.featured_image_url ? event.featured_image_url : null
-        sendSlackMessage('Upcoming Event', formatSlackEventAnnouncement(event), linkURL, imageURL)
+      if (event.status === 'cancelled') {
+        continue
+      }
+
+      if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
+        sendMessage('SLACK_WEBHOOK_URL', event, 'Calendar Event Canceled', sendSlackMessage)
+      }
+      if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
+        sendMessage('DISCORD_WEBHOOK_URL', event, 'Calendar Event Canceled', sendDiscordMessage)
       }
     }
   }
