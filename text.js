@@ -131,12 +131,13 @@ function getHTMLAnnouncements () {
   return doc
 }
 
-// This function compiles an HTML message of upcoming events and returns it as a string
+// Compile an HTML message of upcoming events and return it as a string
 function compileHTMLEmail (eventIDs, eventApiKeyMap) {
   return getHTMLTopAnnouncement() + getHTMLEvents(eventIDs, eventApiKeyMap) + getHTMLAnnouncements()
 }
 
-function formatSlackEventAnnouncement (event) {
+// Format the event title and start time into a multi-line string with the title in bold
+function formatEventAnnouncementMessage (event) {
   const startstring = getStartTime(event).toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
