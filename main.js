@@ -139,10 +139,10 @@ function postTodaysEvents () {
       }
 
       if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
-        sendMessage('SLACK_WEBHOOK_URL', event, 'Calendar Event Canceled', sendSlackMessage)
+        sendMessage('SLACK_WEBHOOK_URL', event, 'Upcoming Event', sendSlackMessage)
       }
       if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
-        sendMessage('DISCORD_WEBHOOK_URL', event, 'Calendar Event Canceled', sendDiscordMessage)
+        sendMessage('DISCORD_WEBHOOK_URL', event, 'Upcoming Event', sendDiscordMessage)
       }
     }
   }
