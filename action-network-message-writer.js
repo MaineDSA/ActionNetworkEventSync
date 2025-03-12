@@ -10,15 +10,15 @@ function draftANMessage (doc, apiKey) {
   const emailSubject = scriptProperties.getProperty('EMAIL_SUBJECT')
 
   if (!apiKey) {
-    Logger.log('No Action Network Api Key "AN_API_KEY" provided, cannot continue.')
+    console.info('No Action Network Api Key "AN_API_KEY" provided, cannot continue.')
     return
   }
   if (!emailReplyTo) {
-    Logger.log('No Email Reply-To Address "AN_EMAIL_REPLY_TO" provided, cannot continue.')
+    console.info('No Email Reply-To Address "AN_EMAIL_REPLY_TO" provided, cannot continue.')
     return
   }
   if (!emailSubject) {
-    Logger.log('No Email Subject "EMAIL_SUBJECT" provided, cannot continue.')
+    console.info('No Email Subject "EMAIL_SUBJECT" provided, cannot continue.')
     return
   }
 
@@ -64,5 +64,5 @@ function draftANMessage (doc, apiKey) {
 
   const response = UrlFetchApp.fetch(`${apiUrlAn}messages/`, options)
   const actionNetworkId = getEventIDFromAN(JSON.parse(response), 'action_network')
-  Logger.log(`Created Action Network Message ${actionNetworkId} with subject ${subject}.`)
+  console.info(`Created Action Network Message ${actionNetworkId} with subject ${subject}.`)
 }

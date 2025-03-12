@@ -29,7 +29,6 @@
       "getSortedANEventIDs",
       "getStartTime",
       "getUpcomingEventLimitFilter",
-      "Logger",
       "PropertiesService",
       "scriptProperties",
       "sendDiscordMessage",

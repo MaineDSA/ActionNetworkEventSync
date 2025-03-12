@@ -2,11 +2,11 @@
 // Sends a message via Discord.
 function sendDiscordMessage (title, message, url, image) {
   if (!scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
-    Logger.log('No Discord Webhook URL "DISCORD_WEBHOOK_URL" provided, cannot continue.')
+    console.info('No Discord Webhook URL "DISCORD_WEBHOOK_URL" provided, cannot continue.')
     return
   }
   if (!title || !message) {
-    Logger.log('Discord message or title not provided, cannot continue.')
+    console.info('Discord message or title not provided, cannot continue.')
     return
   }
 

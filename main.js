@@ -24,14 +24,14 @@ const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty(
 // This function syncs events modified in the last week from Action Network to Google Calendar
 function syncANtoGCal () {
   if (!calendarGoogle) {
-    Logger.log('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
+    console.info('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
     return
   }
 
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
   for (const apiKey of apiKeys) {
     const eventIDs = getRecentlyModifiedEventIDs(daysSinceModified, apiKey)
-    Logger.log(
+    console.info(
       `Found ${eventIDs.length} events modified in the last ${daysSinceModified} days that have not started yet.`
     )
 
@@ -39,7 +39,7 @@ function syncANtoGCal () {
       const event = getAllANEventData(eventID.href, apiKey) // Get all event data for the current event ID
 
       const actionNetworkID = getEventIDFromAN(event, 'action_network') // Get the Action Network ID for the event
-      Logger.log(
+      console.info(
         `${event.title.trim()} is listed as ${event.status} in Action Network at ${actionNetworkID}.`
       )
 
@@ -94,17 +94,17 @@ function draftANEventMessage () {
   }
 
   const allEventIDs = Array.from(eventApiKeyMap.keys())
-  Logger.log(`Sorting all ${allEventIDs.length} events from ${apiKeys.length} api keys by soonest`)
+  console.info(`Sorting all ${allEventIDs.length} events from ${apiKeys.length} api keys by soonest`)
   const sortedEventIDs = allEventIDs.sort((idFirst, idSecond) =>
     sortIDByDate(idFirst, idSecond, eventApiKeyMap.get(idFirst), eventApiKeyMap.get(idSecond))
   )
 
   if (allEventIDs.length === 0) {
-    Logger.log('There are no upcoming events. No newsletter will be drafted.')
+    console.info('There are no upcoming events. No newsletter will be drafted.')
     return
   }
 
-  Logger.log(`Creating newsletter via API key ending in ${apiKeys[0].slice(-4)}.`)
+  console.info(`Creating newsletter via API key ending in ${apiKeys[0].slice(-4)}.`)
   const emailHTML = compileHTMLEmail(sortedEventIDs, eventApiKeyMap)
   draftANMessage(emailHTML, apiKeys[0])
 }
@@ -112,26 +112,26 @@ function draftANEventMessage () {
 function postTodaysEvents () {
   // Check if the Slack Webhook URL is provided
   if (!scriptProperties.getProperty('SLACK_WEBHOOK_URL') && !scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
-    Logger.log('No Webhook URL "SLACK_WEBHOOK_URL" or "DISCORD_WEBHOOK_URL" provided, cannot continue.')
+    console.info('No Webhook URL "SLACK_WEBHOOK_URL" or "DISCORD_WEBHOOK_URL" provided, cannot continue.')
     return
   }
 
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
   for (const apiKey of apiKeys) {
     const eventIDs = getSortedANEventIDs(apiKey, getUpcomingEventLimitFilter(daysUpcomingSlack))
-    Logger.log(
+    console.info(
       `Found ${eventIDs.length} events coming up in the next ${daysUpcomingSlack} ${daysUpcomingSlack === 1 ? 'day' : 'days'}.`
     )
 
     // Skip this AN group if there are no events today
     if (eventIDs.length === 0) {
-      Logger.log('There are no events today. No message will be posted.')
+      console.info('There are no events today. No message will be posted.')
       continue
     }
 
     for (const eventID of eventIDs) {
       const event = getAllANEventData(eventID.href, apiKey) // Get all event data for the current event ID
-      Logger.log(`${event.title.trim()} is listed as ${event.status} in Action Network.`)
+      console.info(`${event.title.trim()} is listed as ${event.status} in Action Network.`)
 
       if (event.status === 'cancelled') {
         continue
