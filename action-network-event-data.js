@@ -23,12 +23,12 @@ function getEventIDFromAN (contentJSON, searchID) {
 
   const regexID = new RegExp(fullSearchID).exec(identifiers)
   if (!regexID) {
-    Logger.log(`${searchID} not found in Action Network event identifiers.`)
+    console.info(`${searchID} not found in Action Network event identifiers.`)
     return null
   }
 
   const foundID = regexID[0].substring(fullSearchID.indexOf('['))
-  Logger.log(`${searchID} found in Action Network event identifiers: ${foundID}`)
+  console.info(`${searchID} found in Action Network event identifiers: ${foundID}`)
 
   return foundID
 }
@@ -43,7 +43,7 @@ function getAllANEventData (eventURL, apiKey) {
 function tagANEvent (actionNetworkURL, googleID, apiKey) {
   // Check if the "AN_API_KEY" property is null
   if (!apiKey) {
-    Logger.log('No Action Network API Key "AN_API_KEY" provided, cannot continue.')
+    console.info('No Action Network API Key "AN_API_KEY" provided, cannot continue.')
     return
   }
 
@@ -59,6 +59,6 @@ function tagANEvent (actionNetworkURL, googleID, apiKey) {
     }
   }
 
-  Logger.log(`Tagging Action Network event ${actionNetworkURL} with Google Calendar event ID ${googleID}`)
+  console.info(`Tagging Action Network event ${actionNetworkURL} with Google Calendar event ID ${googleID}`)
   UrlFetchApp.fetch(`${apiUrlAn}events/${actionNetworkURL}`, options)
 }

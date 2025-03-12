@@ -2,11 +2,11 @@
 // Sends a message via Slack.
 function sendSlackMessage (title, message, url, image) {
   if (!scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
-    Logger.log('No Slack Webhook URL "SLACK_WEBHOOK_URL" provided, cannot continue.')
+    console.info('No Slack Webhook URL "SLACK_WEBHOOK_URL" provided, cannot continue.')
     return
   }
   if (!title || !message) {
-    Logger.log('Slack message or title not provided, cannot continue.')
+    console.info('Slack message or title not provided, cannot continue.')
     return
   }
 

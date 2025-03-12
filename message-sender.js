@@ -11,5 +11,5 @@ function sendMessage (property, event, messageTitle, sendFunction) {
       imageURL
     )
   }
-  Logger.log(`Sent message to webhook to event for ${event.title.trim()}.`)
+  console.info(`Sent message to webhook to event for ${event.title.trim()}.`)
 }
