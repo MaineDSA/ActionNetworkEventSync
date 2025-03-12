@@ -135,3 +135,14 @@ function getHTMLAnnouncements () {
 function compileHTMLEmail (eventIDs, eventApiKeyMap) {
   return getHTMLTopAnnouncement() + getHTMLEvents(eventIDs, eventApiKeyMap) + getHTMLAnnouncements()
 }
+
+function formatSlackEventAnnouncement (event) {
+  const startstring = getStartTime(event).toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: '2-digit',
+    hour: 'numeric',
+    minute: '2-digit'
+  })
+  return `*${event.title.trim()}*\n${startstring}`
+}

@@ -1,15 +1,4 @@
 /* eslint-disable no-unused-vars */
-function formatSlackEventAnnouncement (event) {
-  const startstring = getStartTime(event).toLocaleDateString('en-US', {
-    weekday: 'long',
-    month: 'long',
-    day: '2-digit',
-    hour: 'numeric',
-    minute: '2-digit'
-  })
-  return `*${event.title.trim()}*\n${startstring}`
-}
-
 // Sends a message via Slack.
 function sendSlackMessage (title, message, url, image) {
   if (scriptProperties.getProperty('SLACK_WEBHOOK_URL') === null) {
