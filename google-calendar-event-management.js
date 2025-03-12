@@ -5,7 +5,7 @@ function createEvent (actionNetworkEvent, actionNetwrkID, apiKey) {
   console.info(`Creating event ${eventName} from Action Network at ${actionNetwrkID}.`)
 
   if (!scriptProperties.getProperty('GCAL_ID')) {
-    console.info('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
+    console.error('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
     return
   }
 
@@ -31,14 +31,14 @@ function createEvent (actionNetworkEvent, actionNetwrkID, apiKey) {
 
     return event.id
   } catch (err) {
-    console.info(`Creating Google event ${eventName} failed with error %s`, err.message)
+    console.error(`Creating Google event ${eventName} failed with error %s`, err.message)
   }
 }
 
 // This function updates a Google Calendar event with data from an updated Action Network event
 function updateGoogleEvent (event, actionNetworkID, googleID) {
   if (!scriptProperties.getProperty('GCAL_ID')) {
-    console.info('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
+    console.error('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
     return
   }
 
@@ -79,7 +79,7 @@ function updateGoogleEvent (event, actionNetworkID, googleID) {
 // This function cancels a Google Calendar event that has been cancelled in Action Network
 function cancelGoogleEvent (event, googleID) {
   if (!scriptProperties.getProperty('GCAL_ID')) {
-    console.info('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
+    console.error('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
     return
   }
 
@@ -90,8 +90,9 @@ function cancelGoogleEvent (event, googleID) {
     console.info(`${eventName} has now been deleted from Google Calendar at ${googleID}.`)
     return googleID
   } catch (e) {
-    console.info(`Unable to delete ${eventName} from Google Calendar due to error ${e}.`)
-    console.info(`${eventName} may have already been deleted from Google Calendar at ${googleID}.`)
+    console.error(
+      `Unable to delete ${eventName} from Google Calendar due to error ${e}. ${eventName} may have already been deleted from Google Calendar at ${googleID}.`
+    )
     return false
   }
 }

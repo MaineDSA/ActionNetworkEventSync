@@ -3,7 +3,7 @@
 function getANEventIDs (filter, apiKey) {
   let url = `${apiUrlAn}events/`
   if (!filter) {
-    console.info(`Finding upcoming events via filter query ${filter}.`)
+    console.log(`Finding upcoming events via filter query ${filter}.`)
     url += filter
   }
   const content = UrlFetchApp.fetch(url, standardApiParameters(apiKey))
@@ -32,7 +32,7 @@ function getSortedANEventIDs (apiKey, extraFilters) {
   }
 
   const eventIDs = getANEventIDs(filter, apiKey)
-  console.info(`Sorting ${eventIDs.length} events from API key ending in ${apiKey.slice(-4)} by soonest starting date`)
+  console.log(`Sorting ${eventIDs.length} events from API key ending in ${apiKey.slice(-4)} by soonest starting date`)
 
   return eventIDs.sort((idFirst, idSecond) => sortIDByDate(idFirst, idSecond, apiKey))
 }

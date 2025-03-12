@@ -18,7 +18,7 @@ function dstOffset (datevar) {
   // Check if DST is currently being observed for the given date.
   if (datevar.isDstObserved()) {
     if (!scriptProperties.getProperty('TIME_DST')) {
-      console.info('No DST Time Zone "TIME_DST" provided, cannot continue.')
+      console.error('No DST Time Zone "TIME_DST" provided, cannot continue.')
       return
     }
 
@@ -27,7 +27,7 @@ function dstOffset (datevar) {
   }
 
   if (!scriptProperties.getProperty('TIME_STANDARD')) {
-    console.info('No Standard Time Zone "TIME_STANDARD" provided, cannot continue.')
+    console.error('No Standard Time Zone "TIME_STANDARD" provided, cannot continue.')
     return
   }
 
