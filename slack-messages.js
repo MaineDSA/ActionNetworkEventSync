@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 // Sends a message via Slack.
 function sendSlackMessage (title, message, url, image) {
-  if (scriptProperties.getProperty('SLACK_WEBHOOK_URL') === null) {
+  if (!scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
     Logger.log('No Slack Webhook URL "SLACK_WEBHOOK_URL" provided, cannot continue.')
     return
   }

@@ -2,7 +2,7 @@
 // This function returns event IDs from Action Network. If a filter is provided, it appends it to the API URL.
 function getANEventIDs (filter, apiKey) {
   let url = `${apiUrlAn}events/`
-  if (filter != null) {
+  if (!filter) {
     Logger.log(`Finding upcoming events via filter query ${filter}.`)
     url += filter
   }
