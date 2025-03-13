@@ -9,22 +9,24 @@ Automation for Action Network, Google Calendar, and Slack
 
 This Google Apps Script code simplifies some more labor-intensive Action Network tasks:
 
-- **syncANtoGCal()** Retrieving a list of recently-edited Action Network events from each API key and syncing
-  them to Google Calendar.
-- **draftANEventMessage()** Retriving a list of upcoming Action Network events and
-  compiling them into an HTML-formatted email draft on the Action Network group found at the first API key.
-- **postTodaysEvents()** Retriving a list of upcoming Action Network events from each API key and compiling
-  them into a regular Slack post.
+- **syncANtoGCal()** Retrieve a list of recently-edited Action Network events from each API key and sync them to Google Calendar.
+- **draftANEventMessage()** Retrive a list of upcoming Action Network events and compile them into an HTML-formatted
+email draft on the Action Network group found at the first API key.
+- **postTodaysEvents()** Retrive upcoming Action Network events from each API key and send notice to Slack or Discord.
 
 ## Screenshots
 
 ### Generated Email
 
-<a href="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/7a017df7-5a18-408e-aa7d-d85ec40fcfc1"><img src="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/7a017df7-5a18-408e-aa7d-d85ec40fcfc1" alt="Example of Generated Action Network Draft" align="left" height="520"></a>
+<a href="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/7a017df7-5a18-408e-aa7d-d85ec40fcfc1">
+  <img src="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/7a017df7-5a18-408e-aa7d-d85ec40fcfc1" alt="Example of Generated Action Network Draft" align="left" height="520">
+</a>
 
 ### New Event Notification in Slack
 
-<a href="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/f71bfd4a-90e7-4911-979d-b3c538ce47cd"><img src="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/f71bfd4a-90e7-4911-979d-b3c538ce47cd" alt="Slack Message announcing new event" height="250"></a>
+<a href="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/f71bfd4a-90e7-4911-979d-b3c538ce47cd">
+  <img src="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/f71bfd4a-90e7-4911-979d-b3c538ce47cd" alt="Slack Message announcing new event" height="250">
+</a>
 
 ## Script Properties
 
@@ -45,8 +47,9 @@ in your Google Apps script.
 - TIME_DST: The time zone you use during Daylight Savings Time. We use GMT-04:00.
 - TIME_STANDARD: The time zone you use outside of Daylight Savings Time. We use GMT-05:00
 - SLACK_WEBHOOK_URL: (OPTIONAL) A Slack webhook URL to notify when creating or canceling upcoming Google
-  Calendar events
-  and for the daily upcoming events digest.
+  Calendar events and for the regular upcoming events posts.
+- DISCORD_WEBHOOK_URL: (OPTIONAL) A Discord webhook URL to notify when creating or canceling upcoming Google
+  Calendar events and for the regular upcoming events posts.
 
 # Additional Customization
 
@@ -64,6 +67,6 @@ announcements, articles, etc after the list of upcoming events.
 
 ## Triggering
 
-- Our script is set to call syncANtoGCal() every 10 minutes.
+- Our script is set to call syncANtoGCal() every 30 minutes.
 - Our script is set to call draftANEventMessage() every Tuesday morning.
 - Our script is set to call postTodaysEvents() every morning.
