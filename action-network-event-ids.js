@@ -21,7 +21,8 @@ function sortIDByDate (idFirst, idSecond, apiKeyFirst, apiKeySecond) {
 // This function returns upcoming event IDs from Action Network, sorted by the soonest event first.
 // If a filter is provided, it appends it to the API URL.
 function getSortedANEventIDs (apiKey, extraFilters) {
-  let filter = `?filter=start_date gt '${Utilities.formatDate(new Date(), 'UTC', 'yyyy-MM-dd')}'`
+  const currentDate = Utilities.formatDate(new Date(), 'UTC', 'yyyy-MM-dd')
+  let filter = `?filter=start_date gt '${currentDate}'`
 
   if (extraFilters) {
     extraFilters.forEach((extrafilter) => {
@@ -32,7 +33,7 @@ function getSortedANEventIDs (apiKey, extraFilters) {
   }
 
   const eventIDs = getANEventIDs(filter, apiKey)
-  console.log(`Sorting ${eventIDs.length} events from API key ending in ${apiKey.slice(-4)} by soonest starting date`)
+  console.log(`Sorting ${eventIDs.length} events from API key ending in ${apiKey.slice(-4)} by soonest starting date after currentDate.`)
 
   return eventIDs.sort((idFirst, idSecond) => sortIDByDate(idFirst, idSecond, apiKey))
 }
