@@ -131,7 +131,7 @@ function postTodaysEvents () {
 
     for (const eventID of eventIDs) {
       const event = getAllANEventData(eventID.href, apiKey) // Get all event data for the current event ID
-      console.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${eventID} and starts on ${getStartTime(event)}.`)
+      console.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${getEventIDFromAN(event, 'action_network')} and starts on ${getStartTime(event)}.`)
 
       if (event.status === 'cancelled') {
         console.log(`Skipping cancelled event ${event.title.trim()}.`)
