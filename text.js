@@ -6,6 +6,7 @@ function formatDescription (description) {
     .replace(/<br><\/p>/g, '</p>')
     .replace(/^<p> /g, '<p>')
     .replace(/ <\/p>/g, '</p>')
+    .replace(/<p>\s*<\/p>/g, '')
     .replace(/ {2}/g, ' ')
 }
 
