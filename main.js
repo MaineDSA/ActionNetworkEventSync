@@ -62,7 +62,7 @@ function syncANtoGCal () {
       } else {
         if (event.status !== 'cancelled') {
           updateGoogleEvent(event, actionNetworkID, googleID)
-          return
+          continue
         }
 
         // If the event is in Google Calendar and the event was cancelled in Action Network, cancel it in Google Calendar
