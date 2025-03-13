@@ -11,8 +11,9 @@ function sendDiscordMessage (title, message, url, image) {
   }
 
   const discordWebhookMessage = {
-    content: `**${title}**\n${message}`, // Title and message
-    embeds: [] // To store embeds (for image or additional data)
+    content: `## **${title}**\n${message}`,
+    embeds: [],
+    components: []
   }
 
   // Add URL if provided
