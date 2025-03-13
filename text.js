@@ -14,9 +14,9 @@ function formatDescription (description) {
 function calDescription (event) {
   const moreInfo = `
     <h5><strong>More Info and RSVP:</strong></h5>
-    <a href="${event.browser_url}">
-      <p>${event.browser_url}</p>
-    </a>
+    <p>
+      <a href="${event.browser_url}">${event.browser_url}</a>
+    </p>
     `
   const calDesc = `
     <h5><strong>Description:</strong></h5>
