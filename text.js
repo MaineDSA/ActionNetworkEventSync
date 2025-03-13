@@ -77,7 +77,7 @@ function formatEvent (event) {
       ${templateTimeAndLink}
       ${imageURL}
       ${buttonRSVP}
-      ${event.description}
+      ${formatDescription (event.description)}
     </article>
     `
 }
