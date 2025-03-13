@@ -70,7 +70,7 @@ function formatEvent (event) {
     </a>
   `
 
-  const formattedBody = `
+   return `
     <article class="event_article">
       ${templateTitle}
       ${templateTimeAndLink}
@@ -79,8 +79,6 @@ function formatEvent (event) {
       ${event.description}
     </article>
     `
-
-  return formattedBody.replace(/<a /g, '<a ')
 }
 
 function getUpcomingEventLimitFilter (nextdays) {
