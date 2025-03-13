@@ -12,21 +12,20 @@ function formatDescription (description) {
 
 // This function takes an event object as an argument and generates a formatted description string for the event
 function calDescription (event) {
-  const moreInfo = `
+  let description = `
     <h5><strong>More Info and RSVP:</strong></h5>
     <p>
       <a href="${event.browser_url}">${event.browser_url}</a>
     </p>
     `
-  const calDesc = `
+  description += `
     <h5><strong>Description:</strong></h5>
     ${formatDescription(event.description)}
     `
-  let calDescFooter = ''
   if (typeof customEventDescriptionFooter === 'function') {
-    calDescFooter = customEventDescriptionFooter(event.description)
+    description += customEventDescriptionFooter(event.description)
   }
-  return moreInfo + calDesc + calDescFooter
+  return description
 }
 
 // This function takes a location object as an argument and generates a string with the venue, address, locality, region, and postal code
