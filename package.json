@@ -39,7 +39,8 @@
       "tagANEvent",
       "updateGoogleEvent",
       "UrlFetchApp",
-      "Utilities"
+      "Utilities",
+      "XmlService"
     ]
   },
   "scripts": {
