@@ -70,13 +70,13 @@ function formatEvent (event) {
     </a>
   `
 
-   return `
+  return `
     <article class="event_article">
       ${templateTitle}
       ${templateTimeAndLink}
       ${imageURL}
       ${buttonRSVP}
-      ${formatDescription (event.description)}
+      ${formatDescription(event.description)}
     </article>
     `
 }
