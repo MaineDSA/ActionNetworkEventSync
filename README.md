@@ -34,7 +34,7 @@ To use these features, you must configure
 [Script Properties](https://developers.google.com/apps-script/reference/properties)
 in your Google Apps script.
 
-- AN_API_KEY: Your Action Network API Key (or a comma-separated list if you have multiple groups).
+- AN_API_KEY: Your Action Network API Key (or a comma-separated list if you have multiple groups -- with multiple groups, the first group should be the primary/parent group).
 - AN_EMAIL_REPLY_TO: The email you want generated AN email drafts to use as the reply-to address.
 - AN_EMAIL_SENDER: The name you want displayed as the sender for generated AN email.
 - AN_EMAIL_WRAPPER: (OPTIONAL) The wrapper you want to use for the generated AN email drafts.
