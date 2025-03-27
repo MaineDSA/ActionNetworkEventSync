@@ -14,9 +14,7 @@ function formatDescription (description) {
 function calDescription (event) {
   let description = `
     <h5><strong>More Info and RSVP:</strong></h5>
-    <p>
-      <a href="${event.browser_url}">${event.browser_url}</a>
-    </p>
+    <p><a href="${event.browser_url}">${event.browser_url}</a></p>
     `
   description += `
     <h5><strong>Description:</strong></h5>
