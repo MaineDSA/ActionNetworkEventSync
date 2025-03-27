@@ -23,17 +23,19 @@
       "formatEventAnnouncementMessage",
       "formatLocation",
       "getAllANEventData",
+      "getANEventIDs",
       "getEndTime",
       "getEventIDFromAN",
+      "getFutureANEventIDs",
       "getRecentlyModifiedEventIDs",
-      "getSortedANEventIDs",
+      "getSortedFutureANEventIDs",
       "getStartTime",
       "getUpcomingEventLimitFilter",
       "PropertiesService",
       "scriptProperties",
       "sendDiscordMessage",
-      "sendSlackMessage",
       "sendMessage",
+      "sendSlackMessage",
       "sortIDByDate",
       "standardApiParameters",
       "tagANEvent",
@@ -45,5 +47,8 @@
   },
   "scripts": {
     "test": "standard"
+  },
+  "dependencies": {
+    "action_network_event_sync": "file:"
   }
 }

@@ -87,7 +87,7 @@ function draftANEventMessage () {
 
   const eventApiKeyMap = new Map()
   for (const apiKey of apiKeys) {
-    const eventIDs = getSortedANEventIDs(apiKey, dateFilter)
+    const eventIDs = getFutureANEventIDs(apiKey, dateFilter)
     eventIDs.forEach((eventID) => {
       eventApiKeyMap.set(eventID, apiKey)
     })
@@ -117,33 +117,45 @@ function postTodaysEvents () {
   }
 
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
-  for (const apiKey of apiKeys) {
-    const eventIDs = getSortedANEventIDs(apiKey, getUpcomingEventLimitFilter(daysUpcomingSlack))
-    console.log(
-      `Found ${eventIDs.length} events coming up in the next ${daysUpcomingSlack} ${daysUpcomingSlack === 1 ? 'day' : 'days'}.`
-    )
+  const dateFilter = getUpcomingEventLimitFilter(daysUpcomingSlack)
 
-    // Skip this AN group if there are no events today
-    if (eventIDs.length === 0) {
-      console.warn('There are no events today. No message will be posted.')
+  const eventApiKeyMap = new Map()
+  for (const apiKey of apiKeys) {
+    const eventIDs = getFutureANEventIDs(apiKey, dateFilter)
+    eventIDs.forEach((eventID) => {
+      eventApiKeyMap.set(eventID, apiKey)
+    })
+  }
+
+  const allEventIDs = Array.from(eventApiKeyMap.keys())
+  console.log(
+    `Found ${allEventIDs.length} events coming up in the next ${daysUpcomingSlack} ${daysUpcomingSlack === 1 ? 'day' : 'days'}.`
+  )
+  console.info(`Sorting all ${allEventIDs.length} events from ${apiKeys.length} api keys by soonest`)
+  const sortedEventIDs = allEventIDs.sort((idFirst, idSecond) =>
+    sortIDByDate(idFirst, idSecond, eventApiKeyMap.get(idFirst), eventApiKeyMap.get(idSecond))
+  )
+
+  // Skip this AN group if there are no events today
+  if (allEventIDs.length === 0) {
+    console.warn('There are no events today. No message will be posted.')
+    return
+  }
+
+  for (const eventID of allEventIDs) {
+    const event = getAllANEventData(eventID.href, eventApiKeyMap.get(eventID)) // Get all event data for the current event ID
+    console.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${getEventIDFromAN(event, 'action_network')} and starts on ${getStartTime(event)}.`)
+
+    if (event.status === 'cancelled') {
+      console.log(`Skipping cancelled event ${event.title.trim()}.`)
       continue
     }
 
-    for (const eventID of eventIDs) {
-      const event = getAllANEventData(eventID.href, apiKey) // Get all event data for the current event ID
-      console.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${getEventIDFromAN(event, 'action_network')} and starts on ${getStartTime(event)}.`)
-
-      if (event.status === 'cancelled') {
-        console.log(`Skipping cancelled event ${event.title.trim()}.`)
-        continue
-      }
-
-      if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
-        sendMessage('SLACK_WEBHOOK_URL', event, 'Upcoming Event', sendSlackMessage)
-      }
-      if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
-        sendMessage('DISCORD_WEBHOOK_URL', event, 'Upcoming Event', sendDiscordMessage)
-      }
+    if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
+      sendMessage('SLACK_WEBHOOK_URL', event, 'Upcoming Event', sendSlackMessage)
+    }
+    if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
+      sendMessage('DISCORD_WEBHOOK_URL', event, 'Upcoming Event', sendDiscordMessage)
     }
   }
 }
