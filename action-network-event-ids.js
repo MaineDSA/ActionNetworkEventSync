@@ -43,6 +43,27 @@ function getSortedFutureANEventIDs (apiKey, extraFilters) {
   return eventIDs.sort((idFirst, idSecond) => sortIDByDate(idFirst, idSecond, apiKey))
 }
 
+function getEventApiKeyMap (apiKeys, dateFilter) {
+  const eventApiKeyMap = new Map()
+  for (const apiKey of apiKeys) {
+    const eventIDs = getFutureANEventIDs(apiKey, dateFilter)
+    eventIDs.forEach((eventID) => {
+      eventApiKeyMap.set(eventID, apiKey)
+    })
+  }
+  return eventApiKeyMap
+}
+
+function getSortedEventApiKeyMap (apiKeys, dateFilter) {
+  const eventApiKeyMap = getEventApiKeyMap(apiKeys, dateFilter)
+  const allEventIDs = Array.from(eventApiKeyMap.keys())
+  console.info(`Sorting all ${allEventIDs.length} events from ${apiKeys.length} api keys by soonest`)
+  const sortedEventIDs = allEventIDs.sort((idFirst, idSecond) =>
+    sortIDByDate(idFirst, idSecond, eventApiKeyMap.get(idFirst), eventApiKeyMap.get(idSecond))
+  )
+  return [eventApiKeyMap, sortedEventIDs]
+}
+
 // This function returns event IDs from Action Network for events modified since a certain number of days ago that have not started yet.
 // It calculates the date to filter events by based on the current date and the number of days ago.
 // It uses the getSortedFutureANEventIDs function to return the IDs sorted by soonest event first.

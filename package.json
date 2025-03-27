@@ -23,12 +23,10 @@
       "formatEventAnnouncementMessage",
       "formatLocation",
       "getAllANEventData",
-      "getANEventIDs",
       "getEndTime",
       "getEventIDFromAN",
-      "getFutureANEventIDs",
       "getRecentlyModifiedEventIDs",
-      "getSortedFutureANEventIDs",
+      "getSortedEventApiKeyMap",
       "getStartTime",
       "getUpcomingEventLimitFilter",
       "PropertiesService",
@@ -36,13 +34,11 @@
       "sendDiscordMessage",
       "sendMessage",
       "sendSlackMessage",
-      "sortIDByDate",
       "standardApiParameters",
       "tagANEvent",
       "updateGoogleEvent",
       "UrlFetchApp",
-      "Utilities",
-      "XmlService"
+      "Utilities"
     ]
   },
   "scripts": {
