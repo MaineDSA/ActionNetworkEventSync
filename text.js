@@ -93,12 +93,11 @@ function getHTMLTopAnnouncement () {
     `
 }
 
-function getEventDescBody (event, apiKey) {
-  const eventData = getAllANEventData(event.href, apiKey)
-  return eventData.status !== 'cancelled' ? formatEvent(eventData) : ''
+function getEventDescBody (event) {
+  return event.status !== 'cancelled' ? formatEvent(event) : ''
 }
 
-function getHTMLEvents (events, eventApiKeyMap) {
+function getHTMLEvents (events) {
   let doc = `
     <br />
     <hr class="rounded">
@@ -107,7 +106,7 @@ function getHTMLEvents (events, eventApiKeyMap) {
   if (typeof customNewsletterEventHeaderText === 'function') {
     doc += customNewsletterEventHeaderText(events)
   }
-  const eventBodies = events.map((event) => getEventDescBody(event, eventApiKeyMap.get(event)))
+  const eventBodies = events.map((event) => getEventDescBody(event)
   doc += `
     <section>
       ${eventBodies.join('')}
@@ -125,8 +124,8 @@ function getHTMLAnnouncements () {
 }
 
 // Compile an HTML message of upcoming events and return it as a string
-function compileHTMLEmail (eventIDs, eventApiKeyMap) {
-  return getHTMLTopAnnouncement() + getHTMLEvents(eventIDs, eventApiKeyMap) + getHTMLAnnouncements()
+function compileHTMLEmail (events) {
+  return getHTMLTopAnnouncement() + getHTMLEvents(event) + getHTMLAnnouncements()
 }
 
 // Consolidate event title and start time into a multi-line formatted string
