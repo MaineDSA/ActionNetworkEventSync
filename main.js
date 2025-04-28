@@ -30,10 +30,9 @@ function syncANtoGCal () {
 
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
   for (const apiKey of apiKeys) {
-    const eventIDs = getRecentlyModifiedEventIDs(daysSinceModified, apiKey)
-    const events = eventIDs.map(eventID => getAllANEventData(eventID.href, apiKey)).sort(sortEventByDate)
+    const events = getRecentlyModifiedEvents(daysSinceModified, apiKey).sort(sortEventByDate)
     console.info(
-      `Found ${event.length} events modified in the last ${daysSinceModified} days that have not started yet.`
+      `Found ${events.length} events modified in the last ${daysSinceModified} days that have not started yet.`
     )
 
     for (const event of events) {
@@ -83,16 +82,12 @@ function syncANtoGCal () {
 function draftANEventMessage () {
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
   const dateFilter = getUpcomingEventLimitFilter(daysUpcomingEmail)
-  const eventApiKeyMap = getEventApiKeyMap(apiKeys, dateFilter)
+  const events = apiKeys.flatMap(key => getFutureANEvents(key, dateFilter)).sort(sortEventByDate)
 
-  if (eventApiKeyMap.size === 0) {
+  if (events.length === 0) {
     console.info('There are no upcoming events. No newsletter will be drafted.')
     return
   }
-
-  const events = eventApiKeyMap.keys().toArray()
-    .map(eventID => getAllANEventData(eventID.href, eventApiKeyMap.get(eventID)))
-    .sort(sortEventByDate)
 
   console.info(`Creating newsletter at API key ending in ${apiKeys[0].slice(-4)}.`)
   const emailHTML = compileHTMLEmail(events)
@@ -108,17 +103,13 @@ function postTodaysEvents () {
 
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
   const dateFilter = getUpcomingEventLimitFilter(daysUpcomingSlack)
-  const eventApiKeyMap = getEventApiKeyMap(apiKeys, dateFilter)
+  const events = apiKeys.flatMap(key => getFutureANEvents(key, dateFilter)).sort(sortEventByDate)
 
   // Skip this AN group if there are no events today
-  if (eventApiKeyMap.size === 0) {
+  if (events.length === 0) {
     console.warn('There are no events today. No message will be posted.')
     return
   }
-
-  const events = eventApiKeyMap.keys().toArray()
-    .map(eventID => getAllANEventData(eventID.href, eventApiKeyMap.get(eventID)))
-    .sort(sortEventByDate)
 
   for (const event of events) {
     console.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${getEventIDFromAN(event, 'action_network')} and starts on ${getStartTime(event)}.`)
