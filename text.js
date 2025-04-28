@@ -106,7 +106,7 @@ function getHTMLEvents (events) {
   if (typeof customNewsletterEventHeaderText === 'function') {
     doc += customNewsletterEventHeaderText(events)
   }
-  const eventBodies = events.map((event) => getEventDescBody(event)
+  const eventBodies = events.map((event) => getEventDescBody(event))
   doc += `
     <section>
       ${eventBodies.join('')}
