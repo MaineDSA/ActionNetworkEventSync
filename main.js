@@ -31,7 +31,7 @@ function syncANtoGCal () {
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
   for (const apiKey of apiKeys) {
     const eventIDs = getRecentlyModifiedEventIDs(daysSinceModified, apiKey)
-    const events = eventIDs.map(eventID => getEventIDFromAN(eventID.href, apiKey)).sort(sortEventByDate)
+    const events = eventIDs.map(eventID => getAllANEventData(eventID.href, apiKey)).sort(sortEventByDate)
     console.info(
       `Found ${event.length} events modified in the last ${daysSinceModified} days that have not started yet.`
     )
