@@ -31,13 +31,12 @@ function syncANtoGCal () {
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
   for (const apiKey of apiKeys) {
     const eventIDs = getRecentlyModifiedEventIDs(daysSinceModified, apiKey)
+    const events = eventIDs.map(eventID => getEventIDFromAN(eventID.href, apiKey)).sort(sortEventByDate)
     console.info(
-      `Found ${eventIDs.length} events modified in the last ${daysSinceModified} days that have not started yet.`
+      `Found ${event.length} events modified in the last ${daysSinceModified} days that have not started yet.`
     )
 
-    for (const eventID of eventIDs) {
-      const event = getAllANEventData(eventID.href, apiKey) // Get all event data for the current event ID
-
+    for (const event of events) {
       const actionNetworkID = getEventIDFromAN(event, 'action_network') // Get the Action Network ID for the event
       console.log(
         `${event.title.trim()} is listed as ${event.status} in Action Network at ${actionNetworkID} and starts on ${getStartTime(event)}.`
@@ -84,15 +83,19 @@ function syncANtoGCal () {
 function draftANEventMessage () {
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
   const dateFilter = getUpcomingEventLimitFilter(daysUpcomingEmail)
-  const [eventApiKeyMap, sortedEventIDs] = getSortedEventApiKeyMap(apiKeys, dateFilter)
+  const eventApiKeyMap = getEventApiKeyMap(apiKeys, dateFilter)
 
-  if (sortedEventIDs.length === 0) {
+  if (eventApiKeyMap.size === 0) {
     console.info('There are no upcoming events. No newsletter will be drafted.')
     return
   }
 
+  const events = eventApiKeyMap.keys().toArray()
+    .map(eventID => getAllANEventData(eventID.href, eventApiKeyMap.get(eventID)))
+    .sort(sortEventByDate)
+
   console.info(`Creating newsletter at API key ending in ${apiKeys[0].slice(-4)}.`)
-  const emailHTML = compileHTMLEmail(sortedEventIDs, eventApiKeyMap)
+  const emailHTML = compileHTMLEmail(events)
   draftANMessage(emailHTML, apiKeys[0])
 }
 
@@ -105,16 +108,19 @@ function postTodaysEvents () {
 
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
   const dateFilter = getUpcomingEventLimitFilter(daysUpcomingSlack)
-  const [eventApiKeyMap, sortedEventIDs] = getSortedEventApiKeyMap(apiKeys, dateFilter)
+  const eventApiKeyMap = getEventApiKeyMap(apiKeys, dateFilter)
 
   // Skip this AN group if there are no events today
-  if (sortedEventIDs.length === 0) {
+  if (eventApiKeyMap.size === 0) {
     console.warn('There are no events today. No message will be posted.')
     return
   }
 
-  for (const eventID of sortedEventIDs) {
-    const event = getAllANEventData(eventID.href, eventApiKeyMap.get(eventID)) // Get all event data for the current event ID
+  const events = eventApiKeyMap.keys().toArray()
+    .map(eventID => getAllANEventData(eventID.href, eventApiKeyMap.get(eventID)))
+    .sort(sortEventByDate)
+
+  for (const event of events) {
     console.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${getEventIDFromAN(event, 'action_network')} and starts on ${getStartTime(event)}.`)
 
     if (event.status === 'cancelled') {

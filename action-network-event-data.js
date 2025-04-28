@@ -16,6 +16,12 @@ function getEndTime (event) {
   return outputDate
 }
 
+function sortEventByDate (eventFirst, eventSecond) {
+  const startTimeFirst = getStartTime(eventFirst)
+  const startTimeSecond = getStartTime(eventSecond)
+  return startTimeFirst - startTimeSecond
+}
+
 // This function returns the requested event ID if it is found in the Action Network event data.
 function getEventIDFromAN (contentJSON, searchID) {
   const identifiers = contentJSON.identifiers
