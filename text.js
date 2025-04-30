@@ -2,7 +2,7 @@
 // Take a string argument 'description' and format it by replacing various HTML tags and whitespace characters
 function formatDescription (description) {
   return description
-    .replace(/<br><br>/g, '<br>')
+    .replace(/<br>+/g, '<br>')
     .replace(/<p>\s+/g, '<p>')
     .replace(/<br><p>/g, '<p>')
     .replace(/<br><\/p>/g, '</p>')
