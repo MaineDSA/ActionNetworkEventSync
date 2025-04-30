@@ -12,14 +12,8 @@ function formatDescription (description) {
 
 // This function takes an event object as an argument and generates a formatted description string for the event
 function calDescription (event) {
-  let description = `
-    <h5><strong>More Info and RSVP:</strong></h5>
-    <p><a href="${event.browser_url}">${event.browser_url}</a></p>
-    `
-  description += `
-    <h5><strong>Description:</strong></h5>
-    ${formatDescription(event.description)}
-    `
+  let description = `<h5><strong>More Info and RSVP:</strong></h5><p><a href="${event.browser_url}">${event.browser_url}</a></p>`
+  description += `<h5><strong>Description:</strong></h5>${formatDescription(event.description)}`
   if (typeof customEventDescriptionFooter === 'function') {
     description += customEventDescriptionFooter(event.description)
   }
