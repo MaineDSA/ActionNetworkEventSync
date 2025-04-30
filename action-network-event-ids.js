@@ -36,5 +36,5 @@ function getRecentlyModifiedEvents (DaysAgo, apiKey) {
   const daysAgoDate = new Date(now.getTime() - MillisPerDay * DaysAgo)
   const extraFilters = [`modified_date gt '${Utilities.formatDate(daysAgoDate, 'UTC', 'yyyy-MM-dd')}'`]
 
-  return getFutureANEventDs(apiKey, extraFilters)
+  return getFutureANEvents(apiKey, extraFilters)
 }
