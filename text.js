@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-// This function takes a string argument 'description' and formats it by replacing various HTML tags and whitespace characters
+// Take a string argument 'description' and format it by replacing various HTML tags and whitespace characters
 function formatDescription (description) {
   return description
     .replace(/<br><br>/g, '<br>')
@@ -10,20 +10,24 @@ function formatDescription (description) {
     .replace(/ {2}/g, ' ')
 }
 
-// This function takes an event object as an argument and generates a formatted description string for the event
-function calDescription (event) {
-  let description = `
-    <h5><strong>More Info and RSVP:</strong></h5>
-    <p><a href="${event.browser_url}">${event.browser_url}</a></p>
-    `
-  description += `
-    <h5><strong>Description:</strong></h5>
+// Take an event object as an argument and generate a formatted description string for the event
+function calDescription(event) {
+  const info = `
+    <strong>More Info and RSVP:</strong>
+    <a href="${event.browser_url}">${event.browser_url}</a>
+  `;
+
+  const description = `
+    <strong>Description:</strong>
     ${formatDescription(event.description)}
-    `
-  if (typeof customEventDescriptionFooter === 'function') {
-    description += customEventDescriptionFooter(event.description)
-  }
-  return description
+  `;
+
+  // if customEventDescriptionFooter is defined, append it. otherwise nothing.
+  const footer = (typeof customEventDescriptionFooter === 'function')
+    ? customEventDescriptionFooter(event.description)
+    : '';
+
+  return info + description + footer;
 }
 
 // This function takes a location object as an argument and generates a string with the venue, address, locality, region, and postal code
