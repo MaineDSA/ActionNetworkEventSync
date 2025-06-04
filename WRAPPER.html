@@ -1,99 +1,188 @@
 <!-- This HTML is an Action Network Email Wrapper -->
 <style id="hs-inline-css">
+  /* Reset and base styles */
+  * {
+    box-sizing: border-box;
+  }
+  
+  body, table, td {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Typography */
   p, h1, h2, h3, button {
     font-family: "Lexend", Arial, sans-serif;
-    line-height: normal;
+    line-height: 1.4;
     color: #505050;
+    margin: 0 0 16px 0;
   }
+  
   p {
     font-weight: 400;
     font-size: 16px;
   }
+  
   a {
     color: #EF4338 !important;
+    text-decoration: none;
   }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
   h1 {
     font-weight: 800;
     font-size: 2.2em;
     text-align: center;
+    margin-bottom: 24px;
   }
+  
   h2 {
     font-weight: 600;
     font-size: 1.8em;
+    margin-bottom: 20px;
   }
+  
   h3 {
     font-weight: 600;
     font-style: italic;
-  }
-  img {
-    width: 100%;
-    max-width: 1500px;
     margin-bottom: 16px;
   }
+  
+  /* Images */
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 16px;
+  }
+  
+  /* Buttons */
   button {
     font-weight: 700;
-    color: #FFFFFF;
+    color: #FFFFFF !important;
     background-color: #EF4338;
     border: 1px solid #EF4338;
     border-radius: 10px;
-    padding: 8px;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: "Lexend", Arial, sans-serif;
   }
+  
+  button:hover {
+    background-color: #d63c32;
+  }
+  
+  /* Layout */
+  .email-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+    padding: 20px;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  
+  .content {
+    margin-bottom: 32px;
+  }
+  
+  .join-section {
+    text-align: center;
+    margin: 32px 0;
+  }
+  
+  .divider {
+    border: none;
+    height: 2px;
+    background-color: #EF4338;
+    margin: 32px 0;
+    border-radius: 1px;
+  }
+  
+  /* Specialty sections (if needed) */
   .event_article {
     outline: #EF4338 dotted 3px;
-    margin-top: 1.5em;
-    padding: .8em;
+    margin: 24px 0;
+    padding: 16px;
+    border-radius: 8px;
   }
-  .announce_article {
-    padding: 0 .8em;
-    flex-basis: calc((100% - 4rem)/2);
-  }
+  
   .announce_section {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 20px;
+    margin: 24px 0;
   }
-  table {
-    border-collapse: collapse;
+  
+  .announce_article {
+    flex: 1;
+    min-width: 250px;
+    padding: 16px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
   }
-  td {
-    border-collapse: collapse;
+  
+  /* Mobile responsiveness */
+  @media screen and (max-width: 600px) {
+    .email-container {
+      padding: 15px;
+    }
+    
+    h1 {
+      font-size: 1.8em;
+    }
+    
+    h2 {
+      font-size: 1.5em;
+    }
+    
+    p {
+      font-size: 15px;
+    }
+    
+    .announce_section {
+      flex-direction: column;
+    }
+    
+    .announce_article {
+      min-width: unset;
+    }
   }
 </style>
-<table role="presentation">
-  <tr>
-    <td style="background-color: #FFFFFF; padding:10px 10px 40px;">
-      <table role="presentation">
-        <tr>
-          <td width="600">
-            <div>
-              <div style="text-align: center;">
-                <a href="https://www.mainedsa.org" target="_blank" rel="noopener noreferrer">
-                  <img src="https://www.mainedsa.org/wp-content/uploads/2023/05/forecast_knigi_lilya-brik-scaled.webp" alt="Maine DSA Forecast Letterhead with soviet-stylized Lilya Brik shouting Forecast"/>
-                </a>
-              </div>
-              <!-- Your email's content is inserted here -->
-            </div>
-            <div>
-              <br/>
-              <hr class="rounded">
-              <h1 style="text-align: center;">Ready to Join Maine DSA ?</h1>
-              <p>Maine DSA is the only DSA chapter in Maine. Our chapter primarily organizes in the Portland Metropolitan area, although our <a href="https://www.mainedsa.org/maine-dsa-campaigns-and-projects" target="_blank" rel="noopener noreferrer">campaigns and projects</a> may operate statewide and our membership draws from every county in the state.</p>
-              <p>We welcome all who have anti-racist, anti-fascist, and anti-capitalist ideologies. We are not a charity; our focus is on developing leadership within the working class to organize and fight for the working class. Organizing means listening more than talking, forming relationships with those in our community, and building power with each other to change the world.</p>
-              <p>If you have subscribed to our weekly newsletter and are interested in becoming an official member of our chapter please sign up via the button below.</p>
-              <p style="text-align: center;">
-                <b>Are you ready? Let's build a better world together. We can't do it without you.</b>
-              </p>
-              <br/>
-              <div style="text-align: center;">
-                <a href="https://act.dsausa.org/donate/membership?source=direct_link&referrer=mainedsa_org#donation-form" target="_blank" rel="noopener noreferrer">
-                  <button>Join DSA</button>
-                </a>
-              </div>
-              <br/>
-            </div>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
+<div class="email-container">
+  <div class="header">
+    <a href="https://www.mainedsa.org" target="_blank" rel="noopener noreferrer">
+      <img src="https://www.mainedsa.org/wp-content/uploads/2023/05/forecast_knigi_lilya-brik-scaled.webp" alt="Maine DSA Forecast Letterhead with soviet-stylized Lilya Brik shouting Forecast"/>
+    </a>
+  </div>
+
+  <!-- Action Network content will be inserted here -->
+
+  <hr class="divider">
+  
+  <div class="footer">
+
+    <h1>Ready to Join Maine DSA?</h1>
+    <p>Maine DSA is the only DSA chapter in Maine. Our chapter primarily organizes in the Portland Metropolitan area, although our <a href="https://www.mainedsa.org/maine-dsa-campaigns-and-projects?referrer=forecast" target="_blank" rel="noopener noreferrer">campaigns and projects</a> may operate statewide and our membership draws from every county in the state.</p>
+    <p>We welcome all who have anti-racist, anti-fascist, and anti-capitalist ideologies. We are not a charity; our focus is on developing leadership within the working class to organize and fight for the working class. Organizing means listening more than talking, forming relationships with those in our community, and building power with each other to change the world.</p>
+    <p>If you have subscribed to our weekly newsletter and are interested in becoming an official member of our chapter please sign up via the button below.</p>
+    <p style="font-weight: bold;">
+      Are you ready? Let's build a better world together. We can't do it without you.
+    </p>
+    
+    <div class="join-section">
+      <a href="https://act.dsausa.org/donate/membership?source=direct_link&referrer=mainedsa_org#donation-form" target="_blank" rel="noopener noreferrer" >
+        <button type="button">Join DSA</button>
+      </a>
+    </div>
+  </div>
+</div>
