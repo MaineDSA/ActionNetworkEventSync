@@ -16,6 +16,12 @@ function getEndTime (event) {
   return outputDate
 }
 
+function sortEventByDate (eventFirst, eventSecond) {
+  const startTimeFirst = getStartTime(eventFirst)
+  const startTimeSecond = getStartTime(eventSecond)
+  return startTimeFirst - startTimeSecond
+}
+
 // This function returns the requested event ID if it is found in the Action Network event data.
 function getEventIDFromAN (contentJSON, searchID) {
   const identifiers = contentJSON.identifiers
@@ -31,12 +37,6 @@ function getEventIDFromAN (contentJSON, searchID) {
   console.log(`${searchID} found in Action Network event identifiers: ${foundID}`)
 
   return foundID
-}
-
-// This function returns all event data for an event ID from Action Network.
-function getAllANEventData (eventURL, apiKey) {
-  const eventData = UrlFetchApp.fetch(eventURL, standardApiParameters(apiKey))
-  return JSON.parse(eventData)
 }
 
 // This function tags an Action Network event with the Google ID for its corresponding Google Calendar event
