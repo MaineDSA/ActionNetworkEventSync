@@ -3,11 +3,12 @@
 function formatDescription (description) {
   return description
     .replace(/<br><br>/g, '<br>')
+    .replace(/<br><p>/g, '<p>')
     .replace(/<br><\/p>/g, '</p>')
-    .replace(/^<p> /g, '<p>')
-    .replace(/ <\/p>/g, '</p>')
+    .replace(/^<p>\s/g, '<p>')
+    .replace(/\s<\/p>/g, '</p>')
     .replace(/<p>\s*<\/p>/g, '')
-    .replace(/ {2}/g, ' ')
+    .replace(/\s+/g, ' ')
 }
 
 // Take an event object as an argument and generate a formatted description string for the event
