@@ -3,6 +3,7 @@
 function formatDescription (description) {
   return description
     .replace(/<br><br>/g, '<br>')
+    .replace(/<p>\s+/g, '<p>')
     .replace(/<br><p>/g, '<p>')
     .replace(/<br><\/p>/g, '</p>')
     .replace(/^<p>\s/g, '<p>')
@@ -13,7 +14,7 @@ function formatDescription (description) {
 
 // Take an event object as an argument and generate a formatted description string for the event
 function calDescription (event) {
-  const info = `<strong>More Info and RSVP:</strong><br><a href="${event.browser_url}">${event.browser_url}</a><br>`
+  const info = `<strong>More Info and RSVP:</strong><br><a href="${event.browser_url}">${event.browser_url}</a><br><br>`
   const description = `<strong>Description:</strong><br>${formatDescription(event.description)}<br>`
   const footer = (typeof customEventDescriptionFooter === 'function') // if customEventDescriptionFooter is defined, append it. otherwise nothing.
     ? customEventDescriptionFooter(event.description)
