@@ -125,7 +125,7 @@ function getHTMLAnnouncements () {
 
 // Compile an HTML message of upcoming events and return it as a string
 function compileHTMLEmail (events) {
-  return getHTMLTopAnnouncement() + getHTMLEvents(event) + getHTMLAnnouncements()
+  return getHTMLTopAnnouncement() + getHTMLEvents(events) + getHTMLAnnouncements()
 }
 
 // Consolidate event title and start time into a multi-line formatted string
