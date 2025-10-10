@@ -19,14 +19,19 @@ email draft on the Action Network group found at the first API key.
 ### Generated Email
 
 <a href="https://github.com/user-attachments/assets/3d202d3d-a4c5-4b58-8379-ce5d441ff4c8">
-  <img src="https://github.com/user-attachments/assets/3d202d3d-a4c5-4b58-8379-ce5d441ff4c8" alt="Example of Generated Action Network Draft" align="left" height="520">
+  <img src="https://github.com/user-attachments/assets/3d202d3d-a4c5-4b58-8379-ce5d441ff4c8" alt="Example of a machine-generated Action Network newsletter Draft" align="left" height="520">
 </a>
-
 
 ### New Event Notification in Slack
 
 <a href="https://github.com/user-attachments/assets/f4d0b5c2-c391-4af5-80f7-8a7802696d28">
-  <img src="https://github.com/user-attachments/assets/f4d0b5c2-c391-4af5-80f7-8a7802696d28" alt="Slack Message announcing new event" height="250">
+  <img src="https://github.com/user-attachments/assets/f4d0b5c2-c391-4af5-80f7-8a7802696d28" alt="Slack Message announcing new event, with RSVP button" height="250">
+</a>
+
+### New Event Notification in Discord
+
+<a href="https://github.com/user-attachments/assets/3177d7c0-36b3-4d02-9d8f-7b03222ffd93">
+  <img src="https://github.com/user-attachments/assets/3177d7c0-36b3-4d02-9d8f-7b03222ffd93" alt="Discord Message announcing new event, with link to event page" height="250">
 </a>
 
 
