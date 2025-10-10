@@ -18,15 +18,17 @@ email draft on the Action Network group found at the first API key.
 
 ### Generated Email
 
-<a href="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/7a017df7-5a18-408e-aa7d-d85ec40fcfc1">
-  <img src="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/7a017df7-5a18-408e-aa7d-d85ec40fcfc1" alt="Example of Generated Action Network Draft" align="left" height="520">
+<a href="https://github.com/user-attachments/assets/3d202d3d-a4c5-4b58-8379-ce5d441ff4c8">
+  <img src="https://github.com/user-attachments/assets/3d202d3d-a4c5-4b58-8379-ce5d441ff4c8" alt="Example of Generated Action Network Draft" align="left" height="520">
 </a>
+
 
 ### New Event Notification in Slack
 
-<a href="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/f71bfd4a-90e7-4911-979d-b3c538ce47cd">
-  <img src="https://github.com/MaineDSA/ActionNetworkEventSync/assets/1916835/f71bfd4a-90e7-4911-979d-b3c538ce47cd" alt="Slack Message announcing new event" height="250">
+<a href="https://github.com/user-attachments/assets/f4d0b5c2-c391-4af5-80f7-8a7802696d28">
+  <img src="https://github.com/user-attachments/assets/f4d0b5c2-c391-4af5-80f7-8a7802696d28" alt="Slack Message announcing new event" height="250">
 </a>
+
 
 ## Script Properties
 
