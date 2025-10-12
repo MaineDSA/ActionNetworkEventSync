@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 // This function creates a Google Calendar event with data from an Action Network event
-function createEvent (actionNetworkEvent, actionNetwrkID, apiKey) {
+function createEvent (actionNetworkEvent, actionNetworkID, apiKey) {
   const eventName = actionNetworkEvent.title.trim()
-  console.info(`Creating event ${eventName} from Action Network at ${actionNetwrkID}.`)
+  console.info(`Creating event ${eventName} from Action Network at ${actionNetworkID}.`)
 
   if (!scriptProperties.getProperty('GCAL_ID')) {
     console.error('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
@@ -26,8 +26,8 @@ function createEvent (actionNetworkEvent, actionNetwrkID, apiKey) {
     event = Calendar.Events.insert(event, scriptProperties.getProperty('GCAL_ID'))
     console.info(`Created event ${eventName} in Google Calendar at ${event.id}.`)
 
-    tagANEvent(actionNetwrkID, event.id, apiKey)
-    console.info(`Tagged AN event ${eventName} with google_id ${event.id}.`)
+    tagANEvent(actionNetworkID, event.id, apiKey)
+    console.info(`Tagged AN event ${eventName} with google_id ${event.id} in calendar ${scriptProperties.getProperty('GCAL_ID')}.`)
 
     return event.id
   } catch (err) {
