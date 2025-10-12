@@ -51,7 +51,7 @@ function tagANEvent (actionNetworkURL, googleID, apiKey) {
   const options = {
     method: 'put',
     payload: JSON.stringify({
-      identifiers: [`google_id:${googleID}`]
+      identifiers: [`google_id_${scriptProperties.getProperty('GCAL_ID').replace(/[&/\\#, +()$~%.'":*?<>{}]/g, '_')}:${googleID}`]
     }),
     headers: {
       'Content-Type': 'application/json',
