@@ -16,21 +16,28 @@ function sendDiscordMessage (title, message, url, image) {
     components: []
   }
 
-  // Add URL if provided
-  if (url) {
-    discordWebhookMessage.embeds.push({
-      description: `For more details, click [here](${encodeURI(url + '?source=discord-bot')}).`,
-      color: 3447003 // Optional color for embed, you can adjust this
-    })
-  }
-
   // Add image if provided
   if (image) {
     discordWebhookMessage.embeds.push({
       image: {
         url: image
       },
-      color: 3447003 // Optional color for embed
+      color: 3447003
+    })
+  }
+
+  // Add RSVP button if URL is provided
+  if (url) {
+    discordWebhookMessage.components.push({
+      type: 1, // Action Row
+      components: [
+        {
+          type: 2, // Button
+          style: 5, // Link button
+          label: 'Details and RSVP',
+          url: encodeURI(url + '?source=discord-rsvp')
+        }
+      ]
     })
   }
 
