@@ -10,14 +10,23 @@
     padding: 0;
   }
   
-  /* Typography */
-  p, h1, h2, h3, button {
+  /* Base typography - inherited by children */
+  .email-container {
     font-family: "Lexend", Arial, sans-serif;
-    line-height: 1.4;
     color: #505050;
+    line-height: 1.4;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+    padding: 20px;
+  }
+  
+  /* Common bottom margin */
+  p, h2, h3, ul, ol, img {
     margin: 0 0 16px 0;
   }
   
+  /* Typography */
   p {
     font-weight: 400;
     font-size: 16px;
@@ -48,18 +57,15 @@
   h3 {
     font-weight: 600;
     font-style: italic;
-    margin-bottom: 16px;
   }
   
   /* Lists */
   ul, ol {
-    font-family: "Lexend", Arial, sans-serif;
     font-size: 16px;
-    color: #505050;
     text-align: left;
-    margin: 0 0 16px 0;
     padding-left: 20px;
   }
+  
   li {
     margin-bottom: 8px;
     text-align: left;
@@ -72,6 +78,7 @@
     display: block;
     margin: 0 auto 16px;
   }
+  
   .event_article img {
     max-height: 200px;
   }
@@ -87,7 +94,6 @@
     font-size: 16px;
     cursor: pointer;
     transition: transform 0.5s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-    font-family: "Lexend", Arial, sans-serif;
     box-shadow: 0 2px 8px rgba(239, 67, 56, 0.3);
   }
   
@@ -102,13 +108,6 @@
   }
   
   /* Layout */
-  .email-container {
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: #FFFFFF;
-    padding: 20px;
-  }
-  
   .header {
     text-align: center;
     margin-bottom: 32px;
@@ -131,7 +130,7 @@
     border-radius: 1px;
   }
   
-  /* Specialty sections (if needed) */
+  /* Specialty */
   .event_article {
     outline: #EF4338 dotted 3px;
     margin: 24px 0;
@@ -169,12 +168,10 @@
       font-size: 1.5em;
     }
     
-    p {
+    p, ul, ol {
       font-size: 15px;
     }
-    ul, ol {
-      font-size: 15px;
-    }
+    
     .announce_section {
       flex-direction: column;
     }
