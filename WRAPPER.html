@@ -86,12 +86,19 @@
     padding: 12px 24px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: transform 0.5s ease, background-color 0.3s ease, box-shadow 0.3s ease;
     font-family: "Lexend", Arial, sans-serif;
+    box-shadow: 0 2px 8px rgba(239, 67, 56, 0.3);
   }
   
   button:hover {
     background-color: #d63c32;
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(239, 67, 56, 0.5);
+  }
+  
+  button:active {
+    transform: scale(0.98);
   }
   
   /* Layout */
