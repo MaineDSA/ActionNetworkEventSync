@@ -3,7 +3,7 @@
 
 # ActionNetworkEventScript
 
-Automation for Action Network, Google Calendar, and Slack
+Automation for Action Network, Google Calendar, and Slack/Discord.
 
 ## Features
 
