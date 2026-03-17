@@ -12,42 +12,41 @@ permissions: read-all
 
 jobs:
   devskim:
-    name: DevSkim
     runs-on: ubuntu-latest
 
     permissions:
       security-events: write
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b
+        with:
+          disable-sudo: true
+          egress-policy: audit
 
-      - name: Run DevSkim scanner
-        uses: microsoft/DevSkim-Action@v1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
-      - name: Upload DevSkim scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+      - uses: microsoft/DevSkim-Action@4b5047945a44163b94642a1cecc0d93a3f428cc6
+
+      - uses: github/codeql-action/upload-sarif@89a39a4e59826350b863aa6b6252a07ad50cf83e
         with:
           sarif_file: devskim-results.sarif
 
   js-standard:
-    name: JS Standard
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b
         with:
-          node-version: '20'
+          disable-sudo: true
+          egress-policy: audit
+
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: '24'
           check-latest: true
 
-      - name: Install JS Standard
-        run: |
-          npm install standard --global
+      - run: npm install standard --global
 
-      - name: Run JS Standard
-        run: |
-          npm test
+      - run: npm test
