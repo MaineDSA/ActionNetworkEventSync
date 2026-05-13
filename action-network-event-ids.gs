@@ -3,7 +3,7 @@
 function getANEvents (filter, apiKey) {
   let url = `${apiUrlAn}events/`
   if (filter) {
-    console.log(`Finding upcoming events from API key ending in ${apiKey.slice(-4)} via filter query ${filter}.`)
+    console.log(`Finding upcoming events from group ${getANGroupName(apiKey)} via filter query ${filter}.`)
     url += filter
   }
   const content = UrlFetchApp.fetch(url, standardApiParameters(apiKey))

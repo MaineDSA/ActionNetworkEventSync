@@ -23,6 +23,7 @@
       "formatEventAnnouncementMessage",
       "formatLocation",
       "getANEvents",
+      "getANGroupName",
       "getEndTime",
       "getEventIDFromAN",
       "getFutureANEvents",
