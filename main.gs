@@ -12,6 +12,22 @@ function standardApiParameters (apiKey) {
   }
 }
 
+// Fetch the group (AEP) title for an API key, used for safe log identification
+// in place of leaking part of the key. Falls back to a generic label if the
+// AEP request fails or the title is missing.
+function getANGroupName (apiKey) {
+  try {
+    const response = UrlFetchApp.fetch(apiUrlAn, standardApiParameters(apiKey))
+    const title = JSON.parse(response).title
+    if (title) {
+      return title
+    }
+  } catch (err) {
+    console.warn(`Could not fetch group name from Action Network AEP: ${err}`)
+  }
+  return '(unknown group)'
+}
+
 // Set constants for API URLs and default values
 const apiUrlAn = 'https://actionnetwork.org/api/v2/'
 const defultLengthMinutes = 90
@@ -92,7 +108,7 @@ function draftANEventMessage () {
     return
   }
 
-  console.info(`Creating newsletter at API key ending in ${apiKeys[0].slice(-4)}.`)
+  console.info(`Creating newsletter for group ${getANGroupName(apiKeys[0])}.`)
   const emailHTML = compileHTMLEmail(events)
   draftANMessage(emailHTML, apiKeys[0])
 }
