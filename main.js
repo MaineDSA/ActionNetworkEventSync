@@ -58,7 +58,10 @@ function syncANtoGCal () {
       )
 
       // If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
-      let googleID = getEventIDFromAN(event, `google_id_${scriptProperties.getProperty('GCAL_ID').replace('/[&/\\#, +()$~%.:*?<>{}]/g', '_')}`)
+      let googleID = getEventIDFromAN(event, `google_id_${scriptProperties.getProperty('GCAL_ID').replace(/[^a-zA-Z0-9]+/g, '_')}`)
+      if (!googleID) {
+        googleID = getEventIDFromAN(event, `google_id_${scriptProperties.getProperty('GCAL_ID').replace('/[&/\\#, +()$~%.:*?<>{}]/g', '_')}`)
+      }
       if (!googleID) {
         googleID = getEventIDFromAN(event, 'google_id')
       }
