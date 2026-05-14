@@ -1,4 +1,21 @@
 /* eslint-disable no-unused-vars */
+
+// Fetch the group (AEP) title for an API key, used for safe log identification
+// in place of leaking part of the key. Falls back to a generic label if the
+// AEP request fails or the title is missing.
+function getANGroupName (apiKey) {
+  try {
+    const response = UrlFetchApp.fetch(apiUrlAn, standardApiParameters(apiKey))
+    const title = JSON.parse(response).title
+    if (title) {
+      return title
+    }
+  } catch (err) {
+    console.warn(`Could not fetch group name from Action Network AEP: ${err}`)
+  }
+  return '(unknown group)'
+}
+
 // This function returns events from Action Network. If a filter is provided, it appends it to the API URL.
 function getANEvents (filter, apiKey) {
   let url = `${apiUrlAn}events/`
