@@ -1,19 +1,31 @@
 /* eslint-disable no-unused-vars */
 
-// Fetch the group (AEP) title for an API key, used for safe log identification
-// in place of leaking part of the key. Falls back to a generic label if the
-// AEP request fails or the title is missing.
+// Fetch the sponsoring group's title for an API key, used for safe log
+// identification in place of leaking part of the key. The API entry point does
+// not expose a group name, so we read it from the `action_network:sponsor`
+// block on the first event the key can see. Results are cached per key for
+// the lifetime of the script run to avoid an extra request per log line.
+const _anGroupNameCache = {}
 function getANGroupName (apiKey) {
+  if (_anGroupNameCache[apiKey]) {
+    return _anGroupNameCache[apiKey]
+  }
+  let name = '(unknown group)'
   try {
-    const response = UrlFetchApp.fetch(apiUrlAn, standardApiParameters(apiKey))
-    const title = JSON.parse(response).title
-    if (title) {
-      return title
+    const response = UrlFetchApp.fetch(`${apiUrlAn}events/?per_page=1`, standardApiParameters(apiKey))
+    const events = (JSON.parse(response)._embedded || {})['osdi:events'] || []
+    for (const event of events) {
+      const sponsor = event['action_network:sponsor']
+      if (sponsor && sponsor.title) {
+        name = sponsor.title
+        break
+      }
     }
   } catch (err) {
-    console.warn(`Could not fetch group name from Action Network AEP: ${err}`)
+    console.warn(`Could not fetch group name from Action Network: ${err}`)
   }
-  return '(unknown group)'
+  _anGroupNameCache[apiKey] = name
+  return name
 }
 
 // This function returns events from Action Network. If a filter is provided, it appends it to the API URL.
