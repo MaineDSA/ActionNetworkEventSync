@@ -76,7 +76,7 @@ function updateGoogleEvent (event, actionNetworkID, googleID) {
   return eventGoogle.getId()
 }
 
-// This function cancels a Google Calendar event that has been cancelled in Action Network
+// This function cancels a Google Calendar event
 function cancelGoogleEvent (event, googleID) {
   if (!scriptProperties.getProperty('GCAL_ID')) {
     console.error('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
@@ -95,4 +95,21 @@ function cancelGoogleEvent (event, googleID) {
     )
     return false
   }
+}
+
+// This function removes the location data from a Google Calendar event
+function removeGoogleEventLocation (event, googleID) {
+  if (!scriptProperties.getProperty('GCAL_ID')) {
+    console.error('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
+    return
+  }
+
+  event.location = {}
+  event.location.venue = ''
+  event.location.address_lines = ''
+  event.location.locality = ''
+  event.location.region = ''
+  event.location.postal_code = ''
+
+  updateGoogleEvent(event, googleID)
 }
