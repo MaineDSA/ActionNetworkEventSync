@@ -21,6 +21,62 @@ const daysUpcomingSlack = 1
 
 const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty('GCAL_ID'))
 
+function syncANGrouptoGCal (event) {
+  const actionNetworkID = getEventIDFromAN(event, 'action_network') // Get the Action Network ID for the event
+  console.log(
+    `${event.title.trim()} is listed as ${event.status} in Action Network at ${actionNetworkID} and starts on ${getStartTime(event)}.`
+  )
+
+  // If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
+  let googleID = getEventIDFromAN(event, `google_id_${scriptProperties.getProperty('GCAL_ID').replace(/[^a-zA-Z0-9]+/g, '_')}`)
+  if (!googleID) {
+    googleID = getEventIDFromAN(event, `google_id_${scriptProperties.getProperty('GCAL_ID').replace('/[&/\\#, +()$~%.:*?<>{}]/g', '_')}`)
+  }
+  if (!googleID) {
+    googleID = getEventIDFromAN(event, 'google_id')
+  }
+  if (!googleID && event.status !== 'cancelled') {
+    // If the event is not in Google Calendar and the event is not cancelled in Action Network, create it in Google Calendar
+    const googleIDNew = createEvent(event, actionNetworkID, apiKey)
+
+    if (typeof googleIDNew !== 'string') {
+      return
+    }
+
+    if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
+      sendMessage('SLACK_WEBHOOK_URL', event, 'New Event Added to the Calendar', sendSlackMessage)
+    }
+    if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
+      sendMessage('DISCORD_WEBHOOK_URL', event, 'New Event Added to the Calendar', sendDiscordMessage)
+    }
+  } else {
+    if (event.status !== 'cancelled') {
+      updateGoogleEvent(event, actionNetworkID, googleID)
+      return
+    }
+
+    // If the event is in Google Calendar and the event was cancelled in Action Network, cancel it in Google Calendar
+    const googleIDNew = cancelGoogleEvent(event, googleID)
+    if (typeof googleIDNew === 'string') {
+      if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
+        sendMessage('SLACK_WEBHOOK_URL', event, 'Calendar Event Canceled', sendSlackMessage)
+      }
+      if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
+        sendMessage('DISCORD_WEBHOOK_URL', event, 'Calendar Event Canceled', sendDiscordMessage)
+      }
+    }
+  }
+}
+
+function syncANGrouptoGCal (apiKey) {
+  const events = getRecentlyModifiedEvents(daysSinceModified, apiKey).sort(sortEventByDate)
+  console.info(
+    `Found ${events.length} events modified in the last ${daysSinceModified} days that have not started yet.`
+  )
+
+  for (const event of events) { syncANGrouptoGCal(event) }
+}
+
 // This function syncs events modified in the last week from Action Network to Google Calendar
 function syncANtoGCal () {
   if (!calendarGoogle) {
@@ -29,59 +85,7 @@ function syncANtoGCal () {
   }
 
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
-  for (const apiKey of apiKeys) {
-    const events = getRecentlyModifiedEvents(daysSinceModified, apiKey).sort(sortEventByDate)
-    console.info(
-      `Found ${events.length} events modified in the last ${daysSinceModified} days that have not started yet.`
-    )
-
-    for (const event of events) {
-      const actionNetworkID = getEventIDFromAN(event, 'action_network') // Get the Action Network ID for the event
-      console.log(
-        `${event.title.trim()} is listed as ${event.status} in Action Network at ${actionNetworkID} and starts on ${getStartTime(event)}.`
-      )
-
-      // If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
-      let googleID = getEventIDFromAN(event, `google_id_${scriptProperties.getProperty('GCAL_ID').replace(/[^a-zA-Z0-9]+/g, '_')}`)
-      if (!googleID) {
-        googleID = getEventIDFromAN(event, `google_id_${scriptProperties.getProperty('GCAL_ID').replace('/[&/\\#, +()$~%.:*?<>{}]/g', '_')}`)
-      }
-      if (!googleID) {
-        googleID = getEventIDFromAN(event, 'google_id')
-      }
-      if (!googleID && event.status !== 'cancelled') {
-        // If the event is not in Google Calendar and the event is not cancelled in Action Network, create it in Google Calendar
-        const googleIDNew = createEvent(event, actionNetworkID, apiKey)
-
-        if (typeof googleIDNew !== 'string') {
-          continue
-        }
-
-        if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
-          sendMessage('SLACK_WEBHOOK_URL', event, 'New Event Added to the Calendar', sendSlackMessage)
-        }
-        if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
-          sendMessage('DISCORD_WEBHOOK_URL', event, 'New Event Added to the Calendar', sendDiscordMessage)
-        }
-      } else {
-        if (event.status !== 'cancelled') {
-          updateGoogleEvent(event, actionNetworkID, googleID)
-          continue
-        }
-
-        // If the event is in Google Calendar and the event was cancelled in Action Network, cancel it in Google Calendar
-        const googleIDNew = cancelGoogleEvent(event, googleID)
-        if (typeof googleIDNew === 'string') {
-          if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
-            sendMessage('SLACK_WEBHOOK_URL', event, 'Calendar Event Canceled', sendSlackMessage)
-          }
-          if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
-            sendMessage('DISCORD_WEBHOOK_URL', event, 'Calendar Event Canceled', sendDiscordMessage)
-          }
-        }
-      }
-    }
-  }
+  for (const apiKey of apiKeys) { syncANGrouptoGCal(apiKey) }
 }
 
 // Calls the draftANMessage function with the output of the compileHTMLEmail() function as an argument.
@@ -96,8 +100,25 @@ function draftANEventMessage () {
   }
 
   console.info(`Creating newsletter for group ${getANGroupName(apiKeys[0])}.`)
+
   const emailHTML = compileHTMLEmail(events)
   draftANMessage(emailHTML, apiKeys[0])
+}
+
+function postEventMessage(event) {
+  console.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${getEventIDFromAN(event, 'action_network')} and starts on ${getStartTime(event)}.`)
+
+  if (event.status === 'cancelled') {
+    console.log(`Skipping cancelled event ${event.title.trim()}.`)
+    return
+  }
+
+  if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
+    sendMessage('SLACK_WEBHOOK_URL', event, 'Upcoming Event', sendSlackMessage)
+  }
+  if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
+    sendMessage('DISCORD_WEBHOOK_URL', event, 'Upcoming Event', sendDiscordMessage)
+  }
 }
 
 function postTodaysEvents () {
@@ -117,19 +138,5 @@ function postTodaysEvents () {
     return
   }
 
-  for (const event of events) {
-    console.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${getEventIDFromAN(event, 'action_network')} and starts on ${getStartTime(event)}.`)
-
-    if (event.status === 'cancelled') {
-      console.log(`Skipping cancelled event ${event.title.trim()}.`)
-      continue
-    }
-
-    if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
-      sendMessage('SLACK_WEBHOOK_URL', event, 'Upcoming Event', sendSlackMessage)
-    }
-    if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
-      sendMessage('DISCORD_WEBHOOK_URL', event, 'Upcoming Event', sendDiscordMessage)
-    }
-  }
+  for (const event of events) { postEventMessage(event) }
 }
