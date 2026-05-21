@@ -21,7 +21,7 @@ const daysUpcomingSlack = 1
 
 const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty('GCAL_ID'))
 
-function syncANEventtoGCal (event) {
+function syncANEventtoGCal (event, apiKey) {
   const actionNetworkID = getEventIDFromAN(event, 'action_network') // Get the Action Network ID for the event
   console.log(
     `${event.title.trim()} is listed as ${event.status} in Action Network at ${actionNetworkID} and starts on ${getStartTime(event)}.`
@@ -75,7 +75,7 @@ function syncANGrouptoGCal (apiKey) {
     `Found ${modifiedEvents.length} events modified in the last ${daysSinceModified} days that have not started yet.`
   )
 
-  for (const anEvent of modifiedEvents) { syncANEventtoGCal(anEvent) }
+  for (const anEvent of modifiedEvents) { syncANEventtoGCal(anEvent, apiKey) }
 
   // Remove location from completed events
   const currentDate = Utilities.formatDate(new Date(), 'UTC', 'yyyy-MM-dd')
