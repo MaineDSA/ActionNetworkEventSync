@@ -69,7 +69,7 @@ function syncANEventtoGCal (event, apiKey) {
 }
 
 function syncANGrouptoGCal (apiKey) {
-  // Sync recently modified events 
+  // Sync recently modified events
   const modifiedEvents = getRecentlyModifiedEvents(daysSinceModified, apiKey).sort(sortEventByDate)
   console.info(
     `Found ${modifiedEvents.length} events modified in the last ${daysSinceModified} days that have not started yet.`
@@ -114,7 +114,7 @@ function draftANEventMessage () {
   draftANMessage(emailHTML, apiKeys[0])
 }
 
-function postEventMessage(event) {
+function postEventMessage (event) {
   console.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${getEventIDFromAN(event, 'action_network')} and starts on ${getStartTime(event)}.`)
 
   if (event.status === 'cancelled') {

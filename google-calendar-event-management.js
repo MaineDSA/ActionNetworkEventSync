@@ -97,19 +97,19 @@ function cancelGoogleEvent (event, googleID) {
   }
 }
 
-// This function removes the location data from a Google Calendar event
-function removeGoogleEventLocation (event, googleID) {
+// This function removes the location data from a Google Calendar event based on an Action Network event
+function removeGoogleEventLocation (anEvent, googleID) {
   if (!scriptProperties.getProperty('GCAL_ID')) {
     console.error('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
     return
   }
 
-  event.location = {}
-  event.location.venue = ''
-  event.location.address_lines = ''
-  event.location.locality = ''
-  event.location.region = ''
-  event.location.postal_code = ''
+  anEvent.location = {}
+  anEvent.location.venue = ''
+  anEvent.location.address_lines = ''
+  anEvent.location.locality = ''
+  anEvent.location.region = ''
+  anEvent.location.postal_code = ''
 
-  updateGoogleEvent(event, googleID)
+  updateGoogleEvent(anEvent, googleID)
 }
