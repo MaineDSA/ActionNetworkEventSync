@@ -27,6 +27,7 @@
       "getEndTime",
       "getEventIDFromAN",
       "getFutureANEvents",
+      "getGoogleEventID",
       "getRecentlyModifiedEvents",
       "getStartTime",
       "getUpcomingEventLimitFilter",

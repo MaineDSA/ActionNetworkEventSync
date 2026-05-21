@@ -39,6 +39,18 @@ function getEventIDFromAN (contentJSON, searchID) {
   return foundID
 }
 
+// This function returns the Google ID for the given event, if it is found in the Action Network event data.
+function getGoogleEventID (event) {
+  let googleID = getEventIDFromAN(event, `google_id_${scriptProperties.getProperty('GCAL_ID').replace(/[^a-zA-Z0-9]+/g, '_')}`)
+  if (!googleID) {
+    googleID = getEventIDFromAN(event, `google_id_${scriptProperties.getProperty('GCAL_ID').replace('/[&/\\#, +()$~%.:*?<>{}]/g', '_')}`)
+  }
+  if (!googleID) {
+    googleID = getEventIDFromAN(event, 'google_id')
+  }
+  return googleID
+}
+
 // This function tags an Action Network event with the Google ID for its corresponding Google Calendar event
 function tagANEvent (actionNetworkURL, googleID, apiKey) {
   // Check if the "AN_API_KEY" property is null

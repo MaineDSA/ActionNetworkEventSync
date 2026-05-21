@@ -45,13 +45,7 @@ function syncANEventtoGCal (event, apiKey) {
   )
 
   // If no Google ID is found for the event, we will assume it is not yet in Google Calendar.
-  let googleID = getEventIDFromAN(event, `google_id_${scriptProperties.getProperty('GCAL_ID').replace(/[^a-zA-Z0-9]+/g, '_')}`)
-  if (!googleID) {
-    googleID = getEventIDFromAN(event, `google_id_${scriptProperties.getProperty('GCAL_ID').replace('/[&/\\#, +()$~%.:*?<>{}]/g', '_')}`)
-  }
-  if (!googleID) {
-    googleID = getEventIDFromAN(event, 'google_id')
-  }
+  const googleID = getGoogleEventID(event)
   if (!googleID && event.status !== 'cancelled') {
     // If the event is not in Google Calendar and the event is not cancelled in Action Network, create it in Google Calendar
     const googleIDNew = createEvent(event, actionNetworkID, apiKey)
