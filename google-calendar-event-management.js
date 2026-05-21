@@ -111,5 +111,7 @@ function removeGoogleEventLocation (anEvent) {
   anEvent.location.region = ''
   anEvent.location.postal_code = ''
 
-  updateGoogleEvent(anEvent, scriptProperties.getProperty('GCAL_ID'))
+  const anEventID = getEventIDFromAN(anEvent, 'action_network')
+  const gCalID = scriptProperties.getProperty('GCAL_ID')
+  updateGoogleEvent(anEvent, anEventID, gCalID)
 }
