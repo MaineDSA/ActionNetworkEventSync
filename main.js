@@ -79,11 +79,9 @@ function syncANGrouptoGCal (apiKey) {
 
   // Remove location from completed events
   const current_date = Utilities.formatDate(new Date(), 'UTC', 'yyyy-MM-dd')
-  const filter_past = `end_date lt '${current_date}'`
-  const past_events = getFutureANEvents(apiKey, [filter_past], 'lt').sort(sortEventByDate)
-  console.info(
-    `Found ${past_events.length} completed events.`
-  )
+  const past_filter = `?filter=end_date lt '${current_date}'`
+  const past_events = getANEvents(past_filter, apiKey)
+  console.info(`Found ${past_events.length} past events.`)
 
   for (const an_event of past_events) { removeGoogleEventLocation(an_event) }
 }
