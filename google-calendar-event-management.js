@@ -98,7 +98,7 @@ function cancelGoogleEvent (event, googleID) {
 }
 
 // This function removes the location data from a Google Calendar event based on an Action Network event
-function removeGoogleEventLocation (anEvent, googleID) {
+function removeGoogleEventLocation (anEvent) {
   if (!scriptProperties.getProperty('GCAL_ID')) {
     console.error('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
     return
@@ -111,5 +111,5 @@ function removeGoogleEventLocation (anEvent, googleID) {
   anEvent.location.region = ''
   anEvent.location.postal_code = ''
 
-  updateGoogleEvent(anEvent, googleID)
+  updateGoogleEvent(anEvent, scriptProperties.getProperty('GCAL_ID'))
 }
