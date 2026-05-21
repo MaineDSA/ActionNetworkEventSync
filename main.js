@@ -78,8 +78,9 @@ function syncANGrouptoGCal (apiKey) {
   for (const an_event of modified_events) { syncANEventtoGCal(an_event) }
 
   // Remove location from completed events
-  const filter_past = `end_date lt '${new Date()}'`
-  const past_events = getFutureANEvents(apiKey, [filter_past], operator='lt').sort(sortEventByDate)
+  const current_date = Utilities.formatDate(new Date(), 'UTC', 'yyyy-MM-dd')
+  const filter_past = `end_date lt '${current_date}'`
+  const past_events = getFutureANEvents(apiKey, [filter_past], 'lt').sort(sortEventByDate)
   console.info(
     `Found ${past_events.length} completed events.`
   )
