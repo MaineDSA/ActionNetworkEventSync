@@ -13,11 +13,11 @@ function formatDescription (description) {
 }
 
 // Take an event object as an argument and generate a formatted description string for the event
-function calDescription (event) {
-  const info = `<strong>More Info and RSVP:</strong><br><a href="${event.browser_url}">${event.browser_url}</a><br><br>`
-  const description = `<strong>Description:</strong><br>${formatDescription(event.description)}<br>`
+function calDescription (actionNetworkEvent) {
+  const info = `<strong>More Info and RSVP:</strong><br><a href="${actionNetworkEvent.browser_url}">${actionNetworkEvent.browser_url}</a><br><br>`
+  const description = `<strong>Description:</strong><br>${formatDescription(actionNetworkEvent.description)}<br>`
   const footer = (typeof customEventDescriptionFooter === 'function') // if customEventDescriptionFooter is defined, append it. otherwise nothing.
-    ? customEventDescriptionFooter(event.description)
+    ? customEventDescriptionFooter(actionNetworkEvent.description)
     : ''
 
   return info + description + footer
@@ -33,11 +33,11 @@ const formatLocation = (location) => {
 }
 
 // This function takes an event object as an argument and returns a formatted string for use in a newsletter
-function formatEvent (event) {
-  const startDate = getStartTime(event)
-  const endDate = getEndTime(event)
+function formatEvent (actionNetworkEvent) {
+  const startDate = getStartTime(actionNetworkEvent)
+  const endDate = getEndTime(actionNetworkEvent)
 
-  const templateTitle = `<h2>${event.title.trim()}</h2>`
+  const templateTitle = `<h2>${actionNetworkEvent.title.trim()}</h2>`
   const eventDate = startDate.toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
@@ -52,15 +52,15 @@ function formatEvent (event) {
     minute: '2-digit'
   })
   const templateTimeAndLink = `<h3><time datetime=${startDate.toISOString()}>${eventDate}</time> | ${startTime} - ${endTime}</h3>`
-  const imageURL = event.featured_image_url
+  const imageURL = actionNetworkEvent.featured_image_url
     ? `
-      <a href="${encodeURI(event.browser_url)}" target="_blank">
-        <img src="${encodeURI(event.featured_image_url)}" alt="Event Promo Image">
+      <a href="${encodeURI(actionNetworkEvent.browser_url)}" target="_blank">
+        <img src="${encodeURI(actionNetworkEvent.featured_image_url)}" alt="Event Promo Image">
       </a>
     `
     : ''
   const buttonRSVP = `
-    <a href="${encodeURI(event.browser_url)}" target="_blank">
+    <a href="${encodeURI(actionNetworkEvent.browser_url)}" target="_blank">
       <button type="button">Sign Me Up</button>
     </a>
   `
@@ -71,7 +71,7 @@ function formatEvent (event) {
       ${templateTimeAndLink}
       ${imageURL}
       ${buttonRSVP}
-      ${formatDescription(event.description)}
+      ${formatDescription(actionNetworkEvent.description)}
     </article>
     `
 }
@@ -93,8 +93,8 @@ function getHTMLTopAnnouncement () {
     `
 }
 
-function getEventDescBody (event) {
-  return event.status !== 'cancelled' ? formatEvent(event) : ''
+function getEventDescBody (actionNetworkEvent) {
+  return actionNetworkEvent.status !== 'cancelled' ? formatEvent(actionNetworkEvent) : ''
 }
 
 function getHTMLEvents (events) {
@@ -129,13 +129,13 @@ function compileHTMLEmail (events) {
 }
 
 // Consolidate event title and start time into a multi-line formatted string
-function formatEventAnnouncementMessage (event) {
-  const startstring = getStartTime(event).toLocaleDateString('en-US', {
+function formatEventAnnouncementMessage (actionNetworkEvent) {
+  const startstring = getStartTime(actionNetworkEvent).toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
     day: '2-digit',
     hour: 'numeric',
     minute: '2-digit'
   })
-  return `*${event.title.trim()}*\n${startstring}`
+  return `*${actionNetworkEvent.title.trim()}*\n${startstring}`
 }
