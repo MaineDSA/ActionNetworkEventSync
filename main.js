@@ -1,8 +1,13 @@
 /* eslint-disable no-unused-vars */
-// Get the script properties object for use throughout the script
-const scriptProperties = PropertiesService.getScriptProperties()
 
-// Set standard API parameters for use in requests to the Action Network API
+/**
+* Get standard API parameters
+*
+* These will be used in requests to the Action Network API.
+*
+* @param {string} apiKey - The API key to use for authentication
+* @returns {dict} The standard API parameters of API key and content type.
+*/
 function standardApiParameters (apiKey) {
   return {
     headers: {
@@ -12,15 +17,27 @@ function standardApiParameters (apiKey) {
   }
 }
 
-// Set constants for API URLs and default values
+/**
+* Set constants for API URLs and default values
+*/
+
 const apiUrlAn = 'https://actionnetwork.org/api/v2/'
 const defultLengthMinutes = 90
 const daysSinceModified = 28
 const daysUpcomingEmail = 28
 const daysUpcomingSlack = 1
 
+const scriptProperties = PropertiesService.getScriptProperties()
 const calendarGoogle = CalendarApp.getCalendarById(scriptProperties.getProperty('GCAL_ID'))
 
+/**
+* Sync an Action Network event to Google Calendar
+*
+* Also notifies Slack or Discord as configured
+*
+* @param {dict} event - The event to sync
+* @param {string} apiKey - The Action Network API key to use for authentication
+*/
 function syncANEventtoGCal (event, apiKey) {
   const actionNetworkID = getEventIDFromAN(event, 'action_network') // Get the Action Network ID for the event
   console.log(
@@ -68,6 +85,11 @@ function syncANEventtoGCal (event, apiKey) {
   }
 }
 
+/**
+* Sync recently modified Action Network events to Google Calendar and remove location from all past events
+*
+* @param {string} apiKey - The Action Network API key to use for authentication
+*/
 function syncANGrouptoGCal (apiKey) {
   // Sync recently modified events
   const modifiedEvents = getRecentlyModifiedEvents(daysSinceModified, apiKey).sort(sortEventByDate)
@@ -86,7 +108,11 @@ function syncANGrouptoGCal (apiKey) {
   for (const anEvent of pastEvents) { removeGoogleEventLocation(anEvent) }
 }
 
-// This function syncs events modified in the last week from Action Network to Google Calendar
+/**
+* Syncs events modified in the last week from Action Network to Google Calendar
+*
+* Loads Action Network API keys from the script properties and calls syncANGrouptoGCal for each key.
+*/
 function syncANtoGCal () {
   if (!calendarGoogle) {
     console.error('No Google Calendar ID "GCAL_ID" provided, cannot continue.')
@@ -97,7 +123,11 @@ function syncANtoGCal () {
   for (const apiKey of apiKeys) { syncANGrouptoGCal(apiKey) }
 }
 
-// Calls the draftANMessage function with the output of the compileHTMLEmail() function as an argument.
+/**
+* Create a new Action Network newsletter draft based on upcoming events.
+*
+* Calls the draftANMessage function with the output of the compileHTMLEmail() function as an argument
+*/
 function draftANEventMessage () {
   const apiKeys = scriptProperties.getProperty('AN_API_KEY').split(',')
   const dateFilter = getUpcomingEventLimitFilter(daysUpcomingEmail)
@@ -114,6 +144,9 @@ function draftANEventMessage () {
   draftANMessage(emailHTML, apiKeys[0])
 }
 
+/**
+* Post an event message to Slack and/or Discord if the event has not been cancelled.
+*/
 function postEventMessage (event) {
   console.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${getEventIDFromAN(event, 'action_network')} and starts on ${getStartTime(event)}.`)
 
@@ -130,6 +163,9 @@ function postEventMessage (event) {
   }
 }
 
+/**
+* Post today's events to Slack and/or Discord.
+*/
 function postTodaysEvents () {
   // Check if the Slack Webhook URL is provided
   if (!scriptProperties.getProperty('SLACK_WEBHOOK_URL') && !scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
