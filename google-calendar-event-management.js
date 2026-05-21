@@ -112,6 +112,11 @@ function removeGoogleEventLocation (actionNetworkEvent) {
   actionNetworkEvent.location.postal_code = ''
 
   const actionNetworkEventID = getEventIDFromAN(actionNetworkEvent, 'action_network')
-  const googleEventID = getGoogleEventID(event)
+  const googleEventID = getGoogleEventID(actionNetworkEvent)
+  if (!googleEventID) {
+    console.error(`Invalid Google Calendar event ID ${googleEventID}.`)
+    return
+  }
+
   updateGoogleEvent(actionNetworkEvent, actionNetworkEventID, googleEventID)
 }
