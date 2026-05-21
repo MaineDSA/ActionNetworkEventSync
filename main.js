@@ -70,20 +70,20 @@ function syncANEventtoGCal (event) {
 
 function syncANGrouptoGCal (apiKey) {
   // Sync recently modified events 
-  const modified_events = getRecentlyModifiedEvents(daysSinceModified, apiKey).sort(sortEventByDate)
+  const modifiedEvents = getRecentlyModifiedEvents(daysSinceModified, apiKey).sort(sortEventByDate)
   console.info(
-    `Found ${modified_events.length} events modified in the last ${daysSinceModified} days that have not started yet.`
+    `Found ${modifiedEvents.length} events modified in the last ${daysSinceModified} days that have not started yet.`
   )
 
-  for (const an_event of modified_events) { syncANEventtoGCal(an_event) }
+  for (const anEvent of modifiedEvents) { syncANEventtoGCal(anEvent) }
 
   // Remove location from completed events
-  const current_date = Utilities.formatDate(new Date(), 'UTC', 'yyyy-MM-dd')
-  const past_filter = `?filter=end_date lt '${current_date}'`
-  const past_events = getANEvents(past_filter, apiKey)
-  console.info(`Found ${past_events.length} past events.`)
+  const currentDate = Utilities.formatDate(new Date(), 'UTC', 'yyyy-MM-dd')
+  const pastFilter = `?filter=end_date lt '${currentDate}'`
+  const pastEvents = getANEvents(pastFilter, apiKey)
+  console.info(`Found ${pastEvents.length} past events.`)
 
-  for (const an_event of past_events) { removeGoogleEventLocation(an_event) }
+  for (const anEvent of pastEvents) { removeGoogleEventLocation(anEvent) }
 }
 
 // This function syncs events modified in the last week from Action Network to Google Calendar
