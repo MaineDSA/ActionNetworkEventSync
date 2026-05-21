@@ -69,6 +69,7 @@ function syncANEventtoGCal (event) {
 }
 
 function syncANGrouptoGCal (apiKey) {
+  // Sync recently modified events 
   const modified_events = getRecentlyModifiedEvents(daysSinceModified, apiKey).sort(sortEventByDate)
   console.info(
     `Found ${modified_events.length} events modified in the last ${daysSinceModified} days that have not started yet.`
@@ -76,8 +77,9 @@ function syncANGrouptoGCal (apiKey) {
 
   for (const an_event of modified_events) { syncANEventtoGCal(an_event) }
 
+  // Remove location from completed events
   const filter_past = `end_date lt '${new Date()}'`
-  const past_events = getFutureANEvents(apiKey, filter_past, operator='lt').sort(sortEventByDate)
+  const past_events = getFutureANEvents(apiKey, [filter_past], operator='lt').sort(sortEventByDate)
   console.info(
     `Found ${past_events.length} completed events.`
   )
