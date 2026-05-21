@@ -69,12 +69,12 @@ function syncANGrouptoGCal (event) {
 }
 
 function syncANGrouptoGCal (apiKey) {
-  const events = getRecentlyModifiedEvents(daysSinceModified, apiKey).sort(sortEventByDate)
+  const modified_events = getRecentlyModifiedEvents(daysSinceModified, apiKey).sort(sortEventByDate)
   console.info(
-    `Found ${events.length} events modified in the last ${daysSinceModified} days that have not started yet.`
+    `Found ${modified_events.length} events modified in the last ${daysSinceModified} days that have not started yet.`
   )
 
-  for (const event of events) { syncANGrouptoGCal(event) }
+  for (const an_event of modified_events) { syncANGrouptoGCal(an_event) }
 }
 
 // This function syncs events modified in the last week from Action Network to Google Calendar
