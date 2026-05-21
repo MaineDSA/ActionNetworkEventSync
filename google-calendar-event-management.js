@@ -10,7 +10,7 @@ function createEvent (actionNetworkEvent, actionNetworkID, apiKey) {
   }
 
   // event details for creating event.
-  let event = {
+  let googleEvent = {
     summary: eventName,
     location: formatLocation(actionNetworkEvent.location),
     description: calDescription(actionNetworkEvent),
@@ -23,13 +23,13 @@ function createEvent (actionNetworkEvent, actionNetworkID, apiKey) {
   }
   try {
     // call method to insert/create new event in provided calandar
-    event = Calendar.Events.insert(event, scriptProperties.getProperty('GCAL_ID'))
-    console.info(`Created event ${eventName} in Google Calendar at ${event.id}.`)
+    googleEvent = Calendar.Events.insert(googleEvent, scriptProperties.getProperty('GCAL_ID'))
+    console.info(`Created event ${eventName} in Google Calendar at ${googleEvent.id}.`)
 
-    tagANEvent(actionNetworkID, event.id, apiKey)
-    console.info(`Tagged AN event ${eventName} with google_id ${event.id} in calendar ${scriptProperties.getProperty('GCAL_ID')}.`)
+    tagANEvent(actionNetworkID, googleEvent.id, apiKey)
+    console.info(`Tagged AN event ${eventName} with google_id ${googleEvent.id} in calendar ${scriptProperties.getProperty('GCAL_ID')}.`)
 
-    return event.id
+    return googleEvent.id
   } catch (err) {
     console.error(`Creating Google event ${eventName} failed with error %s`, err.message)
   }
