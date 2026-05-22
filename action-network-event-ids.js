@@ -12,8 +12,7 @@ function getANGroupName (apiKey) {
   }
   let name = '(unknown group)'
   try {
-    const response = UrlFetchApp.fetch(`${apiUrlAn}events/?per_page=1`, standardApiParameters(apiKey))
-    const events = (JSON.parse(response)._embedded || {})['osdi:events'] || []
+    const events = getANEvents('?per_page=1', apiKey)
     for (const event of events) {
       const sponsor = event['action_network:sponsor']
       if (sponsor && sponsor.title) {
