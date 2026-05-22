@@ -59,10 +59,10 @@ function getFutureANEvents (apiKey, extraFilters) {
 // This function returns event IDs from Action Network for events modified since a certain number of days ago that have not started yet.
 // It calculates the date to filter events by based on the current date and the number of days ago.
 // It uses the getSortedFutureANEventIDs function to return the IDs sorted by soonest event first.
-function getRecentlyModifiedEvents (DaysAgo, apiKey) {
-  const MillisPerDay = 1000 * 60 * 60 * 24
+function getRecentlyModifiedEvents (daysAgo, apiKey) {
+  const millisPerDay = 1000 * 60 * 60 * 24
   const now = new Date()
-  const daysAgoDate = new Date(now.getTime() - MillisPerDay * DaysAgo)
+  const daysAgoDate = new Date(now.getTime() - millisPerDay * daysAgo)
   const extraFilters = [`modified_date gt '${Utilities.formatDate(daysAgoDate, 'UTC', 'yyyy-MM-dd')}'`]
 
   return getFutureANEvents(apiKey, extraFilters)
