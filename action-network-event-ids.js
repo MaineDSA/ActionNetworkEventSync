@@ -27,15 +27,44 @@ function getANGroupName (apiKey) {
   return name
 }
 
-// This function returns events from Action Network. If a filter is provided, it appends it to the API URL.
-function getANEvents (filter, apiKey) {
+// Retrieves a list of Action Network events based on a filter query, automatically handling multi-page pagination.
+function getANEvents (filterQuery, apiKey) {
+  let allEvents = []
   let url = `${apiUrlAn}events/`
-  if (filter) {
-    console.log(`Finding upcoming events from group ${getANGroupName(apiKey)} via filter query ${filter}.`)
-    url += `?${filter}`
+
+  if (filterQuery) {
+    console.log(`Finding upcoming events from group ${getANGroupName(apiKey)} via filter query ${filterQuery}.`)
+    url += `?${filterQuery}`
   }
-  const content = UrlFetchApp.fetch(url, standardApiParameters(apiKey))
-  return JSON.parse(content)._embedded['osdi:events']
+
+  const MAX_PAGES = 10
+  let pageCount = 0
+  while (url && pageCount < MAX_PAGES) {
+    pageCount++
+    try {
+      const responseContent = UrlFetchApp.fetch(url, standardApiParameters(apiKey))
+      const responseJson = JSON.parse(responseContent.getContentText())
+
+      const pageEvents = responseJson._embedded?.['osdi:events'] || []
+      allEvents = allEvents.concat(pageEvents)
+
+      const nextLink = responseJson._links?.next?.href
+
+      url = (nextLink && nextLink !== url) ? nextLink : null
+      if (url) {
+        console.log(`Fetching page ${pageCount + 1}...`)
+      }
+    } catch (e) {
+      console.error(`API Page fetch failed on page ${pageCount} at endpoint ${url}: ${e}`)
+      break
+    }
+  }
+
+  if (pageCount >= MAX_PAGES) {
+    console.warn(`Pagination reached the safety limit of ${MAX_PAGES} pages. Some events may not have been synced.`)
+  }
+
+  return allEvents
 }
 
 // This function returns upcoming event IDs from Action Network, sorted by the soonest event first.
