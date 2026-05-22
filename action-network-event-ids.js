@@ -28,7 +28,9 @@ function getANEvents (filterQuery, apiKey, maxPages = 10) {
   let url = `${apiUrlAn}events/`
 
   if (filterQuery) {
-    console.log(`Finding upcoming events from group ${getANGroupName(apiKey)} via filter query ${filterQuery}.`)
+    if (_anGroupNameCache[apiKey]) {
+      console.log(`Finding upcoming events from group ${getANGroupName(apiKey)} via filter query ${filterQuery}.`)
+    }
     url += `?${filterQuery}`
   }
 
@@ -46,7 +48,7 @@ function getANEvents (filterQuery, apiKey, maxPages = 10) {
 
       url = (nextLink && nextLink !== url) ? `${nextLink}&${filterQuery}` : null
       if (url) {
-        console.log(`Fetching page ${pageCount + 1}...`)
+        console.log(`Fetching page ${pageCount + 1} at ${url}...`)
       }
     } catch (e) {
       console.error(`API Page fetch failed on page ${pageCount} at endpoint ${url}: ${e}`)
