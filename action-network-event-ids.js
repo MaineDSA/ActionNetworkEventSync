@@ -10,21 +10,16 @@ function getANGroupName (apiKey) {
   if (_anGroupNameCache[apiKey]) {
     return _anGroupNameCache[apiKey]
   }
-  let name = '(unknown group)'
+  let anGroup = '(unknown group)'
   try {
-    const events = getANEvents('per_page=1', apiKey, 1)
-    for (const event of events) {
-      const sponsor = event['action_network:sponsor']
-      if (sponsor && sponsor.title) {
-        name = sponsor.title
-        break
-      }
-    }
+    const anEvent = getANEvents('per_page=1', apiKey, 1)[0]
+    const anSponsor = anEvent['action_network:sponsor']
+    anGroup = anSponsor.title
   } catch (err) {
     console.warn(`Could not fetch group name from Action Network: ${err}`)
   }
-  _anGroupNameCache[apiKey] = name
-  return name
+  _anGroupNameCache[apiKey] = anGroup
+  return anGroup
 }
 
 // Retrieves a list of Action Network events based on a filter query, automatically handling multi-page pagination.
