@@ -10,32 +10,57 @@ function getANGroupName (apiKey) {
   if (_anGroupNameCache[apiKey]) {
     return _anGroupNameCache[apiKey]
   }
-  let name = '(unknown group)'
+  let anGroup = '(unknown group)'
   try {
-    const events = getANEvents('per_page=1', apiKey)
-    for (const event of events) {
-      const sponsor = event['action_network:sponsor']
-      if (sponsor && sponsor.title) {
-        name = sponsor.title
-        break
-      }
-    }
+    const anEvent = getANEvents('per_page=1', apiKey, 1)[0]
+    const anSponsor = anEvent['action_network:sponsor']
+    anGroup = anSponsor.title
   } catch (err) {
     console.warn(`Could not fetch group name from Action Network: ${err}`)
   }
-  _anGroupNameCache[apiKey] = name
-  return name
+  _anGroupNameCache[apiKey] = anGroup
+  return anGroup
 }
 
-// This function returns events from Action Network. If a filter is provided, it appends it to the API URL.
-function getANEvents (filter, apiKey) {
+// Retrieves a list of Action Network events based on a filter query, automatically handling multi-page pagination.
+function getANEvents (filterQuery, apiKey, maxPages = 10) {
+  let allEvents = []
   let url = `${apiUrlAn}events/`
-  if (filter) {
-    console.log(`Finding upcoming events from group ${getANGroupName(apiKey)} via filter query ${filter}.`)
-    url += `?${filter}`
+
+  if (filterQuery) {
+    if (_anGroupNameCache[apiKey]) {
+      console.log(`Finding upcoming events from group ${getANGroupName(apiKey)} via filter query ${filterQuery}.`)
+    }
+    url += `?${filterQuery}`
   }
-  const content = UrlFetchApp.fetch(url, standardApiParameters(apiKey))
-  return JSON.parse(content)._embedded['osdi:events']
+
+  let pageCount = 0
+  while (url && pageCount < maxPages) {
+    pageCount++
+    try {
+      const responseContent = UrlFetchApp.fetch(url, standardApiParameters(apiKey))
+      const responseJson = JSON.parse(responseContent.getContentText())
+
+      const pageEvents = responseJson._embedded?.['osdi:events'] || []
+      allEvents = allEvents.concat(pageEvents)
+
+      const nextLink = responseJson._links?.next?.href
+
+      url = (nextLink && nextLink !== url) ? `${nextLink}&${filterQuery}` : null
+      if (url) {
+        console.log(`Fetching page ${pageCount + 1} at ${url}...`)
+      }
+    } catch (e) {
+      console.error(`API Page fetch failed on page ${pageCount} at endpoint ${url}: ${e}`)
+      break
+    }
+  }
+
+  if ((maxPages !== 1) && (pageCount >= maxPages)) {
+    console.warn(`Pagination reached the safety limit of ${maxPages} pages. Some events may not have been synced.`)
+  }
+
+  return allEvents
 }
 
 // This function returns upcoming event IDs from Action Network, sorted by the soonest event first.
