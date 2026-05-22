@@ -44,7 +44,7 @@ function getANEvents (filterQuery, apiKey, maxPages = 10) {
 
       const nextLink = responseJson._links?.next?.href
 
-      url = (nextLink && nextLink !== url) ? nextLink : null
+      url = (nextLink && nextLink !== url) ? `${nextLink}&${filterQuery}` : null
       if (url) {
         console.log(`Fetching page ${pageCount + 1}...`)
       }
