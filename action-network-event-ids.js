@@ -12,7 +12,7 @@ function getANGroupName (apiKey) {
   }
   let name = '(unknown group)'
   try {
-    const events = getANEvents('per_page=1', apiKey)
+    const events = getANEvents('per_page=1', apiKey, 1)
     for (const event of events) {
       const sponsor = event['action_network:sponsor']
       if (sponsor && sponsor.title) {
@@ -28,7 +28,7 @@ function getANGroupName (apiKey) {
 }
 
 // Retrieves a list of Action Network events based on a filter query, automatically handling multi-page pagination.
-function getANEvents (filterQuery, apiKey) {
+function getANEvents (filterQuery, apiKey, maxPages = 10) {
   let allEvents = []
   let url = `${apiUrlAn}events/`
 
@@ -37,9 +37,8 @@ function getANEvents (filterQuery, apiKey) {
     url += `?${filterQuery}`
   }
 
-  const MAX_PAGES = 10
   let pageCount = 0
-  while (url && pageCount < MAX_PAGES) {
+  while (url && pageCount < maxPages) {
     pageCount++
     try {
       const responseContent = UrlFetchApp.fetch(url, standardApiParameters(apiKey))
@@ -60,8 +59,8 @@ function getANEvents (filterQuery, apiKey) {
     }
   }
 
-  if (pageCount >= MAX_PAGES) {
-    console.warn(`Pagination reached the safety limit of ${MAX_PAGES} pages. Some events may not have been synced.`)
+  if ((maxPages !== 1) && (pageCount >= maxPages)) {
+    console.warn(`Pagination reached the safety limit of ${maxPages} pages. Some events may not have been synced.`)
   }
 
   return allEvents
