@@ -12,7 +12,7 @@ function getANGroupName (apiKey) {
   }
   let name = '(unknown group)'
   try {
-    const events = getANEvents('?per_page=1', apiKey)
+    const events = getANEvents('per_page=1', apiKey)
     for (const event of events) {
       const sponsor = event['action_network:sponsor']
       if (sponsor && sponsor.title) {
@@ -32,7 +32,7 @@ function getANEvents (filter, apiKey) {
   let url = `${apiUrlAn}events/`
   if (filter) {
     console.log(`Finding upcoming events from group ${getANGroupName(apiKey)} via filter query ${filter}.`)
-    url += filter
+    url += `?${filter}`
   }
   const content = UrlFetchApp.fetch(url, standardApiParameters(apiKey))
   return JSON.parse(content)._embedded['osdi:events']
@@ -42,7 +42,7 @@ function getANEvents (filter, apiKey) {
 // If a filter is provided, it appends it to the API URL.
 function getFutureANEvents (apiKey, extraFilters) {
   const currentDate = Utilities.formatDate(new Date(), 'UTC', 'yyyy-MM-dd')
-  let filter = `?filter=start_date gt '${currentDate}'`
+  let filter = `filter=start_date gt '${currentDate}'`
 
   if (extraFilters) {
     extraFilters.forEach((extrafilter) => {

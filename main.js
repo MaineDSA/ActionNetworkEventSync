@@ -99,7 +99,7 @@ function syncANGrouptoGCal (apiKey) {
   const currentDate = Utilities.formatDate(now, 'UTC', 'yyyy-MM-dd')
   const daysAgoSecs = now.getTime() - millisPerDay * daysSinceModified
   const daysAgoDate = Utilities.formatDate(new Date(daysAgoSecs), 'UTC', 'yyyy-MM-dd')
-  const pastFilter = `?filter=end_date lt '${currentDate}' and start_date gt '${daysAgoDate}'`
+  const pastFilter = `filter=end_date lt '${currentDate}' and start_date gt '${daysAgoDate}'`
   const pastEvents = getANEvents(pastFilter, apiKey)
 
   if (pastEvents.length === 0) {
