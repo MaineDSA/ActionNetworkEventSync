@@ -1,41 +1,16 @@
 /* eslint-disable no-unused-vars */
 
-// Fetch the sponsoring group's title for an API key, used for safe log
-// identification in place of leaking part of the key. The API entry point does
-// not expose a group name, so we read it from the `action_network:sponsor`
-// block on the first event the key can see. Results are cached per key for
-// the lifetime of the script run to avoid an extra request per log line.
-const _anGroupNameCache = {}
-function getANGroupName (apiKey) {
-  if (_anGroupNameCache[apiKey]) {
-    return _anGroupNameCache[apiKey]
-  }
-  let anGroup = '(unknown group)'
-  try {
-    const anEvent = getANEvents('per_page=1', apiKey, 1)[0]
-    const anSponsor = anEvent['action_network:sponsor']
-    anGroup = anSponsor.title
-  } catch (err) {
-    console.warn(`Could not fetch group name from Action Network: ${err}`)
-  }
-  _anGroupNameCache[apiKey] = anGroup
-  return anGroup
-}
-
 // Retrieves a list of Action Network events based on a filter query, automatically handling multi-page pagination.
-function getANEvents (filterQuery, apiKey, maxPages = 10) {
+function getANEvents (query, apiKey, maxPages = 10) {
   let allEvents = []
   let url = `${apiUrlAn}events/`
-
-  if (filterQuery) {
-    if (_anGroupNameCache[apiKey]) {
-      console.log(`Finding upcoming events from group ${getANGroupName(apiKey)} via filter query ${filterQuery}.`)
-    }
-    url += `?${filterQuery}`
+  if (query) {
+    url += `?${query}`
   }
+  console.log(`Finding upcoming events via endpoint '${url}'.`)
 
   let pageCount = 0
-  while (url && pageCount < maxPages) {
+  while (url && (pageCount < maxPages)) {
     pageCount++
     try {
       const responseContent = UrlFetchApp.fetch(url, standardApiParameters(apiKey))
@@ -46,18 +21,17 @@ function getANEvents (filterQuery, apiKey, maxPages = 10) {
 
       const nextLink = responseJson._links?.next?.href
 
-      url = (nextLink && nextLink !== url) ? `${nextLink}&${filterQuery}` : null
+      url = (nextLink && nextLink !== url) ? nextLink : null
       if (url) {
         console.log(`Fetching page ${pageCount + 1} at ${url}...`)
       }
     } catch (e) {
-      console.error(`API Page fetch failed on page ${pageCount} at endpoint ${url}: ${e}`)
       break
     }
   }
 
-  if ((maxPages !== 1) && (pageCount >= maxPages)) {
-    console.warn(`Pagination reached the safety limit of ${maxPages} pages. Some events may not have been synced.`)
+  if (pageCount >= maxPages) {
+    console.warn(`Pagination reached the safety limit of ${maxPages} pages. Some event results may have been skipped.`)
   }
 
   return allEvents

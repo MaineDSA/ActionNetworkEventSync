@@ -1,7 +1,33 @@
 /* eslint-disable no-unused-vars */
+
+// Fetch the sponsoring group's title for an API key, used for safe log
+// identification in place of leaking part of the key. The API entry point does
+// not expose a group name, so we read it from the `action_network:sponsor`
+// block on the first event the key can see. Results are cached per key for
+// the lifetime of the script run to avoid an extra request per log line.
+const _anGroupNameCache = {}
+function getANGroupName (apiKey) {
+  if (_anGroupNameCache[apiKey]) {
+    return _anGroupNameCache[apiKey]
+  }
+  let anGroup = '(unknown group)'
+
+  try {
+    const anEvent = getANEvents('per_page=1', apiKey)[0]
+    const anSponsor = anEvent['action_network:sponsor']
+    anGroup = anSponsor.title
+  } catch (err) {
+    console.warn(`Could not fetch group name from Action Network: ${err}`)
+  }
+  _anGroupNameCache[apiKey] = anGroup
+
+  return anGroup
+}
+
 // This function gets the start time of an event, based on the event's location time zone.
 function getStartTime (actionNetworkEvent) {
   const startDate = new Date(actionNetworkEvent.start_date)
+
   return new Date(`${startDate.toUTCString()} ${dstOffset(startDate)}`)
 }
 
@@ -13,6 +39,7 @@ function getEndTime (actionNetworkEvent) {
   if (isNaN(outputDate.getUTCFullYear())) {
     return new Date(startDate.getTime() + 60 * 1000 * defultLengthMinutes)
   }
+
   return outputDate
 }
 
@@ -48,11 +75,12 @@ function getGoogleEventID (actionNetworkEvent) {
   if (!googleID) {
     googleID = getEventIDFromAN(actionNetworkEvent, 'google_id')
   }
+
   return googleID
 }
 
 // This function tags an Action Network event with the Google ID for its corresponding Google Calendar event
-function tagANEvent (actionNetworkURL, googleEventID, apiKey) {
+function tagANEvent (anEventID, googleEventID, apiKey) {
   // Check if the "AN_API_KEY" property is null
   if (!apiKey) {
     console.error('No Action Network API Key "AN_API_KEY" provided, cannot continue.')
@@ -63,7 +91,7 @@ function tagANEvent (actionNetworkURL, googleEventID, apiKey) {
   const options = {
     method: 'put',
     payload: JSON.stringify({
-      identifiers: [`google_id_${scriptProperties.getProperty('GCAL_ID').replace(/[&/\\#, +()$~%.'":*?<>{}]/g, '_')}:${googleEventID}`]
+      identifiers: [`google_id_${scriptProperties.getProperty('GCAL_ID').replace(/[^a-zA-Z0-9]+/g, '_')}:${googleEventID}`]
     }),
     headers: {
       'Content-Type': 'application/json',
@@ -71,6 +99,6 @@ function tagANEvent (actionNetworkURL, googleEventID, apiKey) {
     }
   }
 
-  console.log(`Tagging Action Network event ${actionNetworkURL} with Google Calendar event ID ${googleEventID}`)
-  UrlFetchApp.fetch(`${apiUrlAn}events/${actionNetworkURL}`, options)
+  console.log(`Tagging Action Network event ${anEventID} with Google Calendar event ID ${googleEventID}`)
+  UrlFetchApp.fetch(`${apiUrlAn}events/${anEventID}`, options)
 }

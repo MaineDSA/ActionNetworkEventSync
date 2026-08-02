@@ -63,6 +63,7 @@ function syncANEventtoGCal (event, apiKey) {
   } else {
     if (event.status !== 'cancelled') {
       updateGoogleEvent(event, actionNetworkID, googleID)
+      tagANEvent(actionNetworkID, googleID, apiKey)
       return
     }
 
@@ -80,6 +81,34 @@ function syncANEventtoGCal (event, apiKey) {
 }
 
 /**
+ * Remove the location from events that are finished and started less than a certain number of days ago.
+ *
+ * @param {string} apiKey - The Action Network API key to use for authentication
+ * @param {string} removeDays - How many days of past events to remove the location from
+ */
+function removeANGroupPastEventLocations (apiKey, removeDays = daysSinceModified) {
+  // Remove location from completed events
+  const millisPerDay = 1000 * 60 * 60 * 24
+  const now = new Date()
+  const currentDate = Utilities.formatDate(now, 'UTC', 'yyyy-MM-dd')
+  const daysAgoSecs = now.getTime() - (millisPerDay * removeDays)
+  const daysAgoDate = Utilities.formatDate(new Date(daysAgoSecs), 'UTC', 'yyyy-MM-dd')
+  const pastFilter = `filter=end_date lt '${currentDate}' and start_date gt '${daysAgoDate}'`
+  const pastEvents = getANEvents(pastFilter, apiKey)
+
+  if (pastEvents.length === 0) {
+    console.log('There are no recently finished events.')
+    return
+  }
+  console.log(`Found ${pastEvents.length} finished events in "${getANGroupName(apiKey)}" that started in the past ${removeDays} days.`)
+
+  for (const anEvent of pastEvents) { removeGoogleEventLocation(anEvent) }
+
+  console.log(`Removed location from ${pastEvents.length} past events.`)
+}
+
+
+/**
  * Sync recently modified Action Network events to Google Calendar and remove location from all past events
  *
  * @param {string} apiKey - The Action Network API key to use for authentication
@@ -87,28 +116,13 @@ function syncANEventtoGCal (event, apiKey) {
 function syncANGrouptoGCal (apiKey) {
   // Sync recently modified events
   const modifiedEvents = getRecentlyModifiedEvents(daysSinceModified, apiKey).sort(sortEventByDate)
-  console.info(
-    `Found ${modifiedEvents.length} events modified in the last ${daysSinceModified} days that have not started yet.`
+  console.log(
+    `Found ${modifiedEvents.length} events in "${getANGroupName(apiKey)}" that were modified in the last ${daysSinceModified} days and have not started yet.`
   )
 
   for (const anEvent of modifiedEvents) { syncANEventtoGCal(anEvent, apiKey) }
 
-  // Remove location from completed events
-  const millisPerDay = 1000 * 60 * 60 * 24
-  const now = new Date()
-  const currentDate = Utilities.formatDate(now, 'UTC', 'yyyy-MM-dd')
-  const daysAgoSecs = now.getTime() - millisPerDay * daysSinceModified
-  const daysAgoDate = Utilities.formatDate(new Date(daysAgoSecs), 'UTC', 'yyyy-MM-dd')
-  const pastFilter = `filter=end_date lt '${currentDate}' and start_date gt '${daysAgoDate}'`
-  const pastEvents = getANEvents(pastFilter, apiKey)
-
-  if (pastEvents.length === 0) {
-    console.info('There are no recently finished events.')
-    return
-  }
-  console.info(`Found ${pastEvents.length} past events.`)
-
-  for (const anEvent of pastEvents) { removeGoogleEventLocation(anEvent) }
+  removeANGroupPastEventLocations(apiKey)
 }
 
 /**
@@ -148,31 +162,11 @@ function draftANEventMessage () {
 }
 
 /**
- * Post an event message to Slack and/or Discord if the event has not been cancelled.
- */
-function postEventMessage (event) {
-  console.log(`${event.title.trim()} is listed as ${event.status} in Action Network at ${getEventIDFromAN(event, 'action_network')} and starts on ${getStartTime(event)}.`)
-
-  if (event.status === 'cancelled') {
-    console.log(`Skipping cancelled event ${event.title.trim()}.`)
-    return
-  }
-
-  if (scriptProperties.getProperty('SLACK_WEBHOOK_URL')) {
-    sendMessage('SLACK_WEBHOOK_URL', event, 'Upcoming Event', sendSlackMessage)
-  }
-  if (scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
-    sendMessage('DISCORD_WEBHOOK_URL', event, 'Upcoming Event', sendDiscordMessage)
-  }
-}
-
-/**
  * Post today's events to Slack and/or Discord.
  */
 function postTodaysEvents () {
-  // Check if the Slack Webhook URL is provided
   if (!scriptProperties.getProperty('SLACK_WEBHOOK_URL') && !scriptProperties.getProperty('DISCORD_WEBHOOK_URL')) {
-    console.error('No Webhook URL "SLACK_WEBHOOK_URL" or "DISCORD_WEBHOOK_URL" provided, cannot continue.')
+    console.error('No Webhook URL provided via "SLACK_WEBHOOK_URL" or "DISCORD_WEBHOOK_URL", cannot continue.')
     return
   }
 
@@ -180,9 +174,8 @@ function postTodaysEvents () {
   const dateFilter = getUpcomingEventLimitFilter(daysUpcomingSlack)
   const events = apiKeys.flatMap(key => getFutureANEvents(key, dateFilter)).sort(sortEventByDate)
 
-  // Skip this AN group if there are no events today
   if (events.length === 0) {
-    console.warn('There are no events today. No message will be posted.')
+    console.info('There are no events today. No message will be posted.')
     return
   }
 
