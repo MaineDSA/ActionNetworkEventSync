@@ -72,8 +72,8 @@ between the header and list of events.
 - customAnnouncements(): Creating this function allows you to add additional
 announcements, articles, etc after the list of upcoming events.
 
-## Triggering
+## Recommended Triggers
 
-- Our script is set to call syncANtoGCal() every 30 minutes.
-- Our script is set to call draftANEventMessage() every Tuesday morning.
-- Our script is set to call postTodaysEvents() every morning.
+- Call syncANtoGCal() every 30 minutes.
+- Call postTodaysEvents() every morning.
+- Call draftANEventMessage() before your communications person intends to finish and send the newsletter.
