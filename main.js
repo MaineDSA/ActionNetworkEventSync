@@ -107,7 +107,6 @@ function removeANGroupPastEventLocations (apiKey, removeDays = daysSinceModified
   console.log(`Removed location from ${pastEvents.length} past events.`)
 }
 
-
 /**
  * Sync recently modified Action Network events to Google Calendar and remove location from all past events
  *
