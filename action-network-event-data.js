@@ -68,12 +68,12 @@ function getEventIDFromAN (contentJSON, searchID) {
 
 // This function returns the Google ID for the given event, if it is found in the Action Network event data.
 function getGoogleEventID (actionNetworkEvent) {
-  let googleID = getEventIDFromAN(actionNetworkEvent, `google_id_${scriptProperties.getProperty('GCAL_ID').replace(/[^a-zA-Z0-9]+/g, '_')}`)
+  let googleID = getEventIDFromAN(actionNetworkEvent, `google_id_${scriptProperties.getProperty('GCAL_ID').replace(/[^a-zA-Z0-9]+/g, '_')}`)  // corrected format
   if (!googleID) {
-    googleID = getEventIDFromAN(actionNetworkEvent, `google_id_${scriptProperties.getProperty('GCAL_ID').replace('/[&/\\#, +()$~%.:*?<>{}]/g', '_')}`)
+    googleID = getEventIDFromAN(actionNetworkEvent, `google_id_${scriptProperties.getProperty('GCAL_ID').replace('/[&/\\#, +()$~%.:*?<>{}]/g', '_')}`)  // mistaken format -- string is not regex
   }
   if (!googleID) {
-    googleID = getEventIDFromAN(actionNetworkEvent, 'google_id')
+    googleID = getEventIDFromAN(actionNetworkEvent, 'google_id')  // original format
   }
 
   return googleID
