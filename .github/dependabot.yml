@@ -9,9 +9,17 @@ updates:
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: weekly
+      interval: monthly
+    groups:
+      action-updates:
+        patterns:
+          - '*'
 
   - package-ecosystem: npm
     directory: "/"
     schedule:
       interval: weekly
+    groups:
+      code-quality-updates:
+        patterns:
+          - '*'
