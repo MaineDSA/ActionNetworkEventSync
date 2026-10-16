@@ -7,7 +7,7 @@ version: 2
 
 updates:
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: /
     schedule:
       interval: monthly
     groups:
@@ -16,7 +16,7 @@ updates:
           - '*'
 
   - package-ecosystem: npm
-    directory: "/"
+    directory: /
     schedule:
       interval: monthly
     groups:
