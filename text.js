@@ -54,13 +54,13 @@ function formatEvent (actionNetworkEvent) {
   const templateTimeAndLink = `<h3><time datetime=${startDate.toISOString()}>${eventDate}</time> | ${startTime} - ${endTime}</h3>`
   const imageURL = actionNetworkEvent.featured_image_url
     ? `
-      <a href="${encodeURI(actionNetworkEvent.browser_url)}" target="_blank">
+      <a href="${encodeURI(actionNetworkEvent.browser_url)}" target="_blank" rel="noopener noreferrer">
         <img src="${encodeURI(actionNetworkEvent.featured_image_url)}" alt="Event Promo Image">
       </a>
     `
     : ''
   const buttonRSVP = `
-    <a href="${encodeURI(actionNetworkEvent.browser_url)}" target="_blank">
+    <a href="${encodeURI(actionNetworkEvent.browser_url)}" target="_blank" rel="noopener noreferrer">
       <button type="button">Sign Me Up</button>
     </a>
   `
